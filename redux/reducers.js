@@ -8,23 +8,6 @@ const setData = async (title, state) => {
   }
 };
 
-async function getGurbaniJi() {
-  let shabad = '';
-  await fetch('https://api.gurbaninow.com/v2/shabad/random')
-    .then(res => res.json())
-    .then(resJson => {
-      const shabadOLstbj = resJson.shabad;
-      for (const index in shabadOLstbj) {
-        const gurmukhi = shabadOLstbj[index].line.larivaar.unicode;
-        const translation =
-          shabadOLstbj[index].line.translation.english.default;
-        shabad += gurmukhi + '\n' + translation + '\n';
-      }
-    });
-  // console.log(typeof shabad);
-  return shabad;
-}
-
 export const initialState = {
   checkBoxes: {
     'Adi Maharaj.pdf': {
@@ -376,9 +359,11 @@ export const initialState = {
     },
   },
   shabadModalShown: false,
+  shabadHistoryModalShown: false,
   theShabad: 'Vaheguru',
+  shabadList: [],
 };
-// setData('state', initialState); //to reset all state
+setData('state', initialState); //to reset all state
 
 //why does the app chash when I change the prarameters position
 function theReducer(state = initialState, action) {
@@ -424,15 +409,17 @@ function theReducer(state = initialState, action) {
       shabadModalShown: !state.shabadModalShown,
     };
   }
+  if (action.type === 'SET_HISTORY_MODAL') {
+    return {
+      ...state,
+      shabadHistoryModalShown: !state.shabadHistoryModalShown,
+    };
+  }
   if (action.type === 'SET_SHABAD') {
-    let theNewShabad = 'hii';
-    theNewShabad = getGurbaniJi().then(res => {
-      theNewShabad = res;
-    });
-    console.log(theNewShabad);
     const newState = {
       ...state,
-      theShabad: theNewShabad,
+      theShabad: action.theShabad,
+      shabadList: [action.theShabad, ...state.shabadList],
     };
     setData('state', newState);
     return newState;

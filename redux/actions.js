@@ -21,9 +21,15 @@ export const setShabadModal = () => dispatch => {
     type: 'SHABAD_MODAL',
   });
 };
-export const setShabad = () => dispatch => {
+export const setShabadHistoryModal = () => dispatch => {
+  dispatch({
+    type: 'SET_HISTORY_MODAL',
+  });
+};
+export const setShabad = theShabad => dispatch => {
   dispatch({
     type: 'SET_SHABAD',
+    theShabad,
   });
 };
 export const setAngNum = (bani, angNum) => dispatch => {

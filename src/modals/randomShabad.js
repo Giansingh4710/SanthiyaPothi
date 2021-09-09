@@ -9,17 +9,12 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
-import {barStyle} from '../assets/styleForEachOption';
-import {
-  setShabadModal,
-  // setShabad
-} from '../redux/actions';
+// import {barStyle} from '../assets/styleForEachOption';
+import {setShabadModal, setShabad} from '../../redux/actions';
 
 function ShabadModal() {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
-  const [theShabad, setShabad] = React.useState('Vaheguru');
-
   async function getGurbaniJi() {
     let shabad = '';
     await fetch('https://api.gurbaninow.com/v2/shabad/random')
@@ -53,8 +48,6 @@ function ShabadModal() {
           }}>
           {/* <Text>Back</Text> */}
           <Icon
-            // style={{flex: 1}}
-            // name="arrow-forward-outline"
             name="arrow-back-outline"
             type="ionicon"
             // onPress={() => {}}
@@ -63,14 +56,15 @@ function ShabadModal() {
         <View style={styles.scroll}>
           <ScrollView style={styles.gurbaniScroll}>
             {/* <Text>{state.theShabad}</Text> */}
-            <Text>{theShabad}</Text>
+            <Text>{state.theShabad}</Text>
           </ScrollView>
         </View>
         <TouchableOpacity
           style={styles.newShabad}
           onPress={() => {
-            getGurbaniJi().then(res => setShabad(res));
-            // dispatch(setShabad());
+            getGurbaniJi().then(res => {
+              dispatch(setShabad(res));
+            });
           }}>
           <Text>Get New Random Shabad</Text>
         </TouchableOpacity>

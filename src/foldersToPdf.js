@@ -79,15 +79,18 @@ export default function FolderToPdfs({navigation, route}) {
   React.useEffect(() => {
     navigation.setOptions({
       title: fileTitle,
-      headerRight: () => (
-        <TouchableOpacity
-          style={{backgroundColor: '#f8f8', padding: 10}}
-          onPress={() => {
-            dispatch(unCheckBoxes(fileTitle));
-          }}>
-          <Text>Unckeck All</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () =>
+        fileTitle !== 'ਪਾਠ Hajari' ? (
+          <TouchableOpacity
+            style={{backgroundColor: '#f8f8', padding: 10}}
+            onPress={() => {
+              dispatch(unCheckBoxes(fileTitle));
+            }}>
+            <Text>Unckeck All</Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        ),
     });
   }, [navigation]);
 

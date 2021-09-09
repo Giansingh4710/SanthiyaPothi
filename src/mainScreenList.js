@@ -4,11 +4,16 @@ import {Icon} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {setTheState, setShabadModal} from '../redux/actions';
+import {
+  setTheState,
+  setShabadModal,
+  setShabadHistoryModal,
+} from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {barStyle} from '../assets/styleForEachOption';
 
-import ShabadModal from './randomShabad';
+import ShabadModal from './modals/randomShabad';
+import HistoryModal from './modals/shabadHistory';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -194,7 +199,18 @@ function HomeScreen({navigation, route}) {
         }}>
         <Text style={styles.shabadtext}>Show Random Shabad</Text>
       </TouchableOpacity>
+      <View>
+        <Text> </Text>
+      </View>
+      <TouchableOpacity
+        style={styles.shabadButton}
+        onPress={() => {
+          dispatch(setShabadHistoryModal());
+        }}>
+        <Text style={styles.shabadtext}>Show Shabad History</Text>
+      </TouchableOpacity>
       <ShabadModal />
+      <HistoryModal />
     </View>
   );
 }
