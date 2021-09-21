@@ -26,10 +26,28 @@ export const setShabadHistoryModal = () => dispatch => {
     type: 'SET_HISTORY_MODAL',
   });
 };
-export const setShabad = theShabad => dispatch => {
+export const setShabad =
+  (theShabad, date, time, addToList, id, saved) => dispatch => {
+    dispatch({
+      type: 'SET_SHABAD',
+      theShabadText: theShabad,
+      date,
+      time,
+      addToList,
+      id,
+      saved,
+    });
+  };
+export const deleteShabad = id => dispatch => {
   dispatch({
-    type: 'SET_SHABAD',
-    theShabad,
+    type: 'DELETE_SHABAD',
+    id,
+  });
+};
+export const setSavedShabad = id => dispatch => {
+  dispatch({
+    type: 'SET_SAVED_SHABAD',
+    id,
   });
 };
 export const setAngNum = (bani, angNum) => dispatch => {

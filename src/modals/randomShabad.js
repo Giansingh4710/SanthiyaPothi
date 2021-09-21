@@ -10,7 +10,7 @@ import {
 import {Icon} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 // import {barStyle} from '../assets/styleForEachOption';
-import {setShabadModal, setShabad} from '../../redux/actions';
+import {setShabadModal, setShabad, setSavedShabad} from '../../redux/actions';
 
 function ShabadModal() {
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ function ShabadModal() {
     // console.log(typeof shabad);
     return shabad;
   }
+
   return (
     <Modal
       visible={state.shabadModalShown}
@@ -41,29 +42,52 @@ function ShabadModal() {
       animationType="slide"
       onRequestClose={() => dispatch(setShabadModal())}>
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.goBack}
-          onPress={() => {
-            dispatch(setShabadModal());
-          }}>
-          {/* <Text>Back</Text> */}
-          <Icon
-            name="arrow-back-outline"
-            type="ionicon"
-            // onPress={() => {}}
-          />
-        </TouchableOpacity>
+        <View style={styles.topRow}>
+          <View style={styles.icons}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              onPress={() => {
+                dispatch(setShabadModal());
+              }}
+            />
+          </View>
+          <Text style={styles.dateTime}>Date: {state.theShabad.time}</Text>
+          <Text style={styles.dateTime}>Time: {state.theShabad.date}</Text>
+
+          <View style={styles.icons}>
+            <Icon
+              name={state.theShabad.saved ? 'bookmark' : 'bookmark-outline'}
+              type="ionicon"
+              onPress={() => {
+                dispatch(setSavedShabad(state.theShabad.id));
+              }}
+            />
+            <Text>{String(state.theShabad.saved)}</Text>
+          </View>
+        </View>
         <View style={styles.scroll}>
           <ScrollView style={styles.gurbaniScroll}>
-            {/* <Text>{state.theShabad}</Text> */}
-            <Text>{state.theShabad}</Text>
+            <Text>{state.theShabad.text}</Text>
           </ScrollView>
         </View>
         <TouchableOpacity
           style={styles.newShabad}
           onPress={() => {
             getGurbaniJi().then(res => {
-              dispatch(setShabad(res));
+              const currentDate = new Date();
+              dispatch(
+                setShabad(
+                  res, //the shabad text
+                  currentDate.toLocaleDateString(), // the date
+                  String(currentDate.getHours()).padStart(2, '0') +
+                    ':' +
+                    String(currentDate.getMinutes()).padStart(2, '0'),
+                  true, //add to shabad lst
+                  0, //0 means no id so id needed
+                  false, //saved=false
+                ),
+              );
             });
           }}>
           <Text>Get New Random Shabad</Text>
@@ -85,9 +109,15 @@ const styles = StyleSheet.create({
     left: '5%',
     borderRadius: 40,
   },
-  goBack: {
+  topRow: {
+    flexDirection: 'row',
+  },
+  icons: {
     // backgroundColor: 'red',
-    right: '40%',
+    flex: 0.5,
+  },
+  dateTime: {
+    flex: 1,
   },
   scroll: {
     padding: 10,

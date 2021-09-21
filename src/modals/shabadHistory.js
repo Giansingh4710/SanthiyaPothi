@@ -14,11 +14,12 @@ import {
   setShabadHistoryModal,
   setShabad,
   setShabadModal,
+  deleteShabad,
 } from '../../redux/actions';
 
 // import {barStyle} from '../assets/styleForEachOption';
 
-function HistoryModal() {
+export default function HistoryModal() {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
@@ -37,26 +38,37 @@ function HistoryModal() {
           <Icon name="arrow-back-outline" type="ionicon" />
         </TouchableOpacity>
         <View style={styles.scroll}>
-          {/* <ScrollView style={styles.gurbaniScroll}></ScrollView> */}
           <FlatList
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.shabad.id}
             renderItem={({item}) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
+                    dispatch(
+                      setShabad(
+                        item.shabad.text, //the shabad test
+                        item.shabad.date,
+                        item.shabad.time,
+                        false, //'no add to list',
+                        item.shabad.id, //the shabad id
+                        item.shabad.saved,
+                      ),
+                    );
                     dispatch(setShabadModal());
-                    dispatch(setShabad(item.shabad));
                   }}>
-                  <ShabarBar item={item} />
+                  <ShabarBar item={item} dispatch={dispatch} />
                 </TouchableOpacity>
               );
             }}
             data={state.shabadList.map((item, index) => {
-              return {
-                title: item.split('\n')[0] + item.split('\n')[1],
-                shabad: item,
-                id: index,
-              };
+              // console.log(Object.keys(item));
+              if (item.text !== undefined) {
+                return {
+                  title: item.text.split('\n')[0] + item.text.split('\n')[1],
+                  shabad: item,
+                  index,
+                };
+              }
             })}
           />
         </View>
@@ -65,15 +77,31 @@ function HistoryModal() {
   );
 }
 
-function ShabarBar({item}) {
+function ShabarBar({item, dispatch}) {
   return (
     <View
       style={
-        item.id % 2 === 0
+        item.index % 2 === 0
           ? shabadBar.container
           : {...shabadBar.container, backgroundColor: '#7CB9E8'}
       }>
       <Text style={shabadBar.item}>{item.title}</Text>
+      <Text style={shabadBar.item}>
+        time: {item.shabad.time}
+        {'\n'}
+        date : {item.shabad.date}
+      </Text>
+
+      <Icon
+        name="close-circle-outline"
+        type="ionicon"
+        color="#002D62"
+        onPress={() => {
+          dispatch(deleteShabad(item.shabad.id));
+        }}
+        // size={25}
+        // onLongPress={() => console.log("LON")}
+      />
     </View>
   );
 }
@@ -131,5 +159,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#00FFFF',
   },
 });
-
-export default HistoryModal;

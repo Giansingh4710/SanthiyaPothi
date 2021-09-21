@@ -360,9 +360,16 @@ export const initialState = {
   },
   shabadModalShown: false,
   shabadHistoryModalShown: false,
-  theShabad: 'Vaheguru',
+  theShabad: {
+    text: 'Vaheguru',
+    date: 'today',
+    id: 1,
+    time: 'right now',
+    saved: false,
+  },
   shabadList: [],
 };
+
 setData('state', initialState); //to reset all state
 
 //why does the app chash when I change the prarameters position
@@ -377,15 +384,20 @@ function theReducer(state = initialState, action) {
       ...state,
       checkBoxes: newCheckBoxes,
     };
+
     setData('state', newState);
     return newState;
   }
   // for async storage
   if (action.type === 'SET_THE_STATE') {
-    return {
+    const newState = {
       ...action.state,
     };
+
+    setData('state', newState);
+    return newState;
   }
+
   if (action.type === 'UN_CHECK_BOXES') {
     let newCheckBoxes = {};
     const arrayCheckBoxes = Object.entries(state.checkBoxes);
@@ -400,30 +412,104 @@ function theReducer(state = initialState, action) {
       ...state,
       checkBoxes: newCheckBoxes,
     };
+
     setData('state', newState);
     return newState;
   }
+
   if (action.type === 'SHABAD_MODAL') {
-    return {
+    const newState = {
       ...state,
       shabadModalShown: !state.shabadModalShown,
     };
+
+    setData('state', newState);
+    return newState;
   }
+
   if (action.type === 'SET_HISTORY_MODAL') {
-    return {
+    const newState = {
       ...state,
       shabadHistoryModalShown: !state.shabadHistoryModalShown,
     };
+
+    setData('state', newState);
+    return newState;
   }
+
   if (action.type === 'SET_SHABAD') {
+    const theNewShabad = {
+      text: action.theShabadText,
+      date: action.date,
+      time: action.time,
+      id: action.id,
+      saved: action.saved,
+    };
+
+    if (action.id === 0) {
+      let newId = Math.floor(Math.random() * 9999999) + 1;
+
+      state.shabadList.map(item => {
+        if (item.id === newId) {
+          newId = Math.floor(Math.random() * 9999999) + 1;
+        }
+      });
+
+      theNewShabad.id = newId;
+    }
+
     const newState = {
       ...state,
-      theShabad: action.theShabad,
-      shabadList: [action.theShabad, ...state.shabadList],
+      theShabad: theNewShabad,
+    };
+
+    if (action.addToList === true) {
+      newState.shabadList = [theNewShabad, ...state.shabadList];
+    }
+
+    setData('state', newState);
+    return newState;
+  }
+
+  if (action.type === 'SET_SAVED_SHABAD') {
+    const newSavedShabad = state.theShabad;
+    const newShabadList = state.shabadList;
+
+    for (const aShabad of newShabadList) {
+      if (aShabad.id === action.id) {
+        const newAns = !aShabad.saved;
+        aShabad.saved = newAns;
+        newSavedShabad.saved = newAns;
+      }
+    }
+    // const newShabadList = state.shabadList.map(item => {
+    //   if (item.id === action.id) {
+    //     const newAns = !item.saved;
+    //     item.saved = newAns;
+    //     newSavedShabad.saved = newAns;
+    //   }
+    //   return item;
+    // });
+
+    const newState = {
+      ...state,
+      shabadList: newShabadList,
+      theShabad: newSavedShabad,
     };
     setData('state', newState);
     return newState;
   }
+
+  if (action.type === 'DELETE_SHABAD') {
+    const newState = {
+      ...state,
+      shabadList: state.shabadList.filter(shabad => shabad.id !== action.id),
+    };
+
+    setData('state', newState);
+    return newState;
+  }
+
   if (action.type === 'SET_ANG_NUM') {
     const newCurrentAngBani = state.checkBoxes[action.bani];
     newCurrentAngBani.currentAng = action.angNum;
@@ -431,15 +517,15 @@ function theReducer(state = initialState, action) {
     const newCheckBoxes = state.checkBoxes;
     newCheckBoxes[action.bani] = newCurrentAngBani;
 
-    // console.log(newCurrentAngBani);
-
     const newState = {
       ...state,
       checkBoxes: newCheckBoxes,
     };
+
     setData('state', newState);
     return newState;
   }
+
   return state;
 }
 

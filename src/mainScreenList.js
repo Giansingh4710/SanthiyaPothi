@@ -24,7 +24,7 @@ function HomeScreen({navigation, route}) {
         const theStringState = await AsyncStorage.getItem('state');
         let theState;
 
-        if (theStringState !== null) {
+        if (theStringState) {
           theState = JSON.parse(theStringState);
           console.log('got state that was previously saved');
         } else {
@@ -192,23 +192,32 @@ function HomeScreen({navigation, route}) {
           ]}
         />
       </View>
-      <TouchableOpacity
-        style={styles.shabadButton}
-        onPress={() => {
-          dispatch(setShabadModal());
-        }}>
-        <Text style={styles.shabadtext}>Show Random Shabad</Text>
-      </TouchableOpacity>
-      <View>
-        <Text> </Text>
+      <View style={styles.underScroll}>
+        <TouchableOpacity
+          style={styles.shabadButton}
+          onPress={() => {
+            dispatch(setShabadModal());
+          }}>
+          <Text style={styles.shabadtext}>Show Random Shabad</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.shabadButton}
+          onPress={() => {
+            dispatch(setShabadHistoryModal());
+          }}>
+          <Text style={styles.shabadtext}>Show Shabad History</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.shabadButton}
+          onPress={() => {
+            dispatch(setShabadHistoryModal());
+          }}>
+          <Text style={styles.shabadtext}>Show Pinned Shabads</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.shabadButton}
-        onPress={() => {
-          dispatch(setShabadHistoryModal());
-        }}>
-        <Text style={styles.shabadtext}>Show Shabad History</Text>
-      </TouchableOpacity>
+
       <ShabadModal />
       <HistoryModal />
     </View>
@@ -224,13 +233,18 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   scroll: {
-    paddingTop: '0%',
+    flex: 1.5,
     width: '100%',
     height: '60%',
-    // backgroundColor: 'yellow',
+  },
+  underScroll: {
+    flex: 1,
   },
   shabadButton: {
-    top: 10,
+    padding: 10,
+    margin: 10,
+    flex: 1,
+    // flexDirection: 'row',
     width: 200,
     height: 50,
     borderRadius: 40,
@@ -239,6 +253,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   shabadtext: {
+    // flex: 1,s
     alignItems: 'center',
     justifyContent: 'center',
   },

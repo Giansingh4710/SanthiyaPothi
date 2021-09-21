@@ -16,7 +16,18 @@ import {barStyle} from '../assets/styleForEachOption';
 import {useSelector, useDispatch} from 'react-redux';
 import {setCheckBox, unCheckBoxes} from '../redux/actions';
 
-function EachBani(navigation, item, state, dispatch) {
+function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
+  function setTheList() {
+    setList(
+      Object.entries(state.checkBoxes)
+        .filter(bani => {
+          return bani[1].currentAng !== 1 && bani[1].checked === false;
+        })
+        .map(bani => {
+          return {title: bani[0]};
+        }),
+    );
+  }
   return (
     <View>
       <TouchableOpacity
@@ -25,40 +36,27 @@ function EachBani(navigation, item, state, dispatch) {
           navigation.navigate('OpenPdf', {pdfTitle: item.title});
         }}>
         <Text style={styles.titleText}>{item.title}</Text>
-        {/* {state.checkBoxes[item.title] ? ( */}
+
         <CheckBox
-          // checked={checked}
           checked={state.checkBoxes[item.title].checked}
           checkedColor="#0F0"
-          // checkedTitle="Great!"
           checkedTitle="ਸੰਪੂਰਨ"
-          onIconPress={() => {
-            dispatch(setCheckBox(item.title));
-          }}
           onPress={() => {
             dispatch(setCheckBox(item.title));
+            if (fileTitle === 'ਪਾਠ Hajari') {
+              setTheList();
+            }
           }}
           size={20}
           textStyle={{
             fontSize: 20,
-            // padding: 1,
-            // backgroundColor: 'yellow',
             height: 30,
           }}
           title="Not Done"
           titleProps={{}}
           uncheckedColor="#F00"
         />
-        {/* ) : (
-          <View />
-        )} */}
-        <Icon
-          style={{flex: 1}}
-          name="arrow-forward-outline"
-          type="ionicon"
-          // color="#7FFFD4"
-          // size={100}
-        />
+        <Icon style={{flex: 1}} name="arrow-forward-outline" type="ionicon" />
       </TouchableOpacity>
       <View style={styles.gap}></View>
     </View>
@@ -69,14 +67,18 @@ export default function FolderToPdfs({navigation, route}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
+  const [list, setList] = React.useState();
+
   const fileTitle = route.params.fileTitle;
-  const list =
-    'ਪਾਠ Hajari' !== fileTitle
-      ? route.params.list
-      : route.params.list.map(bani => {
-          return {title: bani[0]};
-        });
   React.useEffect(() => {
+    setList(
+      'ਪਾਠ Hajari' !== fileTitle
+        ? route.params.list
+        : route.params.list.map(bani => {
+            return {title: bani[0]};
+          }),
+    );
+
     navigation.setOptions({
       title: fileTitle,
       headerRight: () =>
@@ -99,8 +101,14 @@ export default function FolderToPdfs({navigation, route}) {
       <FlatList
         keyExtractor={item => item.title}
         renderItem={({item}) => {
-          //each item is an Object that has 1 key: title
-          return EachBani(navigation, item, state, dispatch);
+          return EachBani(
+            navigation,
+            item,
+            state,
+            dispatch,
+            setList,
+            fileTitle,
+          );
         }}
         data={list}
       />

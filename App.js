@@ -11,7 +11,6 @@ import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
 const Stack = createStackNavigator();
 
-//apk BUILD SUCCESSFUL
 function App() {
   return (
     <Provider store={Store}>
