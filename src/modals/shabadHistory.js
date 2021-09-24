@@ -11,7 +11,7 @@ import {Icon} from 'react-native-elements';
 import {FlatList} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  setShabadHistoryModal,
+  setShabadListModal,
   setShabad,
   setShabadModal,
   deleteShabad,
@@ -19,57 +19,56 @@ import {
 
 // import {barStyle} from '../assets/styleForEachOption';
 
-export default function HistoryModal() {
+export default function ShabadListModal({heading}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
   return (
     <Modal
-      visible={state.shabadHistoryModalShown}
+      visible={state.shabadShabadListModalShown}
       transparent
       animationType="slide"
-      onRequestClose={() => dispatch(setShabadHistoryModal())}>
+      onRequestClose={() => dispatch(setShabadListModal())}>
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.goBack}
           onPress={() => {
-            dispatch(setShabadHistoryModal());
+            dispatch(setShabadListModal());
           }}>
           <Icon name="arrow-back-outline" type="ionicon" />
         </TouchableOpacity>
+        <Text>{heading}</Text>
         <View style={styles.scroll}>
           <FlatList
-            keyExtractor={item => item.shabad.id}
-            renderItem={({item}) => {
+            keyExtractor={item => item.id}
+            renderItem={({item, index}) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
                     dispatch(
                       setShabad(
-                        item.shabad.text, //the shabad test
-                        item.shabad.date,
-                        item.shabad.time,
+                        // item.shabad.text, //the shabad test
+                        // item.shabad.date,
+                        // item.shabad.time,
+                        // false, //'no add to list',
+                        // item.shabad.id, //the shabad id
+                        // item.shabad.saved,
+                        item.text, //the shabad test
+                        item.date,
+                        item.time,
                         false, //'no add to list',
-                        item.shabad.id, //the shabad id
-                        item.shabad.saved,
+                        item.id, //the shabad id
+                        item.pinned,
+                        index,
                       ),
                     );
                     dispatch(setShabadModal());
                   }}>
-                  <ShabarBar item={item} dispatch={dispatch} />
+                  <ShabarBar item={item} index={index} dispatch={dispatch} />
                 </TouchableOpacity>
               );
             }}
-            data={state.shabadList.map((item, index) => {
-              // console.log(Object.keys(item));
-              if (item.text !== undefined) {
-                return {
-                  title: item.text.split('\n')[0] + item.text.split('\n')[1],
-                  shabad: item,
-                  index,
-                };
-              }
-            })}
+            data={state.shabadList}
           />
         </View>
       </View>
@@ -77,19 +76,21 @@ export default function HistoryModal() {
   );
 }
 
-function ShabarBar({item, dispatch}) {
+function ShabarBar({item, index, dispatch}) {
   return (
     <View
       style={
-        item.index % 2 === 0
+        index % 2 === 0
           ? shabadBar.container
           : {...shabadBar.container, backgroundColor: '#7CB9E8'}
       }>
-      <Text style={shabadBar.item}>{item.title}</Text>
       <Text style={shabadBar.item}>
-        time: {item.shabad.time}
+        {item.text.split('\n')[0] + item.text.split('\n')[1]}
+      </Text>
+      <Text style={shabadBar.item}>
+        time: {item.time}
         {'\n'}
-        date : {item.shabad.date}
+        date : {item.date}
       </Text>
 
       <Icon
@@ -97,7 +98,7 @@ function ShabarBar({item, dispatch}) {
         type="ionicon"
         color="#002D62"
         onPress={() => {
-          dispatch(deleteShabad(item.shabad.id));
+          dispatch(deleteShabad(item.id));
         }}
         // size={25}
         // onLongPress={() => console.log("LON")}

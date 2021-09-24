@@ -7,17 +7,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   setTheState,
   setShabadModal,
-  setShabadHistoryModal,
+  setShabadListModal,
 } from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {barStyle} from '../assets/styleForEachOption';
 
-import ShabadModal from './modals/randomShabad';
-import HistoryModal from './modals/shabadHistory';
+import ShabadModal from './modals/showShabad';
+import ShabadListModal from './modals/shabadHistory';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
+
   React.useEffect(() => {
     async function getData() {
       try {
@@ -39,6 +40,8 @@ function HomeScreen({navigation, route}) {
     }
     getData();
   }, []);
+
+  const [shabadListHeading, setShabadListHeading] = React.useState('');
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
@@ -206,7 +209,8 @@ function HomeScreen({navigation, route}) {
         <TouchableOpacity
           style={styles.shabadButton}
           onPress={() => {
-            dispatch(setShabadHistoryModal());
+            setShabadListHeading('All History');
+            dispatch(setShabadListModal());
           }}>
           <Text style={styles.shabadtext}>Show Shabad History</Text>
         </TouchableOpacity>
@@ -214,14 +218,15 @@ function HomeScreen({navigation, route}) {
         <TouchableOpacity
           style={styles.shabadButton}
           onPress={() => {
-            dispatch(setShabadHistoryModal());
+            setShabadListHeading('All Pinned Shabads');
+            dispatch(setShabadListModal());
           }}>
           <Text style={styles.shabadtext}>Show Pinned Shabads</Text>
         </TouchableOpacity>
       </View>
 
       <ShabadModal />
-      <HistoryModal />
+      <ShabadListModal heading={shabadListHeading} />
     </View>
   );
 }

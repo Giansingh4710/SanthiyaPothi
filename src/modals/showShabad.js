@@ -57,18 +57,19 @@ function ShabadModal() {
 
           <View style={styles.icons}>
             <Icon
-              name={state.theShabad.saved ? 'bookmark' : 'bookmark-outline'}
+              name={state.theShabad.pinned ? 'bookmark' : 'bookmark-outline'}
               type="ionicon"
               onPress={() => {
+                // console.log(state)
                 dispatch(setSavedShabad(state.theShabad.id));
               }}
             />
-            <Text>{String(state.theShabad.saved)}</Text>
           </View>
+          <Text>{String(state.theShabad.pinned)}</Text>
         </View>
         <View style={styles.scroll}>
           <ScrollView style={styles.gurbaniScroll}>
-            <Text>{state.theShabad.text}</Text>
+            <Text style={styles.theShabad}>{state.theShabad.text}</Text>
           </ScrollView>
         </View>
         <TouchableOpacity
@@ -84,8 +85,9 @@ function ShabadModal() {
                     ':' +
                     String(currentDate.getMinutes()).padStart(2, '0'),
                   true, //add to shabad lst
-                  0, //0 means no id so id needed
+                  '0', //0 means no id so id needed
                   false, //saved=false
+                  0, //the index here will be zero because we put this to top of list
                 ),
               );
             });
@@ -128,6 +130,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 30,
     backgroundColor: 'rgba(114,160,193,1)',
+  },
+  theShabad: {
+    paddingBottom: 30,
   },
   newShabad: {
     borderRadius: 5,

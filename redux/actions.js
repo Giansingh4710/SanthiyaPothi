@@ -21,13 +21,13 @@ export const setShabadModal = () => dispatch => {
     type: 'SHABAD_MODAL',
   });
 };
-export const setShabadHistoryModal = () => dispatch => {
+export const setShabadListModal = () => dispatch => {
   dispatch({
     type: 'SET_HISTORY_MODAL',
   });
 };
 export const setShabad =
-  (theShabad, date, time, addToList, id, saved) => dispatch => {
+  (theShabad, date, time, addToList, id, saved, index) => dispatch => {
     dispatch({
       type: 'SET_SHABAD',
       theShabadText: theShabad,
@@ -36,6 +36,7 @@ export const setShabad =
       addToList,
       id,
       saved,
+      index,
     });
   };
 export const deleteShabad = id => dispatch => {
