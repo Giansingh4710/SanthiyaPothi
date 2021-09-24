@@ -242,6 +242,11 @@ export const initialState = {
       baniType: 'Bhagat Bani',
       currentAng: 1,
     },
+    'Panch_Granthavali.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+    },
     'Adhyatam_Prakash.pdf': {
       checked: false,
       baniType: 'Vidya Sagar Pothis',
@@ -273,6 +278,11 @@ export const initialState = {
       currentAng: 1,
     },
     'Sri_Nanak_Parkash_2.pdf': {
+      checked: false,
+      baniType: 'Sri Nanak Parkash',
+      currentAng: 1,
+    },
+    'Ajit Singh Teeka Pothi 1.pdf': {
       checked: false,
       baniType: 'Sri Nanak Parkash',
       currentAng: 1,

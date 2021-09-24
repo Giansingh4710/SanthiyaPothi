@@ -185,6 +185,9 @@ export default function OpenPdf({navigation, route}) {
     'FareedkotTeeka.pdf': {
       uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/FareedkotTeeka.pdf',
     },
+    'Panch_Granthavali.pdf': {
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Panch_Granthavali.pdf',
+    },
     'Adhyatam_Prakash.pdf': {
       uri: 'bundle-assets://pdfs/VidyaSagarPothis/Adhyatam_Prakash.pdf',
     },
@@ -205,6 +208,9 @@ export default function OpenPdf({navigation, route}) {
     },
     'Sri_Nanak_Parkash_2.pdf': {
       uri: 'bundle-assets://pdfs/SriNanakParkash/Sri_Nanak_Parkash_2.pdf',
+    },
+    'AjitSinghTeekaPothi1.pdf': {
+      uri: 'bundle-assets://pdfs/SriNanakParkash/AjitSinghTeekaPothi1.pdf',
     },
     'GauriBavanAkahri.pdf': {
       uri: 'bundle-assets://pdfs/PanjGranthi/GauriBavanAkahri.pdf',

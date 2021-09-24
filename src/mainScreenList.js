@@ -173,6 +173,7 @@ function HomeScreen({navigation, route}) {
                 {title: 'CaNaka_Rajniti.pdf'},
                 {title: 'Sarkutavali.pdf'},
                 {title: 'Vichar_Mala.pdf'},
+                {title: 'Panch_Granthavali.pdf'},
                 //'Bhagat Bani Tatkara.jpeg'
               ],
             },
@@ -181,6 +182,7 @@ function HomeScreen({navigation, route}) {
               listt: [
                 {title: 'Sri_Nanak_Parkash_1.pdf'},
                 {title: 'Sri_Nanak_Parkash_2.pdf'},
+                {title: 'Ajit Singh Teeka Pothi 1.pdf'},
               ],
             },
             {
