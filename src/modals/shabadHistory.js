@@ -15,6 +15,7 @@ import {
   setShabad,
   setShabadModal,
   deleteShabad,
+  setSavedShabad,
 } from '../../redux/actions';
 
 // import {barStyle} from '../assets/styleForEachOption';
@@ -22,6 +23,10 @@ import {
 export default function ShabadListModal({heading}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
+
+  const allShabadsHistory = Object.entries(state.shabadList)
+    .map(shabad => shabad[1])
+    .reverse();
 
   return (
     <Modal
@@ -38,21 +43,30 @@ export default function ShabadListModal({heading}) {
           <Icon name="arrow-back-outline" type="ionicon" />
         </TouchableOpacity>
         <Text>{heading}</Text>
+        {/* {console.log(
+          'All History',
+          Object.entries(state.shabadList)
+            .map(shabad => shabad[1])
+            .reverse(),
+        )}
+        {console.log(
+          'All Pinned',
+          Object.entries(state.shabadList).map(shabad => {
+            if (shabad[1].pinned) {
+              return shabad[1];
+            }
+          }),
+        )} */}
         <View style={styles.scroll}>
           <FlatList
             keyExtractor={item => item.id}
             renderItem={({item, index}) => {
+              // console.log(index, item);
               return (
                 <TouchableOpacity
                   onPress={() => {
                     dispatch(
                       setShabad(
-                        // item.shabad.text, //the shabad test
-                        // item.shabad.date,
-                        // item.shabad.time,
-                        // false, //'no add to list',
-                        // item.shabad.id, //the shabad id
-                        // item.shabad.saved,
                         item.text, //the shabad test
                         item.date,
                         item.time,
@@ -64,11 +78,20 @@ export default function ShabadListModal({heading}) {
                     );
                     dispatch(setShabadModal());
                   }}>
-                  <ShabarBar item={item} index={index} dispatch={dispatch} />
+                  <ShabarBar
+                    item={item}
+                    heading={heading}
+                    index={index}
+                    dispatch={dispatch}
+                  />
                 </TouchableOpacity>
               );
             }}
-            data={state.shabadList}
+            data={
+              heading === 'All History'
+                ? allShabadsHistory
+                : allShabadsHistory.filter(shabad => shabad.pinned)
+            }
           />
         </View>
       </View>
@@ -76,7 +99,7 @@ export default function ShabadListModal({heading}) {
   );
 }
 
-function ShabarBar({item, index, dispatch}) {
+function ShabarBar({item, index, dispatch, heading}) {
   return (
     <View
       style={
@@ -93,16 +116,25 @@ function ShabarBar({item, index, dispatch}) {
         date : {item.date}
       </Text>
 
-      <Icon
-        name="close-circle-outline"
-        type="ionicon"
-        color="#002D62"
-        onPress={() => {
-          dispatch(deleteShabad(item.id));
-        }}
-        // size={25}
-        // onLongPress={() => console.log("LON")}
-      />
+      {heading === 'All History' ? (
+        <Icon
+          name="close-circle-outline"
+          type="ionicon"
+          color="#002D62"
+          onPress={() => {
+            dispatch(deleteShabad(item.id));
+          }}
+        />
+      ) : (
+        <Icon
+          name="bookmark"
+          type="ionicon"
+          color="#002D62"
+          onPress={() => {
+            dispatch(setSavedShabad(item.id));
+          }}
+        />
+      )}
     </View>
   );
 }

@@ -9,8 +9,7 @@ const setData = async (title, state) => {
 };
 
 const uniqueId = shabadList => {
-  const lst = shabadList.map(shabad => shabad.id); //the list of ids of shabads
-
+  const lst = shabadList.map(shabad => shabad[0]); //the list of ids of shabads
   let theId = Math.floor(Math.random() * 99999999999) + 1;
   let duplicate = lst.filter(anId => anId === theId);
 
@@ -383,15 +382,16 @@ export const initialState = {
   },
   shabadModalShown: false,
   shabadShabadListModalShown: false,
-  theShabad: {
-    text: 'Vaheguru',
-    date: 'today',
-    id: '1',
-    time: 'right now',
-    pinned: false,
-    index: null,
+  theShabad: '',
+  shabadList: {
+    // 1: {
+    //   text: 'ਵਾਹਿਗੁਰੂ \n Vaheguru',
+    //   date: 'N/A',
+    //   id: '1', //the id is the same as the key. it is useful for shabad history
+    //   time: 'N/A',
+    //   pinned: false,
+    // },
   },
-  shabadList: [],
 };
 
 setData('state', initialState); //to reset all state
@@ -462,57 +462,44 @@ function theReducer(state = initialState, action) {
   }
 
   if (action.type === 'SET_SHABAD') {
+    const theId =
+      action.id === '0'
+        ? uniqueId(Object.entries(state.shabadList))
+        : action.id;
+
     const theNewShabad = {
       text: action.theShabadText,
       date: action.date,
       time: action.time,
-      id: action.id === '0' ? uniqueId(state.shabadList) : action.id,
       pinned: action.saved,
-      index: action.index,
+      id: theId,
     };
 
     const newState = {
       ...state,
-      theShabad: theNewShabad,
+      theShabad: theId,
     };
-
-    if (action.addToList === true) {
-      newState.shabadList = [theNewShabad, ...state.shabadList];
-    }
-
+    newState.shabadList[theId] = theNewShabad;
     setData('state', newState);
     return newState;
   }
 
   if (action.type === 'SET_SAVED_SHABAD') {
-    const newSavedShabad = state.theShabad;
-    const newShabadList = state.shabadList;
-
-    for (const aShabad of newShabadList) {
-      if (aShabad.id === action.id) {
-        const newAns = !aShabad.pinned;
-        aShabad.pinned = newAns;
-        newSavedShabad.pinned = newAns;
-      }
-    }
-    // console.log(newSavedShabad.pinned);
-
-    // newSavedShabad.pinned = !newSavedShabad.pinned;
-    // newShabadList[newSavedShabad.index].pinned = newSavedShabad.pinned;
+    state.shabadList[state.theShabad].pinned =
+      !state.shabadList[state.theShabad].pinned;
 
     const newState = {
       ...state,
-      shabadList: newShabadList,
-      theShabad: newSavedShabad,
     };
     setData('state', newState);
     return newState;
   }
 
   if (action.type === 'DELETE_SHABAD') {
+    delete state.shabadList[action.id];
+    state.theShabad = '';
     const newState = {
       ...state,
-      shabadList: state.shabadList.filter(shabad => shabad.id !== action.id),
     };
 
     setData('state', newState);

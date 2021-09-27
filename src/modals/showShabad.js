@@ -31,9 +31,56 @@ function ShabadModal() {
       .catch(er => {
         shabad = 'Vaheguru. No internet';
       });
-    // console.log(typeof shabad);
     return shabad;
   }
+
+  const [theFontSize, setFontSize] = React.useState(20);
+  const styles = StyleSheet.create({
+    //   ...barStyle,
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#007FFF',
+      height: '75%',
+      width: '90%',
+      top: '15%',
+      left: '5%',
+      borderRadius: 40,
+    },
+    topRow: {
+      flexDirection: 'row',
+    },
+    icons: {
+      // backgroundColor: 'red',
+      flex: 0.75,
+    },
+    dateTime: {
+      flex: 1,
+    },
+    scroll: {
+      padding: 15,
+      height: '80%',
+      width: '100%',
+    },
+    gurbaniScroll: {
+      borderRadius: 20,
+      padding: 15,
+      backgroundColor: 'rgba(114,160,193,1)',
+    },
+    theShabad: {
+      paddingBottom: 10,
+      fontSize: theFontSize,
+    },
+    plusMinusRow: {
+      // backgroundColor: 'red',
+      flexDirection: 'row',
+    },
+    newShabad: {
+      borderRadius: 5,
+      padding: 10,
+      backgroundColor: '#00FFFF',
+    },
+  });
 
   return (
     <Modal
@@ -42,36 +89,72 @@ function ShabadModal() {
       animationType="slide"
       onRequestClose={() => dispatch(setShabadModal())}>
       <View style={styles.container}>
-        <View style={styles.topRow}>
-          <View style={styles.icons}>
-            <Icon
-              name="arrow-back-outline"
-              type="ionicon"
-              onPress={() => {
-                dispatch(setShabadModal());
-              }}
-            />
-          </View>
-          <Text style={styles.dateTime}>Date: {state.theShabad.time}</Text>
-          <Text style={styles.dateTime}>Time: {state.theShabad.date}</Text>
+        {state.theShabad ? (
+          <View>
+            <View style={styles.topRow}>
+              <View style={styles.icons}>
+                <Icon
+                  name="arrow-back-outline"
+                  type="ionicon"
+                  onPress={() => {
+                    dispatch(setShabadModal());
+                  }}
+                />
+              </View>
+              <Text style={styles.dateTime}>
+                Date: {state.shabadList[state.theShabad].date}
+              </Text>
+              <Text style={styles.dateTime}>
+                Time: {state.shabadList[state.theShabad].time}
+              </Text>
 
-          <View style={styles.icons}>
-            <Icon
-              name={state.theShabad.pinned ? 'bookmark' : 'bookmark-outline'}
-              type="ionicon"
-              onPress={() => {
-                // console.log(state)
-                dispatch(setSavedShabad(state.theShabad.id));
-              }}
-            />
+              <View style={styles.icons}>
+                <Icon
+                  name={
+                    state.shabadList[state.theShabad].pinned
+                      ? 'bookmark'
+                      : 'bookmark-outline'
+                  }
+                  type="ionicon"
+                  onPress={() => {
+                    dispatch(setSavedShabad(state.theShabad));
+                  }}
+                />
+              </View>
+              {/* <Text>{String(state.shabadList[state.theShabad].pinned)}</Text> */}
+            </View>
+            <View style={styles.scroll}>
+              <ScrollView style={styles.gurbaniScroll}>
+                <Text style={styles.theShabad}>
+                  {state.shabadList[state.theShabad].text}
+                </Text>
+              </ScrollView>
+            </View>
+            <View style={styles.plusMinusRow}>
+              <View style={{flex: 1}}>
+                <Icon
+                  name="add-outline"
+                  type="ionicon"
+                  onPress={() => {
+                    setFontSize(prev => prev + 1);
+                  }}
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <Icon
+                  style={{flex: 1}}
+                  name="remove-outline"
+                  type="ionicon"
+                  onPress={() => {
+                    setFontSize(prev => prev - 1);
+                  }}
+                />
+              </View>
+            </View>
           </View>
-          <Text>{String(state.theShabad.pinned)}</Text>
-        </View>
-        <View style={styles.scroll}>
-          <ScrollView style={styles.gurbaniScroll}>
-            <Text style={styles.theShabad}>{state.theShabad.text}</Text>
-          </ScrollView>
-        </View>
+        ) : (
+          <View />
+        )}
         <TouchableOpacity
           style={styles.newShabad}
           onPress={() => {
@@ -87,7 +170,7 @@ function ShabadModal() {
                   true, //add to shabad lst
                   '0', //0 means no id so id needed
                   false, //saved=false
-                  0, //the index here will be zero because we put this to top of list
+                  //0, //the index here will be zero because we put this to top of list
                 ),
               );
             });
@@ -98,47 +181,5 @@ function ShabadModal() {
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  //   ...barStyle,
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#007FFF',
-    height: '70%',
-    width: '90%',
-    top: '15%',
-    left: '5%',
-    borderRadius: 40,
-  },
-  topRow: {
-    flexDirection: 'row',
-  },
-  icons: {
-    // backgroundColor: 'red',
-    flex: 0.5,
-  },
-  dateTime: {
-    flex: 1,
-  },
-  scroll: {
-    padding: 10,
-    height: '80%',
-    width: '95%',
-  },
-  gurbaniScroll: {
-    borderRadius: 20,
-    padding: 30,
-    backgroundColor: 'rgba(114,160,193,1)',
-  },
-  theShabad: {
-    paddingBottom: 30,
-  },
-  newShabad: {
-    borderRadius: 5,
-    padding: 10,
-    backgroundColor: '#00FFFF',
-  },
-});
 
 export default ShabadModal;
