@@ -1,0 +1,5 @@
+make sure that ./android/app/build/outputs/apk/release is
+empty because this is where it will generate
+
+cd android
+./gradlew assembleRelease

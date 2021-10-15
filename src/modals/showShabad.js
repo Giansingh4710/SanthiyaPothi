@@ -105,7 +105,7 @@ function ShabadModal() {
                 Date: {state.shabadList[state.theShabad].date}
               </Text>
               <Text style={styles.dateTime}>
-                Time: {state.shabadList[state.theShabad].time}
+                {'\t'}Time: {state.shabadList[state.theShabad].time}
               </Text>
 
               <View style={styles.icons}>

@@ -394,7 +394,7 @@ export const initialState = {
   },
 };
 
-setData('state', initialState); //to reset all state
+// setData('state', initialState); //to reset all state
 
 //why does the app chash when I change the prarameters position
 function theReducer(state = initialState, action) {

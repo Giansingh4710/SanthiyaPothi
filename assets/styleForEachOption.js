@@ -1,6 +1,6 @@
 export const barStyle = {
   itemContainer: {
-    height: 70,
+    height: 75,
     backgroundColor: '#7CE8',
     borderRadius: 5,
     flexDirection: 'row',
@@ -11,6 +11,7 @@ export const barStyle = {
   titleText: {
     flex: 1,
     fontSize: 20,
+    // padding: 5,
   },
   gap: {
     height: 1,
