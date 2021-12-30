@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  FlatList,
-  LogBox,
-  Button,
-} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 
 import {CheckBox, Icon} from 'react-native-elements';
 

@@ -34,7 +34,6 @@ function HomeScreen({navigation, route}) {
     getData();
   }, []);
 
-  const [shabadListHeading, setShabadListHeading] = React.useState('');
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>

@@ -2,11 +2,9 @@ import React from 'react';
 import {
   Text,
   StyleSheet,
-  TouchableOpacity,
   View,
   ActivityIndicator,
   TextInput,
-  Dimensions,
   Alert,
 } from 'react-native';
 
@@ -28,7 +26,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
+    this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -87,7 +85,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  // this.pdf.setPage(asInt);
+                  this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -351,7 +349,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          // this.pdf = pdf;
+          this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}

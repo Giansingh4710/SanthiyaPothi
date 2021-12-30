@@ -2,19 +2,17 @@ import React from 'react';
 import {
   Text,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
   View,
   ActivityIndicator,
   TextInput,
-  Image,
   Alert,
 } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 // import {useSelector, useDispatch} from 'react-redux';
 
-export default function TeekaPDF({navigation}) {
+export default function TeekaPDF() {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(0);
   const [inputAng, setInputAng] = React.useState('');
