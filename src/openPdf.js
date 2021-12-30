@@ -18,7 +18,6 @@ import {setAngNum, setCheckBox} from '../redux/actions';
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
-  const [inputAng, setInputAng] = React.useState('');
   const [orientation, setOrientation] = React.useState('portrait');
 
   const currentAngRef = React.useRef(1); //only for addListner
@@ -41,18 +40,92 @@ export default function OpenPdf({navigation, route}) {
   // });
 
   React.useEffect(() => {
-    this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
+    // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
   React.useEffect(() => {
-    navigation.setOptions({
-      title: pdfTitle,
-      // headerTitle: () => <Text>{pdfTitle}</Text>,
+    const headerStyles = StyleSheet.create({
+      container: {
+        // backgroundColor: 'orange',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+      },
+      title: {
+        flex: 1,
+        // backgroundColor: 'blue',
+        fontSize: 15,
+        fontWeight: 'bold',
+        margin: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+      },
+      pagesBox: {
+        flex: 1,
+        margin: 10,
+        width: '30%',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // justifyContent: 'space-evenly',
+        fontSize: 20,
+        flexDirection: 'row',
+        backgroundColor: '#077b8a',
+      },
+      setAngNumBox: {
+        borderRadius: 5,
+        height: '95%',
+        fontSize: 20,
+        backgroundColor: '#a2d5c6',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+      },
+      boxText: {
+        fontSize: 25,
+      },
     });
 
+    function LogoTitle(props) {
+      return (
+        <View style={headerStyles.container}>
+          <Text style={headerStyles.title}>{props['title']}</Text>
+          <View style={headerStyles.pagesBox}>
+            <TextInput
+              keyboardType="numeric"
+              value={currrentAng.toString()}
+              style={headerStyles.setAngNumBox}
+              placeholder="ex: 5"
+              onSubmitEditing={e => {
+                const asInt = currrentAng;
+                if (asInt) {
+                  // this.pdf.setPage(asInt);
+                  if (asInt > totalAngs) {
+                    setCurrentAng(totalAngs);
+                  }
+                }
+              }}
+              onChangeText={text => {
+                if (text.length === 0) {
+                  setCurrentAng('');
+                } else if (text.length < 5) {
+                  setCurrentAng(parseInt(text));
+                }
+              }}
+            />
+            <Text style={headerStyles.boxText}>/{totalAngs}</Text>
+          </View>
+        </View>
+      );
+    }
+
+    navigation.setOptions({
+      headerTitle: () => <LogoTitle title={pdfTitle} />,
+    });
+  });
+
+  React.useEffect(() => {
     navigation.addListener('beforeRemove', () => {
       dispatch(setAngNum(pdfTitle, currentAngRef.current));
-      // console.log(currentAngRef.current, totalAngRef.current);
       if (currentAngRef.current === totalAngRef.current) {
         if (state.checkBoxes[pdfTitle].checked === false) {
           dispatch(setCheckBox(pdfTitle));
@@ -291,49 +364,9 @@ export default function OpenPdf({navigation, route}) {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.angInfoRow}>
-        <View style={styles.pagesBox}>
-          <Text style={styles.boxText}>
-            {currrentAng}/{totalAngs}
-          </Text>
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            keyboardType="numeric"
-            style={styles.inputEntryBox}
-            value={inputAng}
-            placeholder="ex: 5"
-            onChangeText={text => {
-              if (text.length < 5) {
-                setInputAng(text);
-              }
-            }}
-          />
-          <TouchableOpacity
-            style={styles.inputSubmit}
-            onPress={() => {
-              const asInt = parseInt(inputAng);
-              if (asInt) {
-                this.pdf.setPage(asInt);
-                if (asInt > totalAngs) {
-                  setInputAng(String(totalAngs));
-                }
-              }
-            }}>
-            <Text>Submit</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
-            style={styles.inputSubmit}
-            onPress={() => {
-              this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
-            }}>
-            <Text>Go To Ang Last Left On</Text>
-          </TouchableOpacity> */}
-        </View>
-      </View>
       <Pdf
         ref={pdf => {
-          this.pdf = pdf;
+          // this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}
@@ -369,85 +402,6 @@ export default function OpenPdf({navigation, route}) {
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#7CB9E8',
-//   },
-//   header: {
-//     flexDirection: 'row',
-//     padding: 5,
-//   },
-//   backButton: {
-//     flex: 1,
-//   },
-//   backArrow: {
-//     width: 30,
-//     height: 30,
-//   },
-//   title: {
-//     fontSize: 10,
-//     // backgroundColor: 'yellow',
-//     // flex: 4,
-//     // right: 25,
-//     // textAlign: 'center',
-//   },
-//   angInfoRow: {
-//     flexDirection: 'row',
-//   },
-//   pagesBox: {
-//     height: 30,
-//     width: 150,
-//     borderRadius: 5,
-//     backgroundColor: 'white',
-//     alignItems: 'center',
-//   },
-//   boxText: {
-//     fontSize: 20,
-//   },
-//   inputRow: {
-//     flex: 1,
-//     justifyContent: 'space-evenly',
-//     flexDirection: 'row',
-//     // backgroundColor: 'white',
-//   },
-//   inputEntryBox: {
-//     height: 45,
-//     width: 60,
-//     backgroundColor: '#A3C1AD',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     fontSize: 19,
-//     borderRadius: 5,
-//     // padding: 10,
-//   },
-//   inputSubmit: {
-//     backgroundColor: '#00CED1',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     height: 40,
-//     width: 50,
-//     borderRadius: 10,
-//   },
-//   lastLeftOn: {
-//     backgroundColor: '#00CED1',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     height: 40,
-//     width: 90,
-//     borderRadius: 10,
-//   },
-//   pdf: {
-//     // width: Dimensions.get('window').width,
-//     width: '100%',
-//     // height: Dimensions.get('window').height,
-//     height: '80%',
-//     borderRadius: 25,
-//   },
-// });
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -455,65 +409,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#7CB9E8',
   },
-  // header: {
-  //   flexDirection: 'row',
-  //   paddingBottom: 10,
-  // },
-  // backButton: {
-  //   flex: 1,
-  // },
-  // backArrow: {
-  //   width: 30,
-  //   height: 30,
-  // },
-  // title: {
-  //   fontSize: 15,
-  //   flex: 4,
-  //   right: 25,
-  //   textAlign: 'center',
-  // },
-  angInfoRow: {
-    flexDirection: 'row',
-  },
-  pagesBox: {
-    height: '55%',
-    width: '30%',
-    borderRadius: 5,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  boxText: {
-    fontSize: 20,
-  },
-  inputRow: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
-    // backgroundColor: 'white',
-  },
-  inputEntryBox: {
-    height: '100%',
-    width: '20%',
-    backgroundColor: '#A3C1AD',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 19,
-    borderRadius: 5,
-    // padding: 10,
-  },
-  inputSubmit: {
-    backgroundColor: '#00CED1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 50,
-    width: 90,
-    borderRadius: 10,
-  },
   pdf: {
-    // width: Dimensions.get('window').width,
     width: '100%',
+    height: '99%',
+    borderRadius: 15,
+    // width: Dimensions.get('window').width,
     // height: Dimensions.get('window').height,
-    height: '89%',
-    borderRadius: 25,
   },
 });
