@@ -76,6 +76,7 @@ function HomeScreen({navigation, route}) {
               title: 'Sri Guru Granth Sahib Jee',
               listt: [
                 {title: 'Adi Maharaj.pdf'},
+                {title: 'Adi Maharaj Typed.pdf'},
                 {title: 'Fareedkot Teeka.pdf'},
               ],
             },

@@ -27,6 +27,11 @@ export const initialState = {
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
     },
+    'Adi Maharaj Typed.pdf': {
+      checked: false,
+      baniType: 'Sri Guru Granth Sahib Jee',
+      currentAng: 1,
+    },
     'Fareedkot Teeka.pdf': {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',

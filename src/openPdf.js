@@ -6,27 +6,39 @@ import {
   View,
   ActivityIndicator,
   TextInput,
-  BackHandler,
+  Dimensions,
   Alert,
-  Image,
 } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import TeekaPDF from './teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
-import {setAngNum} from '../redux/actions';
+import {setAngNum, setCheckBox} from '../redux/actions';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
   const [inputAng, setInputAng] = React.useState('');
+  const [orientation, setOrientation] = React.useState('portrait');
 
   const currentAngRef = React.useRef(1); //only for addListner
+  const totalAngRef = React.useRef(1); //only for addListner
 
   const state = useSelector(theState => theState.theReducer);
   const dispatch = useDispatch();
 
   const {pdfTitle} = route.params;
+
+  // const isPortrait = () => {
+  //   const dim = Dimensions.get('screen');
+  //   return dim.height >= dim.width;
+  // };
+
+  // Dimensions.addEventListener('change', () => {
+  //   setOrientation(isPortrait() ? 'portrait' : 'landscape');
+  //   // console.log('changed orientation');
+  //   console.log(this.pdf._reactInternals.memoizedProps);
+  // });
 
   React.useEffect(() => {
     this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
@@ -40,6 +52,12 @@ export default function OpenPdf({navigation, route}) {
 
     navigation.addListener('beforeRemove', () => {
       dispatch(setAngNum(pdfTitle, currentAngRef.current));
+      // console.log(currentAngRef.current, totalAngRef.current);
+      if (currentAngRef.current === totalAngRef.current) {
+        if (state.checkBoxes[pdfTitle].checked === false) {
+          dispatch(setCheckBox(pdfTitle));
+        }
+      }
     });
   }, [navigation]);
 
@@ -182,6 +200,9 @@ export default function OpenPdf({navigation, route}) {
     'AdiMaharaj.pdf': {
       uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/AdiMaharaj.pdf',
     },
+    'AdiMaharajTyped.pdf': {
+      uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/AdiMaharajTyped.pdf',
+    },
     'FareedkotTeeka.pdf': {
       uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/FareedkotTeeka.pdf',
     },
@@ -318,6 +339,7 @@ export default function OpenPdf({navigation, route}) {
         source={sourceFileName}
         onLoadComplete={(numberOfPages, filePath) => {
           setTotalAngs(numberOfPages);
+          totalAngRef.current = numberOfPages;
         }}
         onPageChanged={(page, numberOfPages) => {
           setCurrentAng(page);
