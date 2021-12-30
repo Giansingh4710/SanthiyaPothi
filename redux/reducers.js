@@ -8,18 +8,6 @@ const setData = async (title, state) => {
   }
 };
 
-const uniqueId = shabadList => {
-  const lst = shabadList.map(shabad => shabad[0]); //the list of ids of shabads
-  let theId = Math.floor(Math.random() * 99999999999) + 1;
-  let duplicate = lst.filter(anId => anId === theId);
-
-  while (duplicate.length > 0) {
-    theId = Math.floor(Math.random() * 99999999999) + 1;
-    duplicate = lst.filter(anId => anId === theId);
-  }
-  return theId;
-};
-
 export const initialState = {
   checkBoxes: {
     'Adi Maharaj.pdf': {
@@ -385,24 +373,20 @@ export const initialState = {
       currentAng: 1,
     },
   },
-  shabadModalShown: false,
-  shabadShabadListModalShown: false,
-  theShabad: '',
-  shabadList: {
-    // 1: {
-    //   text: 'ਵਾਹਿਗੁਰੂ \n Vaheguru',
-    //   date: 'N/A',
-    //   id: '1', //the id is the same as the key. it is useful for shabad history
-    //   time: 'N/A',
-    //   pinned: false,
-    // },
-  },
 };
 
 // setData('state', initialState); //to reset all state
 
-//why does the app chash when I change the prarameters position
 function theReducer(state = initialState, action) {
+  // for async storage
+  if (action.type === 'SET_THE_STATE') {
+    const newState = {
+      ...action.state,
+    };
+
+    setData('state', newState);
+    return newState;
+  }
   if (action.type === 'SET_CHECKBOX') {
     const newCheckBoxes = {...state.checkBoxes};
     newCheckBoxes[action.theBani].checked =
@@ -412,15 +396,6 @@ function theReducer(state = initialState, action) {
     const newState = {
       ...state,
       checkBoxes: newCheckBoxes,
-    };
-
-    setData('state', newState);
-    return newState;
-  }
-  // for async storage
-  if (action.type === 'SET_THE_STATE') {
-    const newState = {
-      ...action.state,
     };
 
     setData('state', newState);
@@ -440,71 +415,6 @@ function theReducer(state = initialState, action) {
     const newState = {
       ...state,
       checkBoxes: newCheckBoxes,
-    };
-
-    setData('state', newState);
-    return newState;
-  }
-
-  if (action.type === 'SHABAD_MODAL') {
-    const newState = {
-      ...state,
-      shabadModalShown: !state.shabadModalShown,
-    };
-
-    setData('state', newState);
-    return newState;
-  }
-
-  if (action.type === 'SET_HISTORY_MODAL') {
-    const newState = {
-      ...state,
-      shabadShabadListModalShown: !state.shabadShabadListModalShown,
-    };
-
-    setData('state', newState);
-    return newState;
-  }
-
-  if (action.type === 'SET_SHABAD') {
-    const theId =
-      action.id === '0'
-        ? uniqueId(Object.entries(state.shabadList))
-        : action.id;
-
-    const theNewShabad = {
-      text: action.theShabadText,
-      date: action.date,
-      time: action.time,
-      pinned: action.saved,
-      id: theId,
-    };
-
-    const newState = {
-      ...state,
-      theShabad: theId,
-    };
-    newState.shabadList[theId] = theNewShabad;
-    setData('state', newState);
-    return newState;
-  }
-
-  if (action.type === 'SET_SAVED_SHABAD') {
-    state.shabadList[state.theShabad].pinned =
-      !state.shabadList[state.theShabad].pinned;
-
-    const newState = {
-      ...state,
-    };
-    setData('state', newState);
-    return newState;
-  }
-
-  if (action.type === 'DELETE_SHABAD') {
-    delete state.shabadList[action.id];
-    state.theShabad = '';
-    const newState = {
-      ...state,
     };
 
     setData('state', newState);

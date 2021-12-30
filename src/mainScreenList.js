@@ -4,16 +4,9 @@ import {Icon} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {
-  setTheState,
-  setShabadModal,
-  setShabadListModal,
-} from '../redux/actions';
+import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {barStyle} from '../assets/styleForEachOption';
-
-import ShabadModal from './modals/showShabad';
-import ShabadListModal from './modals/shabadHistory';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -196,36 +189,6 @@ function HomeScreen({navigation, route}) {
           ]}
         />
       </View>
-      <View style={styles.underScroll}>
-        <TouchableOpacity
-          style={styles.shabadButton}
-          onPress={() => {
-            dispatch(setShabadModal());
-          }}>
-          <Text style={styles.shabadtext}>Show Random Shabad</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.shabadButton}
-          onPress={() => {
-            setShabadListHeading('All History');
-            dispatch(setShabadListModal());
-          }}>
-          <Text style={styles.shabadtext}>Show Shabad History</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.shabadButton}
-          onPress={() => {
-            setShabadListHeading('All Pinned Shabads');
-            dispatch(setShabadListModal());
-          }}>
-          <Text style={styles.shabadtext}>Show Pinned Shabads</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ShabadModal />
-      <ShabadListModal heading={shabadListHeading} />
     </View>
   );
 }
