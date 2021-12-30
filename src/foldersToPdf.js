@@ -49,14 +49,13 @@ function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
           }}
           size={20}
           textStyle={{
-            fontSize: 20,
-            height: 30,
+            fontSize: 10,
+            height: 20,
           }}
           title="Not Done"
           titleProps={{}}
           uncheckedColor="#F00"
         />
-        <Icon style={{flex: 1}} name="arrow-forward-outline" type="ionicon" />
       </TouchableOpacity>
       <View style={styles.gap}></View>
     </View>
@@ -80,11 +79,16 @@ export default function FolderToPdfs({navigation, route}) {
     );
 
     navigation.setOptions({
-      title: fileTitle,
+      headerTitle: () => <Text>{fileTitle}</Text>,
       headerRight: () =>
         fileTitle !== 'ਪਾਠ Hajari' ? (
           <TouchableOpacity
-            style={{backgroundColor: '#f8f8', padding: 10}}
+            style={{
+              backgroundColor: '#077b8a',
+              padding: 10,
+              borderRadius: 10,
+              right: 14,
+            }}
             onPress={() => {
               dispatch(unCheckBoxes(fileTitle));
             }}>

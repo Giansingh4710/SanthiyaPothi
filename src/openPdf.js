@@ -18,7 +18,6 @@ import {setAngNum, setCheckBox} from '../redux/actions';
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
-  const [orientation, setOrientation] = React.useState('portrait');
 
   const currentAngRef = React.useRef(1); //only for addListner
   const totalAngRef = React.useRef(1); //only for addListner
@@ -28,67 +27,57 @@ export default function OpenPdf({navigation, route}) {
 
   const {pdfTitle} = route.params;
 
-  // const isPortrait = () => {
-  //   const dim = Dimensions.get('screen');
-  //   return dim.height >= dim.width;
-  // };
-
-  // Dimensions.addEventListener('change', () => {
-  //   setOrientation(isPortrait() ? 'portrait' : 'landscape');
-  //   // console.log('changed orientation');
-  //   console.log(this.pdf._reactInternals.memoizedProps);
-  // });
-
   React.useEffect(() => {
     // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
-  React.useEffect(() => {
-    const headerStyles = StyleSheet.create({
-      container: {
-        // backgroundColor: 'orange',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-      },
-      title: {
-        flex: 1,
-        // backgroundColor: 'blue',
-        fontSize: 15,
-        fontWeight: 'bold',
-        margin: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-      },
-      pagesBox: {
-        flex: 1,
-        margin: 10,
-        width: '30%',
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-        // justifyContent: 'space-evenly',
-        fontSize: 20,
-        flexDirection: 'row',
-        backgroundColor: '#077b8a',
-      },
-      setAngNumBox: {
-        borderRadius: 5,
-        height: '95%',
-        fontSize: 20,
-        backgroundColor: '#a2d5c6',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-      },
-      boxText: {
-        fontSize: 25,
-      },
-    });
+  const headerStyles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+    },
+    title: {
+      flex: 1,
+      margin: 10,
+      borderRadius: 5,
+      height: '75%',
+      backgroundColor: '#077b8a',
+      justifyContent: 'center',
+      textAlign: 'center',
+    },
+    pagesBox: {
+      flex: 1.5,
+      margin: 10,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      // justifyContent: 'space-evenly',
+      fontSize: 20,
+      flexDirection: 'row',
+      backgroundColor: '#077b8a',
+    },
+    setAngNumBox: {
+      borderRadius: 5,
+      height: '95%',
+      fontSize: 20,
+      backgroundColor: '#a2d5c6',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+    },
+    boxText: {
+      fontSize: 25,
+    },
+  });
 
-    function LogoTitle(props) {
-      return (
+  React.useEffect(() => {
+    if (pdfTitle === 'Fareedkot Teeka.pdf') return;
+    let showTitle = pdfTitle;
+    if (showTitle.length > 15) showTitle = showTitle.slice(0, 15) + '...';
+    navigation.setOptions({
+      headerTitle: () => (
         <View style={headerStyles.container}>
-          <Text style={headerStyles.title}>{props['title']}</Text>
+          <Text style={headerStyles.title}>{showTitle}</Text>
           <View style={headerStyles.pagesBox}>
             <TextInput
               keyboardType="numeric"
@@ -115,11 +104,7 @@ export default function OpenPdf({navigation, route}) {
             <Text style={headerStyles.boxText}>/{totalAngs}</Text>
           </View>
         </View>
-      );
-    }
-
-    navigation.setOptions({
-      headerTitle: () => <LogoTitle title={pdfTitle} />,
+      ),
     });
   });
 
