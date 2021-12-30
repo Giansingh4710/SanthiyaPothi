@@ -76,7 +76,6 @@ function HomeScreen({navigation, route}) {
               title: 'Sri Guru Granth Sahib Jee',
               listt: [
                 {title: 'Adi Maharaj.pdf'},
-                {title: 'Adi Maharaj Typed.pdf'},
                 {title: 'Fareedkot Teeka.pdf'},
               ],
             },
@@ -115,7 +114,6 @@ function HomeScreen({navigation, route}) {
                 {title: '20) Sarang Ki Vaar Mahala 4.pdf'},
                 {title: '21) Malaar Ki Vaar Mahala 1.pdf'},
                 {title: '22) Kanre Ki Vaar Mahala 4.pdf'},
-                //'22 Vaara Tatkara.jpeg',
               ],
             },
             {
