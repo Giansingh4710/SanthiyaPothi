@@ -88,7 +88,7 @@ export default function FolderToPdfs({navigation, route}) {
             onPress={() => {
               dispatch(unCheckBoxes(fileTitle));
             }}>
-            <Text>Unckeck All</Text>
+            <Text>Uncheck All</Text>
           </TouchableOpacity>
         ) : (
           <View />
