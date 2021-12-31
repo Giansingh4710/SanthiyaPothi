@@ -6,16 +6,19 @@ import {
   ActivityIndicator,
   TextInput,
   Alert,
+  Touchable,
 } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import TeekaPDF from './teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
+  const [showHeader, setShowHeader] = React.useState(true);
 
   const currentAngRef = React.useRef(1); //only for addListner
   const totalAngRef = React.useRef(1); //only for addListner
@@ -26,7 +29,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
+    // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -85,7 +88,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  this.pdf.setPage(asInt);
+                  // this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -103,6 +106,7 @@ export default function OpenPdf({navigation, route}) {
           </View>
         </View>
       ),
+      headerShown: showHeader,
     });
   });
 
@@ -349,7 +353,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          this.pdf = pdf;
+          // this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}
@@ -358,8 +362,15 @@ export default function OpenPdf({navigation, route}) {
           totalAngRef.current = numberOfPages;
         }}
         onPageChanged={(page, numberOfPages) => {
+          if (page > currrentAng) {
+            // console.log('going down');
+            setShowHeader(false);
+          }
           setCurrentAng(page);
           currentAngRef.current = page;
+        }}
+        onPageSingleTap={() => {
+          setShowHeader(!showHeader);
         }}
         onError={error => {
           Alert.alert(
