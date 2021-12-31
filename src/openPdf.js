@@ -6,14 +6,12 @@ import {
   ActivityIndicator,
   TextInput,
   Alert,
-  Touchable,
 } from 'react-native';
 
 import Pdf from 'react-native-pdf';
 import TeekaPDF from './teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
@@ -29,7 +27,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
+    this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -88,7 +86,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  // this.pdf.setPage(asInt);
+                  this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -353,7 +351,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          // this.pdf = pdf;
+          this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}

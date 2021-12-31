@@ -6,7 +6,6 @@ import {CheckBox, Icon} from 'react-native-elements';
 import {barStyle} from '../assets/styleForEachOption';
 import {useSelector, useDispatch} from 'react-redux';
 import {setCheckBox, unCheckBoxes} from '../redux/actions';
-
 function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
   function setTheList() {
     setList(
@@ -32,6 +31,11 @@ function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
           checked={state.checkBoxes[item.title].checked}
           checkedColor="#0F0"
           checkedTitle="ਸੰਪੂਰਨ"
+          containerStyle={{
+            borderRadius: 10,
+            padding: 10,
+            backgroundColor: 'black',
+          }}
           onPress={() => {
             dispatch(setCheckBox(item.title));
             if (fileTitle === 'ਪਾਠ Hajari') {
@@ -42,12 +46,14 @@ function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
           textStyle={{
             fontSize: 10,
             height: 20,
+            color: 'white',
           }}
           title="Not Done"
           titleProps={{}}
           uncheckedColor="#F00"
         />
       </TouchableOpacity>
+
       <View style={styles.gap}></View>
     </View>
   );
@@ -60,6 +66,7 @@ export default function FolderToPdfs({navigation, route}) {
   const [list, setList] = React.useState();
 
   const fileTitle = route.params.fileTitle;
+
   React.useEffect(() => {
     setList(
       'ਪਾਠ Hajari' !== fileTitle
