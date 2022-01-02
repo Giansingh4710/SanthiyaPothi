@@ -1,3 +1,8 @@
+//#75f1e0
+//#84f8c8
+//#a3fbaa
+//#cbfc8b
+//#f9f871
 export const barStyle = {
   itemContainer: {
     height: 75,

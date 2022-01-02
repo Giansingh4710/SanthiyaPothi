@@ -20,6 +20,7 @@ function HomeScreen({navigation, route}) {
 
         if (theStringState) {
           theState = JSON.parse(theStringState);
+          // console.log(theState);
           console.log('got state that was previously saved');
         } else {
           console.log('there is nothing is state');
