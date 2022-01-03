@@ -3,10 +3,19 @@ import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 
 import {CheckBox, Icon} from 'react-native-elements';
 
-import {barStyle} from '../assets/styleForEachOption';
 import {useSelector, useDispatch} from 'react-redux';
 import {setCheckBox, unCheckBoxes} from '../redux/actions';
-function EachBani(navigation, item, state, dispatch, setList, fileTitle) {
+import {allColors, barStyle, headerColor} from '../assets/styleForEachOption';
+
+function EachBani(
+  navigation,
+  item,
+  state,
+  dispatch,
+  setList,
+  fileTitle,
+  styles,
+) {
   function setTheList() {
     setList(
       Object.entries(state.checkBoxes)
@@ -67,6 +76,8 @@ export default function FolderToPdfs({navigation, route}) {
 
   const fileTitle = route.params.fileTitle;
 
+  const styles = allColors[state.darkMode].barStyle;
+
   React.useEffect(() => {
     setList(
       'ਪਾਠ Hajari' !== fileTitle
@@ -77,6 +88,9 @@ export default function FolderToPdfs({navigation, route}) {
     );
 
     navigation.setOptions({
+      headerStyle: {
+        backgroundColor: allColors[state.darkMode].headerColor,
+      },
       headerTitle: () => <Text>{fileTitle}</Text>,
       headerRight: () =>
         fileTitle !== 'ਪਾਠ Hajari' ? (
@@ -110,6 +124,7 @@ export default function FolderToPdfs({navigation, route}) {
             dispatch,
             setList,
             fileTitle,
+            styles,
           );
         }}
         data={list}
@@ -118,6 +133,6 @@ export default function FolderToPdfs({navigation, route}) {
   );
 }
 
-const styles = StyleSheet.create({
-  ...barStyle,
-});
+// const styles = StyleSheet.create({
+//   ...barStyle,
+// });

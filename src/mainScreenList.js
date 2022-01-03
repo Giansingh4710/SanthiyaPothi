@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
-import {barStyle} from '../assets/styleForEachOption';
+import {allColors, barStyle, headerColor} from '../assets/styleForEachOption';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -35,6 +35,44 @@ function HomeScreen({navigation, route}) {
     getData();
   }, []);
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: allColors[state.darkMode].headerColor,
+      },
+    });
+  });
+
+  const styles = {
+    ...allColors[state.darkMode].barStyle,
+    container: {
+      // justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(114,160,193,1)',
+      height: '100%',
+    },
+    scroll: {
+      // flex: 1.5,
+      width: '100%',
+      height: '80%',
+    },
+    underScroll: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    ButtomButton: {
+      padding: 10,
+      margin: 10,
+      flex: 1,
+      flexDirection: 'row',
+      width: 200,
+      height: 50,
+      borderRadius: 40,
+      backgroundColor: '#f9f871',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  };
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
@@ -189,43 +227,23 @@ function HomeScreen({navigation, route}) {
           ]}
         />
       </View>
+      <View style={styles.underScroll}>
+        <TouchableOpacity
+          style={styles.ButtomButton}
+          onPress={() => {
+            navigation.navigate('Settings Page');
+          }}>
+          <Text style={styles.shabadtext}>Settings</Text>
+          <Icon name="settings-outline" type="ionicon"></Icon>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.ButtomButton} onPress={() => {}}>
+          <Text style={styles.shabadtext}>Random</Text>
+          <Icon name="shuffle-outline" type="ionicon"></Icon>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  ...barStyle,
-  container: {
-    // justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(114,160,193,1)',
-    height: '100%',
-  },
-  scroll: {
-    flex: 1.5,
-    width: '100%',
-    height: '60%',
-  },
-  underScroll: {
-    flex: 1,
-  },
-  shabadButton: {
-    padding: 10,
-    margin: 10,
-    flex: 1,
-    // flexDirection: 'row',
-    width: 200,
-    height: 50,
-    borderRadius: 40,
-    backgroundColor: '#5072A7',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  shabadtext: {
-    // flex: 1,s
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default HomeScreen;

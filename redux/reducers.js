@@ -9,6 +9,7 @@ const setData = async (title, state) => {
 };
 
 export const initialState = {
+  darkMode: false,
   checkBoxes: {
     'Adi Maharaj.pdf': {
       checked: false,
@@ -392,7 +393,6 @@ function theReducer(state = initialState, action) {
     newCheckBoxes[action.theBani].checked =
       !newCheckBoxes[action.theBani].checked;
     // console.log(action.theBani, newCheckBoxes[action.theBani]);
-
     const newState = {
       ...state,
       checkBoxes: newCheckBoxes,
@@ -437,6 +437,14 @@ function theReducer(state = initialState, action) {
     return newState;
   }
 
+  if (action.type === 'SET_DARK_MODE') {
+    const newState = {
+      ...state,
+      darkMode: action.mode,
+    };
+    setData('state', newState);
+    return newState;
+  }
   return state;
 }
 

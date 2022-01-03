@@ -13,6 +13,8 @@ import TeekaPDF from './teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
 
+import {allColors, headerColor} from '../assets/styleForEachOption';
+
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
@@ -27,7 +29,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
+    // this.pdf.setPage(state.checkBoxes[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -73,7 +75,11 @@ export default function OpenPdf({navigation, route}) {
     if (pdfTitle === 'Fareedkot Teeka.pdf') return;
     let showTitle = pdfTitle;
     if (showTitle.length > 15) showTitle = showTitle.slice(0, 15) + '...';
+
     navigation.setOptions({
+      headerStyle: {
+        backgroundColor: allColors[state.darkMode].headerColor,
+      },
       headerTitle: () => (
         <View style={headerStyles.container}>
           <Text style={headerStyles.title}>{showTitle}</Text>
@@ -86,7 +92,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  this.pdf.setPage(asInt);
+                  // this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -347,11 +353,24 @@ export default function OpenPdf({navigation, route}) {
   if (fileName === 'FareedkotTeeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
+  const styles = {
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#7CB9E8',
+    },
+    pdf: {
+      width: '100%',
+      height: '99%',
+      borderRadius: 15,
+    },
+  };
   return (
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          this.pdf = pdf;
+          // this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}
@@ -393,19 +412,3 @@ export default function OpenPdf({navigation, route}) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#7CB9E8',
-  },
-  pdf: {
-    width: '100%',
-    height: '99%',
-    borderRadius: 15,
-    // width: Dimensions.get('window').width,
-    // height: Dimensions.get('window').height,
-  },
-});

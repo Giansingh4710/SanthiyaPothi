@@ -23,6 +23,12 @@ export const setAngNum = (bani, angNum) => dispatch => {
     angNum,
   });
 };
+export const setDarkMode = mode => dispatch => {
+  dispatch({
+    type: 'SET_DARK_MODE',
+    mode,
+  });
+};
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',

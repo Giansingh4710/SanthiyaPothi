@@ -24,3 +24,22 @@ export const barStyle = {
     backgroundColor: '#00308F',
   },
 };
+
+export const headerColor = '#a3fbaa';
+
+export const allColors = {
+  false: {
+    barStyle: {...barStyle},
+    headerColor: '#a3fbaa',
+  },
+  true: {
+    barStyle: {
+      ...barStyle,
+      itemContainer: {
+        ...barStyle.itemContainer,
+        backgroundColor: '#a13862',
+      },
+    },
+    headerColor: '#af8875',
+  },
+};
