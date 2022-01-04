@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
-import {barStyles} from '../assets/styleForEachOption';
+import {barStyles, allColors} from '../assets/styleForEachOption';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -38,10 +38,26 @@ function HomeScreen({navigation, route}) {
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: barStyles[state.darkMode].headerColor,
+        backgroundColor: allColors[state.darkMode].headerColor,
       },
+      headerRight: () => (
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+            <Icon name="shuffle-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              navigation.navigate('Settings Page');
+            }}>
+            <Icon name="settings-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+        </View>
+      ),
     });
   });
+
+  const theColors = allColors[state.darkMode].mainScreenList;
 
   const styles = {
     ...barStyles[state.darkMode].barStyle,
@@ -52,25 +68,12 @@ function HomeScreen({navigation, route}) {
       height: '100%',
     },
     scroll: {
-      // flex: 1.5,
       width: '100%',
-      height: '80%',
+      // height: '80%',
     },
-    underScroll: {
+    headerBtns: {
       flex: 1,
-      flexDirection: 'row',
-    },
-    ButtomButton: {
       padding: 10,
-      margin: 10,
-      flex: 1,
-      flexDirection: 'row',
-      width: 200,
-      height: 50,
-      borderRadius: 40,
-      backgroundColor: '#f9f871',
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   };
   return (
@@ -226,21 +229,6 @@ function HomeScreen({navigation, route}) {
             },
           ]}
         />
-      </View>
-      <View style={styles.underScroll}>
-        <TouchableOpacity
-          style={styles.ButtomButton}
-          onPress={() => {
-            navigation.navigate('Settings Page');
-          }}>
-          <Text style={styles.shabadtext}>Settings</Text>
-          <Icon name="settings-outline" type="ionicon"></Icon>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.ButtomButton} onPress={() => {}}>
-          <Text style={styles.shabadtext}>Random</Text>
-          <Icon name="shuffle-outline" type="ionicon"></Icon>
-        </TouchableOpacity>
       </View>
     </View>
   );

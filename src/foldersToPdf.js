@@ -1,11 +1,11 @@
 import React from 'react';
 import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 
-import {CheckBox, Icon} from 'react-native-elements';
+import {CheckBox} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {setCheckBox, unCheckBoxes} from '../redux/actions';
-import {barStyles} from '../assets/styleForEachOption';
+import {barStyles, allColors} from '../assets/styleForEachOption';
 
 function EachBani(
   navigation,
@@ -89,7 +89,7 @@ export default function FolderToPdfs({navigation, route}) {
 
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: barStyles[state.darkMode].headerColor,
+        backgroundColor: allColors[state.darkMode].headerColor,
       },
       headerTitle: () => <Text>{fileTitle}</Text>,
       headerRight: () =>

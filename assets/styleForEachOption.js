@@ -29,7 +29,6 @@ export const barStyles = {
   false: {
     //if darkMode false
     barStyle: {...barStyle},
-    headerColor: '#a3fbaa',
   },
   true: {
     //if darkMode true
@@ -40,6 +39,46 @@ export const barStyles = {
         backgroundColor: '#a13862',
       },
     },
+  },
+};
+
+//all colors in all files should be here
+export const allColors = {
+  false: {
+    headerColor: '#a3fbaa',
+    //format for the colors: filename > obj-name > propertyName
+    settings: {
+      container: {
+        backgroundColor: '#f3fbaa',
+      },
+    },
+    settingBarSwitch: {
+      settingBar: {
+        backgroundColor: '#75f1e0',
+      },
+    },
+    openPdf: {
+      container: {
+        backgroundColor: '#7CB9E8',
+      },
+    },
+  },
+  true: {
     headerColor: '#af8875',
+    settings: {
+      container: {
+        backgroundColor: '#003f46',
+      },
+    },
+    settingBarSwitch: {
+      settingBar: {
+        backgroundColor: '#d09374',
+      },
+    },
+    openPdf: {
+      container: {
+        backgroundColor: '#7CB9E8',
+      },
+    },
   },
 };

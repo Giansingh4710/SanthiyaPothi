@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Switch, Icon} from 'react-native-elements';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setDarkMode} from '../../redux/actions';
 
+import {allColors} from '../../assets/styleForEachOption';
 function SwitchBar({SettingTitle, icons, currently}) {
   const dispatch = useDispatch();
-  // const state = useSelector(theState => theState.theReducer);
-  // const colors = theColors[state.darkMode];
+  const state = useSelector(theState => theState.theReducer);
 
+  const theColors = allColors[state.darkMode].settingBarSwitch;
   const styles = StyleSheet.create({
     container: {
       height: 50,
@@ -18,12 +19,7 @@ function SwitchBar({SettingTitle, icons, currently}) {
       flexDirection: 'row',
       width: '100%',
       height: '99%',
-      backgroundColor: '#75f1e0',
-    },
-    image: {
-      // flex: 1,
-      width: '30%',
-      height: '100%',
+      backgroundColor: theColors.settingBar.backgroundColor,
     },
     text1: {
       flex: 1,

@@ -1,28 +1,29 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, Settings} from 'react-native';
 
 import {useSelector} from 'react-redux';
 import SwitchBar from './settingBarSwitch';
 // import SettingsBar from './settingBar';
 
 // import theColors from '../../util/colors';
-import {barStyles} from '../../assets/styleForEachOption';
+import {allColors} from '../../assets/styleForEachOption';
 function SettingsPage({navigation}) {
   const state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: barStyles[state.darkMode].headerColor,
+        backgroundColor: allColors[state.darkMode].headerColor,
       },
     });
   });
 
+  const theColors = allColors[state.darkMode].settings;
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
-      backgroundColor: '#f3fbaa',
+      backgroundColor: theColors.container.backgroundColor,
       width: '100%',
       height: '100%',
       paddingTop: '10%',
