@@ -13,7 +13,6 @@ export default function FolderToPdfs({navigation, route}) {
 
   const folderTitle = route.params.folderTitle;
   const baniyaList = route.params.list;
-  const styles = barStyles[state.darkMode].barStyle;
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -38,12 +37,20 @@ export default function FolderToPdfs({navigation, route}) {
     });
   }, [navigation]);
 
+  const barStyle = barStyles[state.darkMode].barStyle;
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+      height: '100%',
+    },
+  });
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item => item.title}
         renderItem={({item}) => {
-          return EachBani(navigation, item, styles, state, dispatch);
+          return EachBani(navigation, item, barStyle, state, dispatch);
         }}
         data={baniyaList}
       />

@@ -157,19 +157,19 @@ export default function OpenPdf({navigation, route}) {
   }
 
   const theColors = allColors[state.darkMode].openPdf;
-  const styles = {
+  const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: theColors.container.backgroundColor,
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
     },
     pdf: {
       width: '100%',
       height: '99%',
       borderRadius: 15,
     },
-  };
+  });
   return (
     <View style={styles.container}>
       <Pdf

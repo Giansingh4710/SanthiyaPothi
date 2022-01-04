@@ -46,6 +46,7 @@ export const barStyles = {
 export const allColors = {
   false: {
     headerColor: '#a3fbaa',
+    mainBackgroundColor: 'rgba(119,16,193,1)',
     //format for the colors: filename > obj-name > propertyName
     settings: {
       container: {
@@ -57,14 +58,13 @@ export const allColors = {
         backgroundColor: '#75f1e0',
       },
     },
-    openPdf: {
-      container: {
-        backgroundColor: '#7CB9E8',
-      },
-    },
+    openPdf: {},
+    mainScreenList: {},
   },
   true: {
     headerColor: '#af8875',
+    mainBackgroundColor: 'rgba(119,16,193,1)',
+    //format for the colors: filename > obj-name > propertyName
     settings: {
       container: {
         backgroundColor: '#003f46',
@@ -75,10 +75,7 @@ export const allColors = {
         backgroundColor: '#d09374',
       },
     },
-    openPdf: {
-      container: {
-        backgroundColor: '#7CB9E8',
-      },
-    },
+    openPdf: {},
+    mainScreenList: {},
   },
 };

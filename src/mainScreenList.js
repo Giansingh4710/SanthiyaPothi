@@ -59,12 +59,12 @@ function HomeScreen({navigation, route}) {
 
   const theColors = allColors[state.darkMode].mainScreenList;
 
-  const styles = {
+  const styles = StyleSheet.create({
     ...barStyles[state.darkMode].barStyle,
     container: {
       // justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(114,160,193,1)',
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
       height: '100%',
     },
     scroll: {
@@ -75,7 +75,7 @@ function HomeScreen({navigation, route}) {
       flex: 1,
       padding: 10,
     },
-  };
+  });
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
