@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
-import {allColors, barStyle, headerColor} from '../assets/styleForEachOption';
+import {allColors} from '../assets/styleForEachOption';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();

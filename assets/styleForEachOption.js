@@ -3,7 +3,7 @@
 //#a3fbaa
 //#cbfc8b
 //#f9f871
-export const barStyle = {
+const barStyle = {
   itemContainer: {
     height: 75,
     backgroundColor: '#7CE8',
@@ -25,14 +25,15 @@ export const barStyle = {
   },
 };
 
-export const headerColor = '#a3fbaa';
-
 export const allColors = {
   false: {
+    //if darkMode false
     barStyle: {...barStyle},
     headerColor: '#a3fbaa',
+    colors: {},
   },
   true: {
+    //if darkMode true
     barStyle: {
       ...barStyle,
       itemContainer: {
@@ -41,5 +42,6 @@ export const allColors = {
       },
     },
     headerColor: '#af8875',
+    colors: {},
   },
 };

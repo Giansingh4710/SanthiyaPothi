@@ -1,0 +1,9 @@
+1) Open app:{
+    Welcome/Splash Screen
+}
+2) Useability:{
+    info pop up,
+    swipe to go back   
+    basic color accseccability
+}
+3)
