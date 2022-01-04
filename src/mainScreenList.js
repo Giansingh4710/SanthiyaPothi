@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
-import {allColors} from '../assets/styleForEachOption';
+import {barStyles} from '../assets/styleForEachOption';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
@@ -38,13 +38,13 @@ function HomeScreen({navigation, route}) {
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: allColors[state.darkMode].headerColor,
+        backgroundColor: barStyles[state.darkMode].headerColor,
       },
     });
   });
 
   const styles = {
-    ...allColors[state.darkMode].barStyle,
+    ...barStyles[state.darkMode].barStyle,
     container: {
       // justifyContent: 'center',
       alignItems: 'center',

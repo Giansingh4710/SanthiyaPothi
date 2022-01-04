@@ -9,7 +9,7 @@ import {Store} from './redux/store';
 import HomeScreen from './src/mainScreenList';
 import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
-import SettingsPage from './src/settings/settings';
+import SettingsPage from './src/settingsPage/settings';
 const Stack = createStackNavigator();
 
 function App() {

@@ -25,12 +25,11 @@ const barStyle = {
   },
 };
 
-export const allColors = {
+export const barStyles = {
   false: {
     //if darkMode false
     barStyle: {...barStyle},
     headerColor: '#a3fbaa',
-    colors: {},
   },
   true: {
     //if darkMode true
@@ -42,6 +41,5 @@ export const allColors = {
       },
     },
     headerColor: '#af8875',
-    colors: {},
   },
 };

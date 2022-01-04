@@ -7,13 +7,13 @@ import SwitchBar from './settingBarSwitch';
 // import SettingsBar from './settingBar';
 
 // import theColors from '../../util/colors';
-import {allColors} from '../../assets/styleForEachOption';
+import {barStyles} from '../../assets/styleForEachOption';
 function SettingsPage({navigation}) {
   const state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: allColors[state.darkMode].headerColor,
+        backgroundColor: barStyles[state.darkMode].headerColor,
       },
     });
   });

@@ -13,7 +13,7 @@ import TeekaPDF from './teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
 
-import {allColors, headerColor} from '../assets/styleForEachOption';
+import {barStyles} from '../assets/styleForEachOption';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
@@ -78,7 +78,7 @@ export default function OpenPdf({navigation, route}) {
 
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: allColors[state.darkMode].headerColor,
+        backgroundColor: barStyles[state.darkMode].headerColor,
       },
       headerTitle: () => (
         <View style={headerStyles.container}>
