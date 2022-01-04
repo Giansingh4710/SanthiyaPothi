@@ -10,12 +10,6 @@ export const setTheState = state => dispatch => {
     state,
   });
 };
-export const unCheckBoxes = folderTitle => dispatch => {
-  dispatch({
-    type: 'UN_CHECK_BOXES',
-    baniType: folderTitle,
-  });
-};
 export const setAngNum = (bani, angNum) => dispatch => {
   dispatch({
     type: 'SET_ANG_NUM',

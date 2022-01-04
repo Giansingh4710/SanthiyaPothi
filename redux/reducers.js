@@ -402,25 +402,6 @@ function theReducer(state = initialState, action) {
     return newState;
   }
 
-  if (action.type === 'UN_CHECK_BOXES') {
-    let newCheckBoxes = {};
-    const arrayCheckBoxes = Object.entries(state.checkBoxes);
-    arrayCheckBoxes.map(item => {
-      if (item[1].baniType === action.baniType) {
-        item[1].checked = false;
-      }
-      newCheckBoxes[item[0]] = item[1];
-    });
-
-    const newState = {
-      ...state,
-      checkBoxes: newCheckBoxes,
-    };
-
-    setData('state', newState);
-    return newState;
-  }
-
   if (action.type === 'SET_ANG_NUM') {
     const newCurrentAngBani = state.checkBoxes[action.bani];
     newCurrentAngBani.currentAng = action.angNum;

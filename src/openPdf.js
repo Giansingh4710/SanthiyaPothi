@@ -71,9 +71,13 @@ export default function OpenPdf({navigation, route}) {
     boxText: {
       fontSize: 25,
     },
-    settingsBtn: {
-      // flex: 0.5,
-      padding: 15,
+    headerBtnsCont: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    headerBtns: {
+      flex: 1,
+      paddingTop: 20,
     },
   });
 
@@ -114,13 +118,20 @@ export default function OpenPdf({navigation, route}) {
             />
             <Text style={headerStyles.boxText}>/{totalAngs}</Text>
           </View>
-          <TouchableOpacity
-            style={headerStyles.settingsBtn}
-            onPress={() => {
-              navigation.navigate('Settings Page');
-            }}>
-            <Icon name="settings-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
+          <View style={headerStyles.headerBtnsCont}>
+            <TouchableOpacity
+              style={headerStyles.headerBtns}
+              onPress={() => {}}>
+              <Icon name="shuffle-outline" type="ionicon"></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={headerStyles.headerBtns}
+              onPress={() => {
+                navigation.navigate('Settings Page');
+              }}>
+              <Icon name="settings-outline" type="ionicon"></Icon>
+            </TouchableOpacity>
+          </View>
         </View>
       ),
       headerShown: showHeader,

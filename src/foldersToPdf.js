@@ -1,32 +1,57 @@
 import React from 'react';
 import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 
-import {CheckBox} from 'react-native-elements';
+import {CheckBox, Icon} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {setCheckBox, unCheckBoxes} from '../redux/actions';
+import {setCheckBox} from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
 
-function EachBani(
-  navigation,
-  item,
-  state,
-  dispatch,
-  setList,
-  fileTitle,
-  styles,
-) {
-  function setTheList() {
-    setList(
-      Object.entries(state.checkBoxes)
-        .filter(bani => {
-          return bani[1].currentAng !== 1 && bani[1].checked === false;
-        })
-        .map(bani => {
-          return {title: bani[0]};
-        }),
-    );
-  }
+export default function FolderToPdfs({navigation, route}) {
+  const dispatch = useDispatch();
+  const state = useSelector(theState => theState.theReducer);
+
+  const folderTitle = route.params.folderTitle;
+  const baniyaList = route.params.list;
+  const styles = barStyles[state.darkMode].barStyle;
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: allColors[state.darkMode].headerColor,
+      },
+      headerTitle: () => <Text>{folderTitle}</Text>,
+      headerRight: () => (
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+            <Icon name="shuffle-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              navigation.navigate('Settings Page');
+            }}>
+            <Icon name="settings-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        keyExtractor={item => item.title}
+        renderItem={({item}) => {
+          return EachBani(navigation, item, styles, state, dispatch);
+        }}
+        data={baniyaList}
+      />
+    </View>
+  );
+}
+
+function EachBani(navigation, item, styles, state, dispatch) {
   return (
     <View>
       <TouchableOpacity
@@ -47,9 +72,6 @@ function EachBani(
           }}
           onPress={() => {
             dispatch(setCheckBox(item.title));
-            if (fileTitle === 'ਪਾਠ Hajari') {
-              setTheList();
-            }
           }}
           size={20}
           textStyle={{
@@ -67,72 +89,3 @@ function EachBani(
     </View>
   );
 }
-
-export default function FolderToPdfs({navigation, route}) {
-  const dispatch = useDispatch();
-  const state = useSelector(theState => theState.theReducer);
-
-  const [list, setList] = React.useState();
-
-  const fileTitle = route.params.fileTitle;
-
-  const styles = barStyles[state.darkMode].barStyle;
-
-  React.useEffect(() => {
-    setList(
-      'ਪਾਠ Hajari' !== fileTitle
-        ? route.params.list
-        : route.params.list.map(bani => {
-            return {title: bani[0]};
-          }),
-    );
-
-    navigation.setOptions({
-      headerStyle: {
-        backgroundColor: allColors[state.darkMode].headerColor,
-      },
-      headerTitle: () => <Text>{fileTitle}</Text>,
-      headerRight: () =>
-        fileTitle !== 'ਪਾਠ Hajari' ? (
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#077b8a',
-              padding: 10,
-              borderRadius: 10,
-              right: 14,
-            }}
-            onPress={() => {
-              dispatch(unCheckBoxes(fileTitle));
-            }}>
-            <Text>Uncheck All</Text>
-          </TouchableOpacity>
-        ) : (
-          <View />
-        ),
-    });
-  }, [navigation]);
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        keyExtractor={item => item.title}
-        renderItem={({item}) => {
-          return EachBani(
-            navigation,
-            item,
-            state,
-            dispatch,
-            setList,
-            fileTitle,
-            styles,
-          );
-        }}
-        data={list}
-      />
-    </View>
-  );
-}
-
-// const styles = StyleSheet.create({
-//   ...barStyle,
-// });

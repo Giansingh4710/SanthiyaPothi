@@ -89,7 +89,7 @@ function HomeScreen({navigation, route}) {
                   onPress={() => {
                     navigation.navigate('BanisList', {
                       list: item.listt,
-                      fileTitle: item.title, //name of the bar clicked on
+                      folderTitle: item.title, //name of the bar clicked on
                     });
                   }}>
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -223,9 +223,13 @@ function HomeScreen({navigation, route}) {
             },
             {
               title: 'ਪਾਠ Hajari',
-              listt: Object.entries(state.checkBoxes).filter(bani => {
-                return bani[1].currentAng !== 1 && bani[1].checked === false;
-              }),
+              listt: Object.entries(state.checkBoxes)
+                .filter(bani => {
+                  return bani[1].currentAng !== 1 && bani[1].checked === false;
+                })
+                .map(bani => {
+                  return {title: bani[0]};
+                }),
             },
           ]}
         />
