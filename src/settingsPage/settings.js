@@ -23,7 +23,7 @@ function SettingsPage({navigation}) {
     container: {
       flex: 1,
       alignItems: 'center',
-      backgroundColor: theColors.container.backgroundColor,
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
       width: '100%',
       height: '100%',
       paddingTop: '10%',

@@ -46,13 +46,8 @@ export const barStyles = {
 export const allColors = {
   false: {
     headerColor: '#a3fbaa',
-    mainBackgroundColor: 'rgba(119,16,193,1)',
+    mainBackgroundColor: 'rgba(109,106,193,1)',
     //format for the colors: filename > obj-name > propertyName
-    settings: {
-      container: {
-        backgroundColor: '#f3fbaa',
-      },
-    },
     settingBarSwitch: {
       settingBar: {
         backgroundColor: '#75f1e0',
@@ -63,13 +58,8 @@ export const allColors = {
   },
   true: {
     headerColor: '#af8875',
-    mainBackgroundColor: 'rgba(119,16,193,1)',
+    mainBackgroundColor: 'rgba(19,16,193,1)',
     //format for the colors: filename > obj-name > propertyName
-    settings: {
-      container: {
-        backgroundColor: '#003f46',
-      },
-    },
     settingBarSwitch: {
       settingBar: {
         backgroundColor: '#d09374',
