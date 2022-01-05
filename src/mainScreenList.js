@@ -108,6 +108,7 @@ function HomeScreen({navigation, route}) {
           }}
           data={[
             ...folderToFileData,
+            {title: 'Added Files', listt: []},
             {
               title: 'ਪਾਠ Hajari',
               listt: Object.entries(state.checkBoxes)

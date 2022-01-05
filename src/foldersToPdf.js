@@ -1,15 +1,26 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  FlatList,
+  Modal,
+} from 'react-native';
 
 import {CheckBox, Icon} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {setCheckBox} from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
+import AddedFiles from '../assets/otherScreens/addedFiles';
+import DocumentPicker from 'react-native-document-picker';
 
 export default function FolderToPdfs({navigation, route}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
+
+  const [modalOn, setModal] = React.useState(false);
 
   const folderTitle = route.params.folderTitle;
   const baniyaList = route.params.list;
@@ -22,6 +33,17 @@ export default function FolderToPdfs({navigation, route}) {
       headerTitle: () => <Text>{folderTitle}</Text>,
       headerRight: () => (
         <View style={{flexDirection: 'row'}}>
+          {folderTitle == 'Added Files' ? (
+            <TouchableOpacity
+              style={styles.headerBtns}
+              onPress={() => {
+                setModal(true);
+              }}>
+              <Icon name="add-outline" type="ionicon"></Icon>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
           <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
             <Icon name="shuffle-outline" type="ionicon"></Icon>
           </TouchableOpacity>
@@ -44,7 +66,16 @@ export default function FolderToPdfs({navigation, route}) {
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
       height: '100%',
     },
+    headerBtnsCont: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    headerBtns: {
+      flex: 1,
+      padding: 10,
+    },
   });
+  // if (folderTitle == 'Added Files') return <AddedFiles></AddedFiles>;
   return (
     <View style={styles.container}>
       <FlatList
@@ -54,6 +85,7 @@ export default function FolderToPdfs({navigation, route}) {
         }}
         data={baniyaList}
       />
+      <ShabadModal visible={modalOn} setVisibility={setModal}></ShabadModal>
     </View>
   );
 }
@@ -94,5 +126,72 @@ function EachBani(navigation, item, styles, state, dispatch) {
 
       <View style={styles.gap}></View>
     </View>
+  );
+}
+
+function ShabadModal({visible, setVisibility}) {
+  async function pickDoc() {
+    try {
+      const res = await DocumentPicker.pick({
+        // type: [DocumentPicker.types.pdf],
+      });
+      const name = res[0].name;
+      const uri = res[0].uri;
+      console.log(name, uri);
+    } catch (err) {
+      // alert(err);
+      setVisibility(false);
+      console.log(err);
+    }
+  }
+  const styles = StyleSheet.create({
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#007FFF',
+      height: '75%',
+      width: '90%',
+      top: '15%',
+      left: '5%',
+      borderRadius: 40,
+    },
+    topRow: {
+      flexDirection: 'row',
+    },
+    icons: {
+      // backgroundColor: 'red',
+      flex: 0.75,
+    },
+    dateTime: {
+      flex: 1,
+    },
+    scroll: {
+      padding: 15,
+      height: '80%',
+      width: '100%',
+    },
+  });
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={() => {
+        setVisibility(false);
+      }}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.icons}
+          onPress={() => {
+            setVisibility(false);
+          }}>
+          <Icon name="close-outline" type="ionicon"></Icon>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => pickDoc()}>
+          <Text>Hi Added container</Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
   );
 }

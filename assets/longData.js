@@ -1,6 +1,7 @@
 export const allPdfsToPath = {
   '1)SriRaagKiVaarMahala4.pdf': {
     uri: 'bundle-assets://pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf',
+    // uri: 'content://com.android.providers.media.documents/document/document%3A31',
   },
   '10)SorathKiVaarMahala4.pdf': {
     uri: 'bundle-assets://pdfs/BaiVarra/10)SorathKiVaarMahala4.pdf',

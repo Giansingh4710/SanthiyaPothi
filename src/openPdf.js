@@ -11,7 +11,7 @@ import {
 import {Icon} from 'react-native-elements';
 
 import Pdf from 'react-native-pdf';
-import TeekaPDF from './teekaPdf';
+import TeekaPDF from '../assets/otherScreens/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
 import {allPdfsToPath} from '../assets/longData';
