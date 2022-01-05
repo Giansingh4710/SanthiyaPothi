@@ -85,7 +85,7 @@ export default function FolderToPdfs({navigation, route}) {
         }}
         data={baniyaList}
       />
-      <ShabadModal visible={modalOn} setVisibility={setModal}></ShabadModal>
+      <AddFile visible={modalOn} setVisibility={setModal}></AddFile>
     </View>
   );
 }
@@ -129,7 +129,7 @@ function EachBani(navigation, item, styles, state, dispatch) {
   );
 }
 
-function ShabadModal({visible, setVisibility}) {
+function AddFile({visible, setVisibility}) {
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({

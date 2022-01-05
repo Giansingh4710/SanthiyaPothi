@@ -7,3 +7,6 @@
     basic color accseccability
 }
 3)
+
+
+yarn add react-native-document-picker
