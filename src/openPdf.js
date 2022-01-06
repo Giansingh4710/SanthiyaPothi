@@ -14,7 +14,6 @@ import Pdf from 'react-native-pdf';
 import TeekaPDF from '../assets/otherScreens/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
-import {allPdfsToPath} from '../assets/longData';
 import {allColors} from '../assets/styleForEachOption';
 
 export default function OpenPdf({navigation, route}) {
@@ -150,7 +149,7 @@ export default function OpenPdf({navigation, route}) {
   }, [navigation]);
 
   const fileName = pdfTitle.split(' ').join(''); //replaces " " with ""
-  const sourceFileName = allPdfsToPath[fileName];
+  const sourceFileName = {uri: state.checkBoxes[pdfTitle].uri};
 
   if (fileName === 'FareedkotTeeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
