@@ -111,7 +111,7 @@ function HomeScreen({navigation, route}) {
             {title: 'Added Files', listt: []},
             {
               title: 'ਪਾਠ Hajari',
-              listt: Object.entries(state.checkBoxes)
+              listt: Object.entries(state.allPdfs)
                 .filter(bani => {
                   return bani[1].currentAng !== 1 && bani[1].checked === false;
                 })

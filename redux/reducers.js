@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {checkBoxes} from '../assets/longData';
+import {allPdfs} from '../assets/longData';
 
 const setData = async (title, state) => {
   try {
@@ -11,7 +11,7 @@ const setData = async (title, state) => {
 
 export const initialState = {
   darkMode: false,
-  checkBoxes: {...checkBoxes},
+  allPdfs: {...allPdfs},
 };
 
 setData('state', initialState); //to reset all state
@@ -27,13 +27,11 @@ function theReducer(state = initialState, action) {
     return newState;
   }
   if (action.type === 'SET_CHECKBOX') {
-    const newCheckBoxes = {...state.checkBoxes};
-    newCheckBoxes[action.theBani].checked =
-      !newCheckBoxes[action.theBani].checked;
-    // console.log(action.theBani, newCheckBoxes[action.theBani]);
+    const newallPdfs = {...state.allPdfs};
+    newallPdfs[action.theBani].checked = !newallPdfs[action.theBani].checked;
     const newState = {
       ...state,
-      checkBoxes: newCheckBoxes,
+      allPdfs: newallPdfs,
     };
 
     setData('state', newState);
@@ -41,15 +39,9 @@ function theReducer(state = initialState, action) {
   }
 
   if (action.type === 'SET_ANG_NUM') {
-    const newCurrentAngBani = state.checkBoxes[action.bani];
-    newCurrentAngBani.currentAng = action.angNum;
-
-    const newCheckBoxes = state.checkBoxes;
-    newCheckBoxes[action.bani] = newCurrentAngBani;
-
+    state.allPdfs[action.bani].currentAng = action.angNum;
     const newState = {
       ...state,
-      checkBoxes: newCheckBoxes,
     };
 
     setData('state', newState);

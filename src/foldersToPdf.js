@@ -101,7 +101,7 @@ function EachBani(navigation, item, styles, state, dispatch) {
         <Text style={styles.titleText}>{item.title}</Text>
 
         <CheckBox
-          checked={state.checkBoxes[item.title].checked}
+          checked={state.allPdfs[item.title].checked}
           checkedColor="#0F0"
           checkedTitle="ਸੰਪੂਰਨ"
           containerStyle={{
