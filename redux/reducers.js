@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {allPdfs} from '../assets/longData';
 
-const setData = async (title, state) => {
+export const setData = async (title, state) => {
   try {
     await AsyncStorage.setItem(title, JSON.stringify(state));
   } catch (e) {
@@ -14,7 +14,7 @@ export const initialState = {
   allPdfs: {...allPdfs},
 };
 
-setData('state', initialState); //to reset all state
+// setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   // for async storage

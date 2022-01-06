@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setDarkMode} from '../../redux/actions';
 
 import {allColors} from '../../assets/styleForEachOption';
-function SwitchBar({SettingTitle, icons, currently}) {
+function SwitchBar({SettingTitle, icons, nameInState}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
@@ -30,25 +30,25 @@ function SwitchBar({SettingTitle, icons, currently}) {
     },
   });
 
-  const [currentVal, setCurrentVal] = React.useState(currently);
-
   function capitalizeFirstLetter(str) {
     const string = String(str);
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
+  const settingOnOff = state[nameInState];
   return (
     <View style={styles.container}>
       <View style={styles.settingBar}>
-        <Icon name={currentVal ? icons[0] : icons[1]} type="ionicon"></Icon>
+        <Icon name={settingOnOff ? icons[0] : icons[1]} type="ionicon"></Icon>
         <Text style={styles.text1}>{SettingTitle}</Text>
 
         <View style={styles.rightSide}>
-          <Text style={styles.text2}>{capitalizeFirstLetter(currentVal)}</Text>
+          <Text style={styles.text2}>
+            {capitalizeFirstLetter(settingOnOff)}
+          </Text>
           <Switch
-            value={currentVal}
+            value={settingOnOff}
             onValueChange={newSetting => {
-              setCurrentVal(newSetting);
+              // setCurrentVal(newSetting);
               dispatch(setDarkMode(newSetting));
             }}
           />
