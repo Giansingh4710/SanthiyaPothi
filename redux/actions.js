@@ -23,6 +23,13 @@ export const setDarkMode = mode => dispatch => {
     mode,
   });
 };
+export const setAddedPDFs = (folderTitle, item) => dispatch => {
+  dispatch({
+    type: 'SET_ADDED_PDFS',
+    item,
+    folderTitle,
+  });
+};
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',

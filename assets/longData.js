@@ -448,11 +448,11 @@ export const allPdfs = {
 export const folderToFileData = [
   {
     title: 'Sri Guru Granth Sahib Jee',
-    listt: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
+    list: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
   },
   {
     title: 'Panj Granthi',
-    listt: [
+    list: [
       {title: 'Gauri Bavan Akahri.pdf'},
       {title: 'Sukhmani Sahib.pdf'},
       {title: 'Asa Ki Vaar.pdf'},
@@ -462,7 +462,7 @@ export const folderToFileData = [
   },
   {
     title: 'Bai Varra',
-    listt: [
+    list: [
       {title: '1) Sri Raag Ki Vaar Mahala 4.pdf'},
       {title: '2) Vaar Maajh Ki Mahala 1.pdf'},
       {title: '3) Goauri Ki Vaar Mahala 4.pdf'},
@@ -489,7 +489,7 @@ export const folderToFileData = [
   },
   {
     title: 'Bhagat Bani',
-    listt: [
+    list: [
       {title: '1) Sri raag.pdf'},
       {title: '2) Raag Gaurii.pdf'},
       {title: '3) Raag Asa.pdf'},
@@ -519,7 +519,7 @@ export const folderToFileData = [
   },
   {
     title: 'Bhattaa De Swaiye',
-    listt: [
+    list: [
       {title: 'Swaiye Sri Mukhvaakea Mahalla 5.pdf'},
       {title: 'Swaiye Sri Mukhvaakea Mahalla 5-2.pdf'},
       {title: 'Swaiye Mahallay Peheley Ky.pdf'},
@@ -531,7 +531,7 @@ export const folderToFileData = [
   },
   {
     title: 'Vaara De Vadeek',
-    listt: [
+    list: [
       {title: 'Vaara Di Vadeek Mahalla 1.pdf'},
       {title: 'Vaara Di Vadeek Mahalla 3.pdf'},
       {title: 'Vaara Di Vadeek Mahalla 4.pdf'},
@@ -540,7 +540,7 @@ export const folderToFileData = [
   },
   {
     title: 'Vidya Sagar Pothis',
-    listt: [
+    list: [
       {title: 'Adhyatam_Prakash.pdf'},
       {title: 'Bavras_Amrit.pdf'},
       {title: 'CaNaka_Rajniti.pdf'},
@@ -552,7 +552,7 @@ export const folderToFileData = [
   },
   {
     title: 'Sri Nanak Parkash',
-    listt: [
+    list: [
       {title: 'Sri_Nanak_Parkash_1.pdf'},
       {title: 'Sri_Nanak_Parkash_2.pdf'},
       {title: 'Ajit Singh Teeka Pothi 1.pdf'},

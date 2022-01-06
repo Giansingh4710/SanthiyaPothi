@@ -16,7 +16,7 @@ import {barStyles, allColors} from '../assets/styleForEachOption';
 import AddedFiles from '../assets/otherScreens/addedFiles';
 import DocumentPicker from 'react-native-document-picker';
 
-export default function FolderToPdfs({navigation, route}) {
+export default function FolderToPdfs2({navigation, route}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
@@ -32,17 +32,13 @@ export default function FolderToPdfs({navigation, route}) {
       headerTitle: () => <Text>{folderTitle}</Text>,
       headerRight: () => (
         <View style={{flexDirection: 'row'}}>
-          {folderTitle == 'Added PDFs' ? (
-            <TouchableOpacity
-              style={styles.headerBtns}
-              onPress={() => {
-                setModal(true);
-              }}>
-              <Icon name="add-outline" type="ionicon"></Icon>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              setModal(true);
+            }}>
+            <Icon name="add-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
             <Icon name="shuffle-outline" type="ionicon"></Icon>
           </TouchableOpacity>

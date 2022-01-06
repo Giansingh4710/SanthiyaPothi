@@ -76,6 +76,10 @@ function HomeScreen({navigation, route}) {
       flex: 1,
       padding: 10,
     },
+    icons: {
+      // flex: 1,
+      // padding: 10,
+    },
   });
   return (
     <View style={styles.container}>
@@ -89,17 +93,20 @@ function HomeScreen({navigation, route}) {
                   style={styles.itemContainer}
                   onPress={() => {
                     navigation.navigate('BanisList', {
-                      list: item.listt,
+                      list: item.list,
                       folderTitle: item.title, //name of the bar clicked on
                     });
                   }}>
+                  <Icon
+                    style={styles.icons}
+                    name="folder-outline"
+                    type="ionicon"
+                  />
                   <Text style={styles.titleText}>{item.title}</Text>
                   <Icon
-                    style={{flex: 1}}
-                    // name="arrow-forward-outline"
+                    style={styles.icons}
                     name="arrow-forward-outline"
                     type="ionicon"
-                    // onPress={() => {}}
                   />
                 </TouchableOpacity>
                 <View style={styles.gap}></View>
@@ -108,7 +115,7 @@ function HomeScreen({navigation, route}) {
           }}
           data={[
             ...folderToFileData,
-            {title: 'Added Files', listt: []},
+            {...state.addedPdfs},
             {
               title: 'ਪਾਠ Hajari',
               listt: Object.entries(state.allPdfs)
