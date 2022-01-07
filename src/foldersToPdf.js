@@ -22,11 +22,13 @@ export default function FolderToPdfs({navigation, route}) {
   const state = useSelector(theState => theState.theReducer);
 
   const [modalOn, setModal] = React.useState(false);
-  const baniaList = route.params.list;
   const folderTitle = route.params.folderTitle;
+  const baniaList = route.params.list;
+  console.log('from state', state.addedPdfs);
+  // const baniaList = state.addedPdfs;
 
   for (let i = 0; i < baniaList.length; i++) {
-    console.log(baniaList[i]);
+    console.log(i + 1, ')', baniaList[i]);
   }
   React.useEffect(() => {
     navigation.setOptions({
