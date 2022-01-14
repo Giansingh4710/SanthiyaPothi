@@ -47,9 +47,17 @@ function theReducer(state = initialState, action) {
   } else if (action.type === 'SET_ADDED_PDFS') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;
-    console.log(theFolderToPutIn, theFile);
+    // console.log(theFolderToPutIn, theFile);
     const res = dfsPutInFolder(state.addedPdfs, theFolderToPutIn, theFile);
-    console.log(res);
+    // console.log(res);
+    if (res !== false) {
+      state.addedPdfs = res;
+    }
+    theState = state;
+  } else if (action.type === 'DELETE_ADDED_ITEM') {
+    const fileToDel = action.title;
+    const res = dfsDelInFolder(state.addedPdfs, fileToDel);
+    // console.log(res);
     if (res !== false) {
       state.addedPdfs = res;
     }
@@ -84,5 +92,38 @@ function dfsPutInFolder(addedPdfs, folderToAdd, file) {
     }
   }
   return false;
+}
+
+function dfsDelInFolder(addedPdfs, fileToDel) {
+  if (!addedPdfs.list) {
+    return false;
+  }
+
+  const theLst = addedPdfs.list;
+  for (let i = 0; i < theLst.length; i++) {
+    if (theLst[i].title === fileToDel) {
+      const newArr = remove(theLst, fileToDel);
+      addedPdfs.list = newArr;
+      return addedPdfs;
+    }
+  }
+  for (let i = 0; i < theLst.length; i++) {
+    if (theLst[i].list) {
+      const newObj = dfsDelInFolder(theLst[i], fileToDel);
+      if (newObj !== false) {
+        addedPdfs.list[i] = newObj;
+        return addedPdfs;
+      }
+    }
+  }
+  return false;
+}
+function remove(arr, file) {
+  const ans = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].title === file) continue;
+    ans.push(arr[i]);
+  }
+  return ans;
 }
 export default theReducer;

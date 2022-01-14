@@ -30,6 +30,12 @@ export const setAddedPDFs = (folderTitle, item) => dispatch => {
     folderTitle,
   });
 };
+export const deleteAddedItem = title => dispatch => {
+  dispatch({
+    type: 'DELETE_ADDED_ITEM',
+    title,
+  });
+};
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',

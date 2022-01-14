@@ -6,12 +6,13 @@ import {
   View,
   FlatList,
   Modal,
+  TextInput,
 } from 'react-native';
 
 import {CheckBox, Icon} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {setCheckBox, setAddedPDFs} from '../redux/actions';
+import {setCheckBox, setAddedPDFs, deleteAddedItem} from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
 import AddedFiles from '../assets/otherScreens/addedFiles';
 import DocumentPicker from 'react-native-document-picker';
@@ -21,9 +22,14 @@ export default function FolderToPdfs({navigation, route}) {
   const state = useSelector(theState => theState.theReducer);
 
   const [modalOn, setModal] = React.useState(false);
-  const [baniaList, setBaniaList] = React.useState(route.params.list);
   const folderTitle = route.params.folderTitle;
+  const baniaList = route.params.list;
+  console.log('from state', state.addedPdfs);
+  // const baniaList = state.addedPdfs;
 
+  for (let i = 0; i < baniaList.length; i++) {
+    console.log(i + 1, ')', baniaList[i]);
+  }
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -87,7 +93,7 @@ export default function FolderToPdfs({navigation, route}) {
       <AddFile
         visible={modalOn}
         setVisibility={setModal}
-        setList={setBaniaList}
+        // setList={setBaniaList}
         dispatch={dispatch}
         folderTitle={folderTitle}></AddFile>
     </View>
@@ -101,7 +107,7 @@ function EachBani(navigation, item, styles, state, dispatch) {
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          console.log('is Folder: ', isFolder);
+          // console.log('is Folder: ', isFolder);
           if (!isFolder) navigation.navigate('OpenPdf', {pdfTitle: item.title});
           else
             navigation.navigate('BanisList2', {
@@ -115,8 +121,12 @@ function EachBani(navigation, item, styles, state, dispatch) {
             <Text style={styles.titleText}>{item.title}</Text>
             <Icon
               style={styles.icons}
-              name="arrow-forward-outline"
-              type="ionicon"></Icon>
+              name="trash-outline"
+              type="ionicon"
+              onPress={() => {
+                dispatch(deleteAddedItem(item.title));
+              }}
+            />
           </>
         ) : (
           <Text style={styles.titleText}>{item.title}</Text>
@@ -154,7 +164,7 @@ function EachBani(navigation, item, styles, state, dispatch) {
   );
 }
 
-function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
+function AddFile({visible, setVisibility, folderTitle, dispatch}) {
   // 'Adi Maharaj.pdf': {
   //   checked: false,
   //   baniType: 'Sri Guru Granth Sahib Jee',
@@ -166,6 +176,8 @@ function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
   // title: 'Sri Guru Granth Sahib Jee',
   // list: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
   // },
+
+  const [folderName, setFolderName] = React.useState();
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({
@@ -173,10 +185,10 @@ function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
       });
       const name = res[0].name;
       const uri = res[0].uri;
-      setList(prev => {
-        prev.push({title: name});
-        return prev;
-      });
+      // setList(prev => {
+      //   prev.push({title: name});
+      //   return prev;
+      // });
       setVisibility(false);
     } catch (err) {
       // alert(err);
@@ -239,16 +251,27 @@ function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
           }}>
           <Icon name="close-outline" type="ionicon"></Icon>
         </TouchableOpacity>
+        <TextInput
+          // keyboardType="numeric"
+          // value={currrentAng.toString()}
+          style={{backgroundColor: '#cecece', borderRadius: 5}}
+          placeholder="exp: Folder 1"
+          onChangeText={e => {
+            setFolderName(e);
+          }}
+          // onSubmitEditing={e => {
+          //   const theText = e.nativeEvent.text;
+          //   console.log(theText);
+          //   setFolderName(theText);
+          // }}
+        />
         <View style={styles.underScroll}>
           <TouchableOpacity
             style={styles.ButtomButton}
             onPress={() => {
-              let a = 'hi' + Math.floor(Math.random() * 10000);
-              // setList(prev => {
-              // prev.push({title: a, list: []});
-              dispatch(setAddedPDFs(folderTitle, {title: a, list: []}));
-              // return prev;
-              // });
+              dispatch(
+                setAddedPDFs(folderTitle, {title: folderName, list: []}),
+              );
               setVisibility(false);
             }}>
             <Text style={styles.shabadtext}>Add a folder</Text>
