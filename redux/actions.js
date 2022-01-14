@@ -36,6 +36,14 @@ export const deleteAddedItem = title => dispatch => {
     title,
   });
 };
+export const addNdeletePdf = (title, item, toAdd) => dispatch => {
+  dispatch({
+    type: 'ADD_OR_DELETE_PDF',
+    title,
+    item,
+    add: toAdd, //boolean
+  });
+};
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',

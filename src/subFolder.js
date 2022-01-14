@@ -11,9 +11,8 @@ import {
 import {CheckBox, Icon} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {setCheckBox, setAddedPDFs} from '../redux/actions';
+import {setCheckBox, setAddedPDFs, deleteAddedItem} from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import AddedFiles from '../assets/otherScreens/addedFiles';
 import DocumentPicker from 'react-native-document-picker';
 
 export default function FolderToPdfs2({navigation, route}) {
@@ -91,32 +90,23 @@ export default function FolderToPdfs2({navigation, route}) {
 }
 
 function EachBani(navigation, item, styles, state, dispatch) {
-  const isFolder = item.list ? true : false;
   return (
     <View>
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          console.log('is Folder: ', isFolder);
-          if (!isFolder) navigation.navigate('OpenPdf', {pdfTitle: item.title});
-          else
-            navigation.navigate('BanisList2', {
-              list: item.list,
-              folderTitle: item.title, //name of the bar clicked on
-            });
+          navigation.navigate('OpenPdf', {pdfTitle: item.title});
         }}>
-        {isFolder ? (
-          <>
-            <Icon style={styles.icons} name="folder-outline" type="ionicon" />
-            <Text style={styles.titleText}>{item.title}</Text>
-            <Icon
-              style={styles.icons}
-              name="arrow-forward-outline"
-              type="ionicon"></Icon>
-          </>
-        ) : (
-          <Text style={styles.titleText}>{item.title}</Text>
-        )}
+        <Icon style={styles.icons} name="folder-outline" type="ionicon" />
+        <Text style={styles.titleText}>{item.title}</Text>
+        <Icon
+          style={styles.icons}
+          name="trash-outline"
+          type="ionicon"
+          onPress={() => {
+            dispatch(deleteAddedItem(item.title));
+          }}></Icon>
+
         {state.allPdfs[item.title] ? (
           <CheckBox
             checked={state.allPdfs[item.title].checked}
@@ -236,20 +226,6 @@ function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
           <Icon name="close-outline" type="ionicon"></Icon>
         </TouchableOpacity>
         <View style={styles.underScroll}>
-          <TouchableOpacity
-            style={styles.ButtomButton}
-            onPress={() => {
-              let a = 'hi' + Math.floor(Math.random() * 10000);
-              // setList(prev => {
-              // prev.push({title: a, list: []});
-              dispatch(setAddedPDFs(folderTitle, {title: a, list: []}));
-              // return prev;
-              // });
-              setVisibility(false);
-            }}>
-            <Text style={styles.shabadtext}>Add a folder</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={styles.ButtomButton}
             onPress={() => {

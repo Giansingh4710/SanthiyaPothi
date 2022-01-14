@@ -11,8 +11,7 @@ import {folderToFileData} from '../assets/longData';
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
-  const state = useSelector(theState => theState.theReducer);
-
+  let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
     async function getData() {
       try {
@@ -27,6 +26,7 @@ function HomeScreen({navigation, route}) {
           console.log('there is nothing is state');
           theState = initialState;
         }
+        state = theState;
         dispatch(setTheState(theState));
       } catch (error) {
         // Error retrieving data
@@ -87,11 +87,13 @@ function HomeScreen({navigation, route}) {
         <FlatList
           keyExtractor={item => item.title} //name of each item like 'Bai Vaara'
           renderItem={({item}) => {
+            // console.log(item.title);
             return (
               <View>
                 <TouchableOpacity
                   style={styles.itemContainer}
                   onPress={() => {
+                    console.log('mains:', item.list);
                     navigation.navigate('BanisList', {
                       list: item.list,
                       folderTitle: item.title, //name of the bar clicked on
@@ -118,13 +120,6 @@ function HomeScreen({navigation, route}) {
             {...state.addedPdfs},
             {
               title: 'ਪਾਠ Hajari',
-              listt: Object.entries(state.allPdfs)
-                .filter(bani => {
-                  return bani[1].currentAng !== 1 && bani[1].checked === false;
-                })
-                .map(bani => {
-                  return {title: bani[0]};
-                }),
             },
           ]}
         />

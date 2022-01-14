@@ -62,6 +62,17 @@ function theReducer(state = initialState, action) {
       state.addedPdfs = res;
     }
     theState = state;
+  } else if (action.type === 'ADD_OR_DELETE_PDF') {
+    const fileName = action.title;
+    const details = action.item;
+    const add = action.add; //boolean
+    if (add) {
+      state.allPdfs[fileName] = details;
+    } else {
+      delete state.allPdfs[fileName];
+    }
+
+    theState = state;
   } else {
     return state;
   }

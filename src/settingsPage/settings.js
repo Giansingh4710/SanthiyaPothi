@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
+import RNRestart from 'react-native-restart';
 
 import {useSelector, useDispatch} from 'react-redux';
 import SwitchBar from './settingBarSwitch';
@@ -67,6 +68,7 @@ function SettingsPage({navigation}) {
           onPress: () => {
             setData('state', initialState);
             dispatch(setTheState(initialState));
+            RNRestart.Restart();
           },
         },
       ],

@@ -7,12 +7,19 @@ import {
   FlatList,
   Modal,
   TextInput,
+  Alert,
 } from 'react-native';
 
 import {CheckBox, Icon} from 'react-native-elements';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {setCheckBox, setAddedPDFs, deleteAddedItem} from '../redux/actions';
+import {
+  setCheckBox,
+  setAddedPDFs,
+  deleteAddedItem,
+  addNdeletePdf,
+} from '../redux/actions';
+import {allOriginalFolders} from '../assets/longData';
 import {barStyles, allColors} from '../assets/styleForEachOption';
 import AddedFiles from '../assets/otherScreens/addedFiles';
 import DocumentPicker from 'react-native-document-picker';
@@ -23,14 +30,25 @@ export default function FolderToPdfs({navigation, route}) {
 
   const [modalOn, setModal] = React.useState(false);
   const folderTitle = route.params.folderTitle;
-  const baniaList = route.params.list;
-  console.log('from state', state.addedPdfs);
-  // const baniaList = state.addedPdfs;
 
-  for (let i = 0; i < baniaList.length; i++) {
-    console.log(i + 1, ')', baniaList[i]);
-  }
+  const [baniaList, setBaniaList] = React.useState(route.params.list);
+
+  // React.useLayoutEffect(() => {
+  //   setBaniaList(route.params.list);
+  // }, [navigation]);
+
   React.useEffect(() => {
+    if (folderTitle === 'ਪਾਠ Hajari')
+      setBaniaList(
+        Object.entries(state.allPdfs)
+          .filter(bani => {
+            return bani[1].currentAng !== 1 && bani[1].checked === false;
+          })
+          .map(bani => {
+            return {title: bani[0]};
+          }),
+      );
+
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
@@ -62,7 +80,7 @@ export default function FolderToPdfs({navigation, route}) {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation.isFocused()]);
 
   const barStyle = barStyles[state.darkMode].barStyle;
 
@@ -80,20 +98,41 @@ export default function FolderToPdfs({navigation, route}) {
       padding: 10,
     },
   });
+  if (allOriginalFolders.includes(folderTitle)) {
+    return (
+      <View style={styles.container}>
+        <FlatList
+          keyExtractor={item => item.title}
+          renderItem={({item}) => {
+            //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
+            return EachBani(navigation, item, barStyle, state, dispatch);
+          }}
+          data={baniaList}
+        />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item => item.title}
         renderItem={({item}) => {
           //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
-          return EachBani(navigation, item, barStyle, state, dispatch);
+          return EachAddedItem(
+            navigation,
+            item,
+            barStyle,
+            state,
+            dispatch,
+            setBaniaList,
+          );
         }}
         data={baniaList}
       />
       <AddFile
         visible={modalOn}
         setVisibility={setModal}
-        // setList={setBaniaList}
+        setBaniaList={setBaniaList}
         dispatch={dispatch}
         folderTitle={folderTitle}></AddFile>
     </View>
@@ -101,13 +140,55 @@ export default function FolderToPdfs({navigation, route}) {
 }
 
 function EachBani(navigation, item, styles, state, dispatch) {
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          navigation.navigate('OpenPdf', {pdfTitle: item.title});
+        }}>
+        <Text style={styles.titleText}>{item.title}</Text>
+        <CheckBox
+          checked={state.allPdfs[item.title].checked}
+          checkedColor="#0F0"
+          checkedTitle="ਸੰਪੂਰਨ"
+          containerStyle={{
+            borderRadius: 10,
+            padding: 10,
+            backgroundColor: 'black',
+          }}
+          onPress={() => {
+            dispatch(setCheckBox(item.title));
+          }}
+          size={20}
+          textStyle={{
+            fontSize: 10,
+            height: 20,
+            color: 'white',
+          }}
+          title="Not Done"
+          titleProps={{}}
+          uncheckedColor="#F00"
+        />
+      </TouchableOpacity>
+      <View style={styles.gap}></View>
+    </View>
+  );
+}
+function EachAddedItem(
+  navigation,
+  item,
+  styles,
+  state,
+  dispatch,
+  setBaniaList,
+) {
   const isFolder = item.list ? true : false;
   return (
     <View>
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          // console.log('is Folder: ', isFolder);
           if (!isFolder) navigation.navigate('OpenPdf', {pdfTitle: item.title});
           else
             navigation.navigate('BanisList2', {
@@ -116,21 +197,13 @@ function EachBani(navigation, item, styles, state, dispatch) {
             });
         }}>
         {isFolder ? (
-          <>
-            <Icon style={styles.icons} name="folder-outline" type="ionicon" />
-            <Text style={styles.titleText}>{item.title}</Text>
-            <Icon
-              style={styles.icons}
-              name="trash-outline"
-              type="ionicon"
-              onPress={() => {
-                dispatch(deleteAddedItem(item.title));
-              }}
-            />
-          </>
+          <Icon style={styles.icons} name="folder-outline" type="ionicon" />
         ) : (
-          <Text style={styles.titleText}>{item.title}</Text>
+          <></>
         )}
+
+        <Text style={styles.titleText}>{item.title}</Text>
+        {/* {!isFolder ? ( */}
         {state.allPdfs[item.title] ? (
           <CheckBox
             checked={state.allPdfs[item.title].checked}
@@ -157,6 +230,18 @@ function EachBani(navigation, item, styles, state, dispatch) {
         ) : (
           <></>
         )}
+        <Icon
+          style={styles.icons}
+          name="trash-outline"
+          type="ionicon"
+          onPress={() => {
+            dispatch(deleteAddedItem(item.title));
+            // setBaniaList(prev => {
+            //   const ans = prev.filter(i => i.title !== item.title);
+            //   return ans;
+            // });
+          }}
+        />
       </TouchableOpacity>
 
       <View style={styles.gap}></View>
@@ -164,20 +249,22 @@ function EachBani(navigation, item, styles, state, dispatch) {
   );
 }
 
-function AddFile({visible, setVisibility, folderTitle, dispatch}) {
-  // 'Adi Maharaj.pdf': {
-  //   checked: false,
-  //   baniType: 'Sri Guru Granth Sahib Jee',
-  //   currentAng: 1,
-  //   uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/AdiMaharaj.pdf',
-  // },
-
-  // {
-  // title: 'Sri Guru Granth Sahib Jee',
-  // list: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
-  // },
-
+function AddFile({
+  visible,
+  setVisibility,
+  setBaniaList,
+  folderTitle,
+  dispatch,
+}) {
   const [folderName, setFolderName] = React.useState();
+  const sameFileAlert = () =>
+    Alert.alert('File or folder with the Same name already exists!!', [
+      {
+        text: 'OK',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ]);
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({
@@ -185,16 +272,23 @@ function AddFile({visible, setVisibility, folderTitle, dispatch}) {
       });
       const name = res[0].name;
       const uri = res[0].uri;
-      // setList(prev => {
-      //   prev.push({title: name});
-      //   return prev;
-      // });
-      setVisibility(false);
+      const details = {
+        checked: false,
+        baniType: folderTitle,
+        currentAng: 1,
+        uri: uri,
+      };
+      dispatch(setAddedPDFs(folderTitle, {title: name}));
+      setBaniaList(prev => {
+        prev.push({title: folderName});
+        return prev;
+      });
+      dispatch(addNdeletePdf(name, details, true));
     } catch (err) {
       // alert(err);
-      setVisibility(false);
       console.log(err);
     }
+    setVisibility(false);
   }
   const styles = StyleSheet.create({
     container: {
@@ -252,26 +346,24 @@ function AddFile({visible, setVisibility, folderTitle, dispatch}) {
           <Icon name="close-outline" type="ionicon"></Icon>
         </TouchableOpacity>
         <TextInput
-          // keyboardType="numeric"
-          // value={currrentAng.toString()}
           style={{backgroundColor: '#cecece', borderRadius: 5}}
           placeholder="exp: Folder 1"
           onChangeText={e => {
             setFolderName(e);
           }}
-          // onSubmitEditing={e => {
-          //   const theText = e.nativeEvent.text;
-          //   console.log(theText);
-          //   setFolderName(theText);
-          // }}
         />
         <View style={styles.underScroll}>
           <TouchableOpacity
             style={styles.ButtomButton}
             onPress={() => {
+              // setBaniaList(prev => {
+              //   prev.push({title: folderName});
+              //   return prev;
+              // });
               dispatch(
                 setAddedPDFs(folderTitle, {title: folderName, list: []}),
               );
+
               setVisibility(false);
             }}>
             <Text style={styles.shabadtext}>Add a folder</Text>

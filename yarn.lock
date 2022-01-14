@@ -7720,6 +7720,11 @@ react-native-reanimated@^2.2.0:
     mockdate "^3.0.2"
     string-hash-64 "^1.0.3"
 
+react-native-restart@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/react-native-restart/-/react-native-restart-0.0.23.tgz#9b53062ebc692f469d0662c06879cb4d34c62520"
+  integrity sha512-BTs3YNl0MFyTgYgq6oQOspVV7+8Umm2QeuHWJ8xfRsjdHIUBoKF/Bxe1IMGAO5vHPcNwN+lHE6Mf58Tu4HS9/w==
+
 react-native-safe-area-context@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz#06113c6b208f982d68ab5c3cebd199ca93db6941"
