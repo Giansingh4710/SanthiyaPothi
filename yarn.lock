@@ -7655,6 +7655,11 @@ react-native-document-picker@^7.1.3:
   dependencies:
     invariant "^2.2.4"
 
+react-native-draggable-flatlist@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-3.0.4.tgz#f2eb6612c3cfde34abc8f2a3523d6dabd7905bd0"
+  integrity sha512-XgU+cVhxioLFbcn9+ZhBDVjF3CuyFHSiHlpq6/yFgbghoYxrh8atBW1eLkK7bC5rhtTpb/JkS5QaGb/7+croTQ==
+
 react-native-elements@^3.4.2:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.4.2.tgz#66602be9c5e0e0a2a831913adec80ff6518d1ee2"

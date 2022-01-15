@@ -9,8 +9,16 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-
 import {CheckBox, Icon} from 'react-native-elements';
+
+import DraggableFlatList, {
+  RenderItemParams,
+  ScaleDecorator,
+  ShadowDecorator,
+  OpacityDecorator,
+  useOnCellActiveAnimation,
+} from 'react-native-draggable-flatlist';
+import Animated from 'react-native-reanimated';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -113,22 +121,114 @@ export default function FolderToPdfs({navigation, route}) {
       </View>
     );
   }
+
+  const renderItem = ({item, drag}) => {
+    const isFolder = item.list ? true : false;
+    const {isActive} = useOnCellActiveAnimation();
+    const styles = barStyles[state.darkMode].barStyle;
+    return (
+      <ScaleDecorator>
+        <OpacityDecorator activeOpacity={0.5}>
+          <ShadowDecorator>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => {
+                if (!isFolder)
+                  navigation.navigate('OpenPdf', {pdfTitle: item.title});
+                else
+                  navigation.navigate('BanisList2', {
+                    list: item.list,
+                    folderTitle: item.title, //name of the bar clicked on
+                  });
+              }}
+              style={[
+                styles.rowItem,
+                {
+                  backgroundColor: isActive ? 'red' : item.backgroundColor,
+                  height: item.height,
+                  elevation: isActive ? 30 : 0,
+                },
+              ]}
+              onLongPress={drag}>
+              <Animated.View style={styles.itemContainer}>
+                {isFolder ? (
+                  <Icon
+                    style={styles.icons}
+                    name="folder-outline"
+                    type="ionicon"
+                  />
+                ) : (
+                  <></>
+                )}
+
+                <Text style={styles.titleText}>{item.title}</Text>
+                {/* {!isFolder ? ( */}
+                {state.allPdfs[item.title] ? (
+                  <CheckBox
+                    checked={state.allPdfs[item.title].checked}
+                    checkedColor="#0F0"
+                    checkedTitle="ਸੰਪੂਰਨ"
+                    containerStyle={{
+                      borderRadius: 10,
+                      padding: 10,
+                      backgroundColor: 'black',
+                    }}
+                    onPress={() => {
+                      dispatch(setCheckBox(item.title));
+                    }}
+                    size={20}
+                    textStyle={{
+                      fontSize: 10,
+                      height: 20,
+                      color: 'white',
+                    }}
+                    title="Not Done"
+                    titleProps={{}}
+                    uncheckedColor="#F00"
+                  />
+                ) : (
+                  <></>
+                )}
+                <Icon
+                  style={styles.icons}
+                  name="trash-outline"
+                  type="ionicon"
+                  onPress={() => {
+                    dispatch(deleteAddedItem(item.title));
+                    dispatch(addNdeletePdf(item.title, '_', false));
+                    setBaniaList(state.addedPdfs.list);
+                  }}
+                />
+              </Animated.View>
+              <View style={styles.gap}></View>
+            </TouchableOpacity>
+          </ShadowDecorator>
+        </OpacityDecorator>
+      </ScaleDecorator>
+    );
+  };
+  // const [placeholderIndex, setPlaceholderIndex] = React.useState(-1);
+  // const ref = React.useRef();
   return (
     <View style={styles.container}>
-      <FlatList
-        keyExtractor={item => item.title}
-        renderItem={({item}) => {
-          //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
-          return EachAddedItem(
-            navigation,
-            item,
-            barStyle,
-            state,
-            dispatch,
-            setBaniaList,
-          );
-        }}
+      <DraggableFlatList
+        // ref={ref}
         data={baniaList}
+        onDragEnd={i => {
+          const data = i.data;
+          const from = i.from;
+          const to = i.to;
+
+          console.log(i);
+          const temp = data[from];
+          data[from] = data[to];
+          data[to] = temp;
+          console.log(data);
+          setBaniaList(data);
+        }}
+        keyExtractor={item => item.title}
+        renderItem={renderItem}
+        // onPlaceholderIndexChange={setPlaceholderIndex}
       />
       <AddFileModal
         state={state}
