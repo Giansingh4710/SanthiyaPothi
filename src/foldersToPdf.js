@@ -36,7 +36,9 @@ export default function FolderToPdfs({navigation, route}) {
   // React.useLayoutEffect(() => {
   //   setBaniaList(route.params.list);
   // }, [navigation]);
-
+  React.useEffect(() => {
+    if (folderTitle === 'Added PDFs') setBaniaList(state.addedPdfs.list);
+  });
   React.useEffect(() => {
     if (folderTitle === 'ਪਾਠ Hajari')
       setBaniaList(
@@ -48,7 +50,6 @@ export default function FolderToPdfs({navigation, route}) {
             return {title: bani[0]};
           }),
       );
-
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
@@ -130,6 +131,7 @@ export default function FolderToPdfs({navigation, route}) {
         data={baniaList}
       />
       <AddFile
+        state={state}
         visible={modalOn}
         setVisibility={setModal}
         setBaniaList={setBaniaList}
@@ -236,10 +238,8 @@ function EachAddedItem(
           type="ionicon"
           onPress={() => {
             dispatch(deleteAddedItem(item.title));
-            // setBaniaList(prev => {
-            //   const ans = prev.filter(i => i.title !== item.title);
-            //   return ans;
-            // });
+            dispatch(addNdeletePdf(item.title, '_', false));
+            setBaniaList(state.addedPdfs.list);
           }}
         />
       </TouchableOpacity>
@@ -250,6 +250,7 @@ function EachAddedItem(
 }
 
 function AddFile({
+  state,
   visible,
   setVisibility,
   setBaniaList,
@@ -257,6 +258,7 @@ function AddFile({
   dispatch,
 }) {
   const [folderName, setFolderName] = React.useState();
+
   const sameFileAlert = () =>
     Alert.alert('File or folder with the Same name already exists!!', [
       {
@@ -278,12 +280,12 @@ function AddFile({
         currentAng: 1,
         uri: uri,
       };
-      dispatch(setAddedPDFs(folderTitle, {title: name}));
-      setBaniaList(prev => {
-        prev.push({title: folderName});
-        return prev;
-      });
+      if (state.allPdfs[name]) {
+        // sameFileAlert();
+        return;
+      }
       dispatch(addNdeletePdf(name, details, true));
+      dispatch(setAddedPDFs(folderTitle, {title: name}));
     } catch (err) {
       // alert(err);
       console.log(err);
@@ -356,14 +358,18 @@ function AddFile({
           <TouchableOpacity
             style={styles.ButtomButton}
             onPress={() => {
-              // setBaniaList(prev => {
-              //   prev.push({title: folderName});
-              //   return prev;
-              // });
+              if (state.allPdfs[folderName] || folderName === '') {
+                // sameFileAlert();
+                return;
+              }
               dispatch(
                 setAddedPDFs(folderTitle, {title: folderName, list: []}),
               );
-
+              const details = {
+                checked: false,
+                baniType: folderTitle,
+              };
+              dispatch(addNdeletePdf(folderName, details, true));
               setVisibility(false);
             }}>
             <Text style={styles.shabadtext}>Add a folder</Text>

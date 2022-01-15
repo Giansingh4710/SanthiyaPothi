@@ -81,6 +81,7 @@ function HomeScreen({navigation, route}) {
       // padding: 10,
     },
   });
+
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
@@ -93,9 +94,12 @@ function HomeScreen({navigation, route}) {
                 <TouchableOpacity
                   style={styles.itemContainer}
                   onPress={() => {
-                    console.log('mains:', item.list);
+                    const theList =
+                      item.title == 'Added PDFs'
+                        ? state.addedPdfs.list
+                        : item.list;
                     navigation.navigate('BanisList', {
-                      list: item.list,
+                      list: theList,
                       folderTitle: item.title, //name of the bar clicked on
                     });
                   }}>

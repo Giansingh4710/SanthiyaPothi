@@ -72,6 +72,7 @@ function theReducer(state = initialState, action) {
       delete state.allPdfs[fileName];
     }
 
+    // console.log(state.allPdfs[fileName]);
     theState = state;
   } else {
     return state;
