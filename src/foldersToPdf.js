@@ -130,13 +130,13 @@ export default function FolderToPdfs({navigation, route}) {
         }}
         data={baniaList}
       />
-      <AddFile
+      <AddFileModal
         state={state}
         visible={modalOn}
         setVisibility={setModal}
         setBaniaList={setBaniaList}
         dispatch={dispatch}
-        folderTitle={folderTitle}></AddFile>
+        folderTitle={folderTitle}></AddFileModal>
     </View>
   );
 }
@@ -249,7 +249,7 @@ function EachAddedItem(
   );
 }
 
-function AddFile({
+function AddFileModal({
   state,
   visible,
   setVisibility,
@@ -282,7 +282,7 @@ function AddFile({
       };
       if (state.allPdfs[name]) {
         // sameFileAlert();
-        return;
+        return sameFileAlert();
       }
       dispatch(addNdeletePdf(name, details, true));
       dispatch(setAddedPDFs(folderTitle, {title: name}));

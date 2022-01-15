@@ -75,38 +75,56 @@ export default function FolderToPdfs2({navigation, route}) {
         keyExtractor={item => item.title}
         renderItem={({item}) => {
           //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
-          return EachBani(navigation, item, barStyle, state, dispatch);
+          return EachAddedItem(
+            navigation,
+            item,
+            barStyle,
+            state,
+            dispatch,
+            setBaniaList,
+          );
         }}
         data={baniaList}
       />
-      <AddFile
+      <AddFileModal
         visible={modalOn}
         setVisibility={setModal}
         setList={setBaniaList}
         dispatch={dispatch}
-        folderTitle={folderTitle}></AddFile>
+        folderTitle={folderTitle}></AddFileModal>
     </View>
   );
 }
 
-function EachBani(navigation, item, styles, state, dispatch) {
+function EachAddedItem(
+  navigation,
+  item,
+  styles,
+  state,
+  dispatch,
+  setBaniaList,
+) {
+  const isFolder = item.list ? true : false;
   return (
     <View>
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          navigation.navigate('OpenPdf', {pdfTitle: item.title});
+          if (!isFolder) navigation.navigate('OpenPdf', {pdfTitle: item.title});
+          else
+            navigation.navigate('BanisList2', {
+              list: item.list,
+              folderTitle: item.title, //name of the bar clicked on
+            });
         }}>
-        <Icon style={styles.icons} name="folder-outline" type="ionicon" />
-        <Text style={styles.titleText}>{item.title}</Text>
-        <Icon
-          style={styles.icons}
-          name="trash-outline"
-          type="ionicon"
-          onPress={() => {
-            dispatch(deleteAddedItem(item.title));
-          }}></Icon>
+        {isFolder ? (
+          <Icon style={styles.icons} name="folder-outline" type="ionicon" />
+        ) : (
+          <></>
+        )}
 
+        <Text style={styles.titleText}>{item.title}</Text>
+        {/* {!isFolder ? ( */}
         {state.allPdfs[item.title] ? (
           <CheckBox
             checked={state.allPdfs[item.title].checked}
@@ -133,6 +151,16 @@ function EachBani(navigation, item, styles, state, dispatch) {
         ) : (
           <></>
         )}
+        <Icon
+          style={styles.icons}
+          name="trash-outline"
+          type="ionicon"
+          onPress={() => {
+            dispatch(deleteAddedItem(item.title));
+            dispatch(addNdeletePdf(item.title, '_', false));
+            setBaniaList(state.addedPdfs.list);
+          }}
+        />
       </TouchableOpacity>
 
       <View style={styles.gap}></View>
@@ -140,18 +168,14 @@ function EachBani(navigation, item, styles, state, dispatch) {
   );
 }
 
-function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
-  // 'Adi Maharaj.pdf': {
-  //   checked: false,
-  //   baniType: 'Sri Guru Granth Sahib Jee',
-  //   currentAng: 1,
-  //   uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/AdiMaharaj.pdf',
-  // },
-
-  // {
-  // title: 'Sri Guru Granth Sahib Jee',
-  // list: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
-  // },
+function AddFileModal({
+  state,
+  visible,
+  setVisibility,
+  setBaniaList,
+  folderTitle,
+  dispatch,
+}) {
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({
@@ -159,14 +183,21 @@ function AddFile({visible, setVisibility, setList, folderTitle, dispatch}) {
       });
       const name = res[0].name;
       const uri = res[0].uri;
-      setList(prev => {
-        prev.push({title: name});
-        return prev;
-      });
+      const details = {
+        checked: false,
+        baniType: folderTitle,
+        currentAng: 1,
+        uri: uri,
+      };
+      if (state.allPdfs[name]) {
+        // sameFileAlert();
+        return;
+      }
+      dispatch(addNdeletePdf(name, details, true));
+      dispatch(setAddedPDFs(folderTitle, {title: name}));
       setVisibility(false);
     } catch (err) {
       // alert(err);
-      setVisibility(false);
       console.log(err);
     }
   }
