@@ -45,8 +45,10 @@ export default function FolderToPdfs({navigation, route}) {
   //   setBaniaList(route.params.list);
   // }, [navigation]);
   React.useEffect(() => {
-    if (folderTitle === 'Added PDFs') setBaniaList(state.addedPdfs.list);
-  });
+    // console.log('in use effect');
+    // if (folderTitle === 'Added PDFs') setBaniaList(state.addedPdfs.list);
+  }, []);
+
   React.useEffect(() => {
     if (folderTitle === 'ਪਾਠ Hajari')
       setBaniaList(
@@ -146,7 +148,7 @@ export default function FolderToPdfs({navigation, route}) {
                 {
                   backgroundColor: isActive ? 'red' : item.backgroundColor,
                   height: item.height,
-                  elevation: isActive ? 30 : 0,
+                  elevation: isActive ? 1 : 0,
                 },
               ]}
               onLongPress={drag}>
@@ -214,18 +216,7 @@ export default function FolderToPdfs({navigation, route}) {
       <DraggableFlatList
         // ref={ref}
         data={baniaList}
-        onDragEnd={i => {
-          const data = i.data;
-          const from = i.from;
-          const to = i.to;
-
-          console.log(i);
-          const temp = data[from];
-          data[from] = data[to];
-          data[to] = temp;
-          console.log(data);
-          setBaniaList(data);
-        }}
+        onDragEnd={i => setBaniaList(i.data)}
         keyExtractor={item => item.title}
         renderItem={renderItem}
         // onPlaceholderIndexChange={setPlaceholderIndex}
