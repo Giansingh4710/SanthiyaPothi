@@ -71,8 +71,20 @@ function theReducer(state = initialState, action) {
     } else {
       delete state.allPdfs[fileName];
     }
+    theState = state;
+  } else if (action.type === 'SET_LIST') {
+    const listTitle = action.listTitle;
+    const theList = action.theList;
 
-    // console.log(state.allPdfs[fileName]);
+    if (state.addedPdfs.title === listTitle) state.addedPdfs.list = theList;
+    else {
+      for (let i = 0; i < state.addedPdfs.list.length; i++) {
+        if (state.addedPdfs.list[i].title === listTitle) {
+          state.addedPdfs.list[i].list = theList;
+          break;
+        }
+      }
+    }
     theState = state;
   } else {
     return state;
@@ -138,4 +150,5 @@ function remove(arr, file) {
   }
   return ans;
 }
+
 export default theReducer;

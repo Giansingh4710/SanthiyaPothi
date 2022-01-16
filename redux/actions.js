@@ -44,6 +44,13 @@ export const addNdeletePdf = (title, item, toAdd) => dispatch => {
     add: toAdd, //boolean
   });
 };
+export const setList = (listTitle, theList) => dispatch => {
+  dispatch({
+    type: 'SET_LIST',
+    listTitle,
+    theList,
+  });
+};
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',
