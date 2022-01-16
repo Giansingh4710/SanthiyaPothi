@@ -23,13 +23,12 @@ import Animated from 'react-native-reanimated';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setCheckBox,
-  setAddedPDFs,
+  addFileOrFolder,
   deleteAddedItem,
   addNdeletePdf,
 } from '../redux/actions';
 import {allOriginalFolders} from '../assets/longData';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import AddedFiles from '../assets/otherScreens/addedFiles';
 import DocumentPicker from 'react-native-document-picker';
 
 export default function FolderToPdfs({navigation, route}) {
@@ -41,15 +40,8 @@ export default function FolderToPdfs({navigation, route}) {
 
   const [baniaList, setBaniaList] = React.useState(route.params.list);
 
-  // React.useLayoutEffect(() => {
-  //   setBaniaList(route.params.list);
-  // }, [navigation]);
   React.useEffect(() => {
-    // console.log('in use effect');
     // if (folderTitle === 'Added PDFs') setBaniaList(state.addedPdfs.list);
-  }, []);
-
-  React.useEffect(() => {
     if (folderTitle === 'ਪਾਠ Hajari')
       setBaniaList(
         Object.entries(state.allPdfs)
@@ -128,6 +120,13 @@ export default function FolderToPdfs({navigation, route}) {
     const isFolder = item.list ? true : false;
     const {isActive} = useOnCellActiveAnimation();
     const styles = barStyles[state.darkMode].barStyle;
+
+    const folderOrFileIcon = isFolder ? (
+      <Icon style={styles.icons} name="folder-outline" type="ionicon" />
+    ) : (
+      <Icon style={styles.icons} name="document-outline" type="ionicon" />
+      // <></>
+    );
     return (
       <ScaleDecorator>
         <OpacityDecorator activeOpacity={0.5}>
@@ -153,44 +152,31 @@ export default function FolderToPdfs({navigation, route}) {
               ]}
               onLongPress={drag}>
               <Animated.View style={styles.itemContainer}>
-                {isFolder ? (
-                  <Icon
-                    style={styles.icons}
-                    name="folder-outline"
-                    type="ionicon"
-                  />
-                ) : (
-                  <></>
-                )}
-
+                {folderOrFileIcon}
                 <Text style={styles.titleText}>{item.title}</Text>
-                {/* {!isFolder ? ( */}
-                {state.allPdfs[item.title] ? (
-                  <CheckBox
-                    checked={state.allPdfs[item.title].checked}
-                    checkedColor="#0F0"
-                    checkedTitle="ਸੰਪੂਰਨ"
-                    containerStyle={{
-                      borderRadius: 10,
-                      padding: 10,
-                      backgroundColor: 'black',
-                    }}
-                    onPress={() => {
-                      dispatch(setCheckBox(item.title));
-                    }}
-                    size={20}
-                    textStyle={{
-                      fontSize: 10,
-                      height: 20,
-                      color: 'white',
-                    }}
-                    title="Not Done"
-                    titleProps={{}}
-                    uncheckedColor="#F00"
-                  />
-                ) : (
-                  <></>
-                )}
+
+                <CheckBox
+                  checked={state.allPdfs[item.title].checked}
+                  checkedColor="#0F0"
+                  checkedTitle="ਸੰਪੂਰਨ"
+                  containerStyle={{
+                    borderRadius: 10,
+                    padding: 10,
+                    backgroundColor: 'black',
+                  }}
+                  onPress={() => {
+                    dispatch(setCheckBox(item.title));
+                  }}
+                  size={20}
+                  textStyle={{
+                    fontSize: 10,
+                    height: 20,
+                    color: 'white',
+                  }}
+                  title="Not Done"
+                  titleProps={{}}
+                  uncheckedColor="#F00"
+                />
                 <Icon
                   style={styles.icons}
                   name="trash-outline"
@@ -209,8 +195,6 @@ export default function FolderToPdfs({navigation, route}) {
       </ScaleDecorator>
     );
   };
-  // const [placeholderIndex, setPlaceholderIndex] = React.useState(-1);
-  // const ref = React.useRef();
   return (
     <View style={styles.container}>
       <DraggableFlatList
@@ -219,7 +203,6 @@ export default function FolderToPdfs({navigation, route}) {
         onDragEnd={i => setBaniaList(i.data)}
         keyExtractor={item => item.title}
         renderItem={renderItem}
-        // onPlaceholderIndexChange={setPlaceholderIndex}
       />
       <AddFileModal
         state={state}
@@ -373,10 +356,10 @@ function AddFileModal({
       };
       if (state.allPdfs[name]) {
         // sameFileAlert();
-        return sameFileAlert();
+        return;
       }
       dispatch(addNdeletePdf(name, details, true));
-      dispatch(setAddedPDFs(folderTitle, {title: name}));
+      dispatch(addFileOrFolder(folderTitle, {title: name}));
     } catch (err) {
       // alert(err);
       console.log(err);
@@ -454,7 +437,7 @@ function AddFileModal({
                 return;
               }
               dispatch(
-                setAddedPDFs(folderTitle, {title: folderName, list: []}),
+                addFileOrFolder(folderTitle, {title: folderName, list: []}),
               );
               const details = {
                 checked: false,

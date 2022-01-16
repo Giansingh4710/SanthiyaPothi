@@ -16,7 +16,7 @@ const barStyle = {
   titleText: {
     flex: 1,
     fontSize: 15,
-    // padding: 5,
+    padding: 5,
     left: 12,
   },
   gap: {

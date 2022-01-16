@@ -23,9 +23,9 @@ export const setDarkMode = mode => dispatch => {
     mode,
   });
 };
-export const setAddedPDFs = (folderTitle, item) => dispatch => {
+export const addFileOrFolder = (folderTitle, item) => dispatch => {
   dispatch({
-    type: 'SET_ADDED_PDFS',
+    type: 'ADD_FILE_OR_FOLDER',
     item,
     folderTitle,
   });

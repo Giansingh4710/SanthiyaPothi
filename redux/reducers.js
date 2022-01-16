@@ -44,7 +44,7 @@ function theReducer(state = initialState, action) {
       darkMode: action.mode,
     };
     theState = newState;
-  } else if (action.type === 'SET_ADDED_PDFS') {
+  } else if (action.type === 'ADD_FILE_OR_FOLDER') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;
     // console.log(theFolderToPutIn, theFile);
