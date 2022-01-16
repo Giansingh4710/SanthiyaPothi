@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  FlatList,
-  Modal,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 import {CheckBox, Icon} from 'react-native-elements';
 
 import DraggableFlatList, {
-  RenderItemParams,
   ScaleDecorator,
   ShadowDecorator,
   OpacityDecorator,
@@ -28,13 +18,13 @@ import {
   addNdeletePdf,
   setList,
 } from '../redux/actions';
-// import {allOriginalFolders} from '../assets/longData';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import DocumentPicker from 'react-native-document-picker';
+import AddFileModal from '../assets/otherScreens/addFilesModal';
 
 export default function FolderToPdfs({navigation, route}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
+
   const folderTitle = route.params.folderTitle;
   const styles = StyleSheet.create({
     container: {
@@ -110,10 +100,46 @@ export default function FolderToPdfs({navigation, route}) {
   );
 }
 
+function EachBani(navigation, item, styles, state, dispatch) {
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          navigation.navigate('OpenPdf', {pdfTitle: item.title});
+        }}>
+        <Text style={styles.titleText}>{item.title}</Text>
+        <CheckBox
+          checked={state.allPdfs[item.title].checked}
+          checkedColor="#0F0"
+          checkedTitle="ਸੰਪੂਰਨ"
+          containerStyle={{
+            borderRadius: 10,
+            padding: 10,
+            backgroundColor: 'black',
+          }}
+          onPress={() => {
+            dispatch(setCheckBox(item.title));
+          }}
+          size={20}
+          textStyle={{
+            fontSize: 10,
+            height: 20,
+            color: 'white',
+          }}
+          title="Not Done"
+          titleProps={{}}
+          uncheckedColor="#F00"
+        />
+      </TouchableOpacity>
+      <View style={styles.gap}></View>
+    </View>
+  );
+}
+
 function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
   const [modalOn, setModal] = React.useState(false);
   const [data, setData] = React.useState(state.addedPdfs.list);
-  // console.log(data);
 
   React.useEffect(() => {
     setData(state.addedPdfs.list);
@@ -231,7 +257,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
       <DraggableFlatList
         data={data}
         onDragEnd={i => {
-          // setBaniaList(i.data);
           dispatch(setList('Added PDFs', i.data));
           setData(i.data);
         }}
@@ -242,7 +267,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
         state={state}
         visible={modalOn}
         setVisibility={setModal}
-        // setBaniaList={setBaniaList}
         dispatch={dispatch}
         folderTitle={'Added PDFs'}
         onlyFiles={false}></AddFileModal>
@@ -250,181 +274,149 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
   );
 }
 
-function EachBani(navigation, item, styles, state, dispatch) {
-  return (
-    <View>
-      <TouchableOpacity
-        style={styles.itemContainer}
-        onPress={() => {
-          navigation.navigate('OpenPdf', {pdfTitle: item.title});
-        }}>
-        <Text style={styles.titleText}>{item.title}</Text>
-        <CheckBox
-          checked={state.allPdfs[item.title].checked}
-          checkedColor="#0F0"
-          checkedTitle="ਸੰਪੂਰਨ"
-          containerStyle={{
-            borderRadius: 10,
-            padding: 10,
-            backgroundColor: 'black',
-          }}
-          onPress={() => {
-            dispatch(setCheckBox(item.title));
-          }}
-          size={20}
-          textStyle={{
-            fontSize: 10,
-            height: 20,
-            color: 'white',
-          }}
-          title="Not Done"
-          titleProps={{}}
-          uncheckedColor="#F00"
-        />
-      </TouchableOpacity>
-      <View style={styles.gap}></View>
-    </View>
-  );
-}
+// function AddFileModal({
+//   state,
+//   visible,
+//   setVisibility,
+//   folderTitle,
+//   dispatch,
+//   onlyFiles,
+// }) {
+//   const [folderName, setFolderName] = React.useState();
 
-function AddFileModal({
-  state,
-  visible,
-  setVisibility,
-  folderTitle,
-  dispatch,
-  onlyFiles,
-}) {
-  const [folderName, setFolderName] = React.useState();
+//   const sameFileAlert = name => {
+//     const msg =
+//       name === ''
+//         ? 'Black name for folder not allowed.'
+//         : `You already have a folder or file named: "${name}"`;
+//     return Alert.alert('Invalid name for a folder or file!!', msg, [
+//       {
+//         text: 'OK',
+//         onPress: () => {},
+//       },
+//     ]);
+//   };
 
-  const sameFileAlert = () =>
-    Alert.alert('File or folder with the Same name already exists!!', [
-      {
-        text: 'OK',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-    ]);
+//   const styles = StyleSheet.create({
+//     container: {
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//       backgroundColor: '#0FF',
+//       height: '55%',
+//       width: '90%',
+//       top: '15%',
+//       left: '5%',
+//       borderRadius: 40,
+//     },
+//     topRow: {
+//       flexDirection: 'row',
+//     },
+//     icons: {
+//       // backgroundColor: 'red',
+//       flex: 0.75,
+//     },
+//     dateTime: {
+//       flex: 1,
+//     },
+//     underScroll: {
+//       flex: 1,
+//       flexDirection: 'row',
+//     },
+//     ButtomButton: {
+//       padding: 10,
+//       margin: 10,
+//       flex: 1,
+//       flexDirection: 'row',
+//       width: 200,
+//       height: 50,
+//       borderRadius: 40,
+//       backgroundColor: '#f9f871',
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//     },
+//   });
 
-  async function pickDoc() {
-    try {
-      const res = await DocumentPicker.pick({
-        // type: [DocumentPicker.types.pdf],
-      });
-      const name = res[0].name;
-      const uri = res[0].uri;
-      const details = {
-        checked: false,
-        baniType: folderTitle,
-        currentAng: 1,
-        uri: uri,
-      };
-      if (state.allPdfs[name]) {
-        // sameFileAlert();
-        return;
-      }
-      dispatch(addNdeletePdf(name, details, true));
-      dispatch(addFileOrFolder(folderTitle, {title: name}));
-    } catch (err) {
-      // alert(err);
-      console.log(err);
-    }
-    setVisibility(false);
-  }
-  const styles = StyleSheet.create({
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#0FF',
-      height: '55%',
-      width: '90%',
-      top: '15%',
-      left: '5%',
-      borderRadius: 40,
-    },
-    topRow: {
-      flexDirection: 'row',
-    },
-    icons: {
-      // backgroundColor: 'red',
-      flex: 0.75,
-    },
-    dateTime: {
-      flex: 1,
-    },
-    underScroll: {
-      flex: 1,
-      flexDirection: 'row',
-    },
-    ButtomButton: {
-      padding: 10,
-      margin: 10,
-      flex: 1,
-      flexDirection: 'row',
-      width: 200,
-      height: 50,
-      borderRadius: 40,
-      backgroundColor: '#f9f871',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
+//   async function pickDoc() {
+//     try {
+//       const res = await DocumentPicker.pick({
+//         // type: [DocumentPicker.types.pdf],
+//       });
+//       const name = res[0].name;
+//       const uri = res[0].uri;
+//       const details = {
+//         checked: false,
+//         baniType: folderTitle,
+//         currentAng: 1,
+//         uri: uri,
+//       };
+//       if (state.allPdfs[name]) {
+//         sameFileAlert(name);
+//         return;
+//       }
+//       dispatch(addNdeletePdf(name, details, true));
+//       dispatch(addFileOrFolder(folderTitle, {title: name}));
+//     } catch (err) {
+//       // alert(err);
+//       console.log(err);
+//     }
+//     setVisibility(false);
+//   }
 
-  const addFolderBtn = onlyFiles ? (
-    <></>
-  ) : (
-    <TouchableOpacity
-      style={styles.ButtomButton}
-      onPress={() => {
-        if (state.allPdfs[folderName] || folderName === '') {
-          // sameFileAlert();
-          return;
-        }
-        const details = {
-          checked: false,
-          baniType: folderTitle,
-        };
-        dispatch(addNdeletePdf(folderName, details, true));
-        dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
-        setVisibility(false);
-      }}>
-      <Text style={styles.shabadtext}>Add a folder</Text>
-    </TouchableOpacity>
-  );
-  return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={() => {
-        setVisibility(false);
-      }}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.icons}
-          onPress={() => {
-            setVisibility(false);
-          }}>
-          <Icon name="close-outline" type="ionicon"></Icon>
-        </TouchableOpacity>
-        <TextInput
-          style={{backgroundColor: '#cecece', borderRadius: 5}}
-          placeholder="exp: Folder 1"
-          onChangeText={e => {
-            setFolderName(e);
-          }}
-        />
-        <View style={styles.underScroll}>
-          {addFolderBtn}
-          <TouchableOpacity
-            style={styles.ButtomButton}
-            onPress={() => {
-              pickDoc();
-            }}>
-            <Text style={styles.shabadtext}>Add a file</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
-  );
-}
+//   const addFolderBtn = onlyFiles ? (
+//     <></>
+//   ) : (
+//     <TouchableOpacity
+//       style={styles.ButtomButton}
+//       onPress={() => {
+//         if (state.allPdfs[folderName] || folderName === '') {
+//           sameFileAlert(folderName);
+//           return;
+//         }
+//         const details = {
+//           checked: false,
+//           baniType: folderTitle,
+//         };
+//         dispatch(addNdeletePdf(folderName, details, true));
+//         dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
+//         setVisibility(false);
+//       }}>
+//       <Text style={styles.shabadtext}>Add a folder</Text>
+//     </TouchableOpacity>
+//   );
+//   return (
+//     <Modal
+//       visible={visible}
+//       transparent
+//       animationType="slide"
+//       onRequestClose={() => {
+//         setVisibility(false);
+//       }}>
+//       <View style={styles.container}>
+//         <TouchableOpacity
+//           style={styles.icons}
+//           onPress={() => {
+//             setVisibility(false);
+//           }}>
+//           <Icon name="close-outline" type="ionicon"></Icon>
+//         </TouchableOpacity>
+//         <TextInput
+//           style={{backgroundColor: '#cecece', borderRadius: 5}}
+//           placeholder="exp: Folder 1"
+//           onChangeText={e => {
+//             setFolderName(e);
+//           }}
+//         />
+//         <View style={styles.underScroll}>
+//           {addFolderBtn}
+//           <TouchableOpacity
+//             style={styles.ButtomButton}
+//             onPress={() => {
+//               pickDoc();
+//             }}>
+//             <Text style={styles.shabadtext}>Add a file</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     </Modal>
+//   );
+// }

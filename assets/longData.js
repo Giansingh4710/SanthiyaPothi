@@ -560,6 +560,6 @@ export const folderToFileData = [
   },
 ];
 
-const allInitialFolders = folderToFileData.map(item => item.title);
-allInitialFolders.push('ਪਾਠ Hajari');
-export const allOriginalFolders = allInitialFolders;
+// const allInitialFolders = folderToFileData.map(item => item.title);
+// allInitialFolders.push('ਪਾਠ Hajari');
+// export const allOriginalFolders = allInitialFolders;

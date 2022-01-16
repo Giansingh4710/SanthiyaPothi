@@ -11,101 +11,159 @@ import DraggableFlatList, {
   useOnCellActiveAnimation,
 } from 'react-native-draggable-flatlist';
 import Animated from 'react-native-reanimated';
-import {barStyles} from '../assets/styleForEachOption';
+import {barStyles, allColors} from '../assets/styleForEachOption';
+import AddFileModal from '../assets/otherScreens/addFilesModal';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setCheckBox,
+  deleteAddedItem,
+  addNdeletePdf,
+  setList,
+} from '../redux/actions';
 
-const NUM_ITEMS = 5;
+export default function FolderToPdfs2({navigation, route}) {
+  const dispatch = useDispatch();
+  const state = useSelector(theState => theState.theReducer);
 
-function getData(numItems) {
-  return [...Array(numItems)].map((d, index) => {
-    // console.log(barStyles[false].barStyle);
-    return {
-      key: `item-${index}`,
-      label: `${index}`,
-      // height: 100,
-      // width: 60 + Math.random() * 40,
-      // backgroundColor,
-      ...barStyles[false].barStyle.itemContainer,
-    };
+  const [modalOn, setModal] = React.useState(false);
+  const [data, setData] = React.useState(route.params.list);
+  const folderTitle = route.params.folderTitle;
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+      height: '100%',
+    },
+    headerBtnsCont: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    headerBtns: {
+      flex: 1,
+      padding: 10,
+    },
   });
-}
 
-export default function FolderToPdfs2() {
-  const [data, setData] = useState(getData(NUM_ITEMS));
-  const [placeholderIndex, setPlaceholderIndex] = useState(-1);
-  const ref = useRef();
+  React.useEffect(() => {
+    // setData(state.addedPdfs.list);
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: allColors[state.darkMode].headerColor,
+      },
+      headerTitle: () => <Text>{folderTitle}</Text>,
+      headerRight: () => (
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              setModal(true);
+            }}>
+            <Icon name="add-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+            <Icon name="shuffle-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              navigation.navigate('Settings Page');
+            }}>
+            <Icon name="settings-outline" type="ionicon"></Icon>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation.isFocused()]);
 
   const renderItem = ({item, drag}) => {
     const {isActive} = useOnCellActiveAnimation();
-    const styles = barStyles[false].barStyle;
+    const styles = barStyles[state.darkMode].barStyle;
+
+    const folderOrFileIcon = (
+      <Icon style={styles.icons} name="document-outline" type="ionicon" />
+    );
+
     return (
       <ScaleDecorator>
         <OpacityDecorator activeOpacity={0.5}>
           <ShadowDecorator>
             <TouchableOpacity
               activeOpacity={1}
-              onPress={() => {
-                console.log('Pressed');
-              }}
+              onPress={() =>
+                navigation.navigate('OpenPdf', {pdfTitle: item.title})
+              }
               style={[
                 styles.rowItem,
                 {
                   backgroundColor: isActive ? 'red' : item.backgroundColor,
                   height: item.height,
-                  elevation: isActive ? 30 : 0,
+                  elevation: isActive ? 1 : 0,
                 },
               ]}
               onLongPress={drag}>
-              <Animated.View style={{}}>
-                <View style={styles.itemContainer}>
-                  <Text style={styles.titleText}>{item.label}</Text>
-                  <Icon
-                    style={styles.icons}
-                    name="trash-outline"
-                    type="ionicon"
-                    onPress={() => {
-                      console.log('trash');
-                    }}
-                  />
-                </View>
-                <View style={styles.gap}></View>
+              <Animated.View style={styles.itemContainer}>
+                {/* {folderOrFileIcon} */}
+                <Text style={styles.titleText}>{item.title}</Text>
+
+                <CheckBox
+                  checked={state.allPdfs[item.title].checked}
+                  checkedColor="#0F0"
+                  checkedTitle="ਸੰਪੂਰਨ"
+                  containerStyle={{
+                    borderRadius: 10,
+                    padding: 10,
+                    backgroundColor: 'black',
+                  }}
+                  onPress={() => {
+                    dispatch(setCheckBox(item.title));
+                  }}
+                  size={20}
+                  textStyle={{
+                    fontSize: 10,
+                    height: 20,
+                    color: 'white',
+                  }}
+                  title="Not Done"
+                  titleProps={{}}
+                  uncheckedColor="#F00"
+                />
+                <Icon
+                  style={styles.icons}
+                  name="trash-outline"
+                  type="ionicon"
+                  onPress={() => {
+                    dispatch(deleteAddedItem(item.title));
+                    dispatch(addNdeletePdf(item.title, '_', false));
+                    // setData(state.addedPdfs.list);
+                  }}
+                />
               </Animated.View>
+              <View style={styles.gap}></View>
             </TouchableOpacity>
           </ShadowDecorator>
         </OpacityDecorator>
       </ScaleDecorator>
     );
   };
-  // console.log('theData', data[0]);
+
   return (
-    <DraggableFlatList
-      // ref={ref}
-      data={data}
-      onDragEnd={i => setData(i.data)}
-      keyExtractor={item => item.key}
-      renderItem={renderItem}
-      // onPlaceholderIndexChange={setPlaceholderIndex}
-      renderPlaceholder={({item, index}) => (
-        <View style={{flex: 1, backgroundColor: 'blue'}}>
-          <Text
-            style={[
-              styles.rowItem,
-              styles.text,
-            ]}>{`placeholder: index: ${placeholderIndex}`}</Text>
-        </View>
-      )}
-    />
+    <View style={styles.container}>
+      <DraggableFlatList
+        data={data}
+        onDragEnd={i => {
+          dispatch(setList('Added PDFs', i.data));
+          // setData(i.data);
+        }}
+        keyExtractor={item => item.title}
+        renderItem={renderItem}
+      />
+      <AddFileModal
+        state={state}
+        visible={modalOn}
+        setVisibility={setModal}
+        dispatch={dispatch}
+        folderTitle={folderTitle}
+        onlyFiles={true}></AddFileModal>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  rowItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
