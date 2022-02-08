@@ -233,6 +233,7 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
                   titleProps={{}}
                   uncheckedColor="#F00"
                 />
+
                 <Icon
                   style={styles.icons}
                   name="trash-outline"
@@ -241,6 +242,12 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
                     dispatch(deleteAddedItem(item.title));
                     dispatch(addNdeletePdf(item.title, '_', false));
                     setData(state.addedPdfs.list);
+                    // const lstInFld = item.list;
+                    if (item.list)
+                      item.list.map(i => {
+                        dispatch(deleteAddedItem(i.title));
+                        dispatch(addNdeletePdf(i.title, '_', false));
+                      });
                   }}
                 />
               </Animated.View>

@@ -22,7 +22,7 @@ export default function AddFileModal({
   dispatch,
   onlyFiles,
 }) {
-  const [folderName, setFolderName] = React.useState();
+  const [folderName, setFolderName] = React.useState('');
 
   const sameFileAlert = name => {
     const msg =
@@ -79,7 +79,7 @@ export default function AddFileModal({
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({
-        // type: [DocumentPicker.types.pdf],
+        type: DocumentPicker.types.pdf,
       });
       const name = res[0].name;
       const uri = res[0].uri;
@@ -110,6 +110,7 @@ export default function AddFileModal({
       onPress={() => {
         if (state.allPdfs[folderName] || folderName === '') {
           sameFileAlert(folderName);
+          setFolderName('');
           return;
         }
         const details = {

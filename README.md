@@ -1,3 +1,5 @@
+[Santhiya Pothi](https://giansingh4710.github.io/learnGurmukhi/)
+
 There are many apps out there that are avaliable for reading Gurbani.
 The only thing in this app is that it is focused on santhiya. It doesn't
 include the nitnem baniya because thoese are readaliy avaliable (also, each bani added will

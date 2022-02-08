@@ -29,6 +29,16 @@ export default function FolderToPdfs2({navigation, route}) {
   const [data, setData] = React.useState(route.params.list);
   const folderTitle = route.params.folderTitle;
 
+  let folderInd = 0; //index of folder in state.addedPdfs.list
+  React.useEffect(() => {
+    for (let i = 0; i < state.addedPdfs.list.length; i++) {
+      if (state.addedPdfs.list[i].title == folderTitle) {
+        folderInd = i;
+        break;
+      }
+    }
+  }, []);
+
   const styles = StyleSheet.create({
     container: {
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
@@ -45,7 +55,7 @@ export default function FolderToPdfs2({navigation, route}) {
   });
 
   React.useEffect(() => {
-    // setData(state.addedPdfs.list);
+    setData(state.addedPdfs.list[folderInd].list);
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
@@ -134,7 +144,7 @@ export default function FolderToPdfs2({navigation, route}) {
                   onPress={() => {
                     dispatch(deleteAddedItem(item.title));
                     dispatch(addNdeletePdf(item.title, '_', false));
-                    // setData(state.addedPdfs.list);
+                    setData(state.addedPdfs.list[folderInd].list);
                   }}
                 />
               </Animated.View>
@@ -151,8 +161,8 @@ export default function FolderToPdfs2({navigation, route}) {
       <DraggableFlatList
         data={data}
         onDragEnd={i => {
-          dispatch(setList('Added PDFs', i.data));
-          // setData(i.data);
+          dispatch(setList(folderTitle, i.data));
+          setData(i.data);
         }}
         keyExtractor={item => item.title}
         renderItem={renderItem}
