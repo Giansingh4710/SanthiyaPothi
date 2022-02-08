@@ -1,4 +1,4 @@
-[Santhiya Pothi](https://giansingh4710.github.io/learnGurmukhi/)
+[Santhiya Pothi](https://santhiyapothi.xyz)
 
 There are many apps out there that are avaliable for reading Gurbani.
 The only thing in this app is that it is focused on santhiya. It doesn't
