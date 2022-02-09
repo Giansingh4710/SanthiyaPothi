@@ -6,4 +6,4 @@ include the nitnem baniya because thoese are readaliy avaliable (also, each bani
 make the size of the app grow becuase I'm using pdfs to show the baniya). Im using pdfs also
 because some people prefere reading from them instead of regular gutke apps becuase
 it makes it feel more like the physical pothi sahib. If you can read from a physical pothi sahib that is definetly the best. This is just another alternitive
-![Screenshot_1640892623](https://user-images.githubusercontent.com/73843250/147863053-20302289-4bf7-4cb6-ab69-57452a94d421.png)
+![Screenshot_1644372529](https://user-images.githubusercontent.com/73843250/153108479-656cea51-9e97-480c-82c9-b6cf6195f82d.png)
