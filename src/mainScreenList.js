@@ -17,7 +17,6 @@ function HomeScreen({navigation, route}) {
       try {
         const theStringState = await AsyncStorage.getItem('state');
         let theState;
-
         if (theStringState) {
           theState = JSON.parse(theStringState);
           // console.log(theState);
@@ -88,35 +87,13 @@ function HomeScreen({navigation, route}) {
         <FlatList
           keyExtractor={item => item.title} //name of each item like 'Bai Vaara'
           renderItem={({item}) => {
-            // console.log(item.title);
             return (
-              <View>
-                <TouchableOpacity
-                  style={styles.itemContainer}
-                  onPress={() => {
-                    const theList =
-                      item.title == 'Added PDFs'
-                        ? state.addedPdfs.list
-                        : item.list;
-                    navigation.navigate('BanisList', {
-                      list: theList,
-                      folderTitle: item.title, //name of the bar clicked on
-                    });
-                  }}>
-                  <Icon
-                    style={styles.icons}
-                    name="folder-outline"
-                    type="ionicon"
-                  />
-                  <Text style={styles.titleText}>{item.title}</Text>
-                  <Icon
-                    style={styles.icons}
-                    name="arrow-forward-outline"
-                    type="ionicon"
-                  />
-                </TouchableOpacity>
-                <View style={styles.gap}></View>
-              </View>
+              <EachFolderItem
+                item={item}
+                styles={styles}
+                state={state}
+                navigation={navigation}
+              />
             );
           }}
           data={[
@@ -132,4 +109,29 @@ function HomeScreen({navigation, route}) {
   );
 }
 
+function EachFolderItem({item, styles, state, navigation}) {
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          const theList =
+            item.title == 'Added PDFs' ? state.addedPdfs.list : item.list;
+          navigation.navigate('BanisList', {
+            list: theList,
+            folderTitle: item.title, //name of the bar clicked on
+          });
+        }}>
+        <Icon style={styles.icons} name="folder-outline" type="ionicon" />
+        <Text style={styles.titleText}>{item.title}</Text>
+        <Icon
+          style={styles.icons}
+          name="arrow-forward-outline"
+          type="ionicon"
+        />
+      </TouchableOpacity>
+      <View style={styles.gap}></View>
+    </View>
+  );
+}
 export default HomeScreen;

@@ -1,0 +1,8 @@
+0) made added pdfs work
+
+1) [ ] make shuffle/random btn work
+
+2) [ ] add more settings
+      - where pdf open, header bar disappear or not
+
+3) [ ] when you hold back button from pdf screen, give option to leave without saving position
