@@ -11,11 +11,12 @@ export const setData = async (title, state) => {
 
 export const initialState = {
   darkMode: false,
+  hideHeaderOnScroll:false,
   allPdfs: {...allPdfs},
   addedPdfs: {title: 'Added PDFs', list: []},
 };
 
-// setData('state', initialState); //to reset all state
+ setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -42,6 +43,12 @@ function theReducer(state = initialState, action) {
     const newState = {
       ...state,
       darkMode: action.mode,
+    };
+    theState = newState;
+  } else if (action.type === 'SET_HIDE_HEADER') {
+    const newState = {
+      ...state,
+      hideHeaderOnScroll: action.mode,
     };
     theState = newState;
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {

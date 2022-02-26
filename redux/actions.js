@@ -23,6 +23,12 @@ export const setDarkMode = mode => dispatch => {
     mode,
   });
 };
+export const setHideHeader = mode => dispatch => {
+  dispatch({
+    type: 'SET_HIDE_HEADER',
+    mode,
+  });
+};
 export const addFileOrFolder = (folderTitle, item) => dispatch => {
   dispatch({
     type: 'ADD_FILE_OR_FOLDER',

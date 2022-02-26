@@ -182,8 +182,7 @@ export default function OpenPdf({navigation, route}) {
           totalAngRef.current = numberOfPages;
         }}
         onPageChanged={(page, numberOfPages) => {
-          if (page > currrentAng) {
-            // console.log('going down');
+          if (state.hideHeaderOnScroll && page > currrentAng) {
             setShowHeader(false);
           }
           setCurrentAng(page);

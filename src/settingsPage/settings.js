@@ -14,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import SwitchBar from './settingBarSwitch';
 // import SettingsBar from './settingBar';
 
+import {setDarkMode,setHideHeader} from '../../redux/actions';
 import {allColors} from '../../assets/styleForEachOption';
 import {setData, initialState} from '../../redux/reducers';
 import {setTheState} from '../../redux/actions';
@@ -22,14 +23,11 @@ function SettingsPage({navigation}) {
   const state = useSelector(theState => theState.theReducer);
   const dispatch = useDispatch();
 
-  const [darkMode, setDarkMode] = React.useState(state.darkMode);
-
   React.useEffect(() => {
-    setDarkMode(state.darkMode);
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
-      },
+      }
     });
   });
 
@@ -52,11 +50,18 @@ function SettingsPage({navigation}) {
       width: '100%',
       // height: '100%',
     },
+    resetBtn: {
+      margin:10,
+      height: 50,
+      //width: '100%',
+      //height: '99%',
+      backgroundColor: 'red'
+    },
   });
   const createThreeButtonAlert = () =>
     Alert.alert(
       'Are you Sure you want to reset all Data?',
-      'You will delete all added pdfs , checked off boxes and last left off page',
+      'This will delete all added pdfs , checked off boxes and last left off angs',
       [
         {
           text: 'Cancel',
@@ -73,6 +78,7 @@ function SettingsPage({navigation}) {
         },
       ],
     );
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
@@ -80,6 +86,13 @@ function SettingsPage({navigation}) {
           SettingTitle="Dark Mode"
           icons={['moon', 'sunny']} //if true icon=moon, if false icon=sunny
           nameInState={'darkMode'} //only true or false
+          setter={setDarkMode}
+        />
+        <SwitchBar
+          SettingTitle="Hide Header On Scroll"
+          icons={['chevron-up-circle', 'close-outline']} //if true icon=moon, if false icon=sunny
+          nameInState={'hideHeaderOnScroll'} //only true or false
+          setter={setHideHeader}
         />
         {/* <SettingsBar
           theSetting="Type of Words"
@@ -100,7 +113,7 @@ function SettingsPage({navigation}) {
       </ScrollView>
       <TouchableOpacity
         onPress={() => createThreeButtonAlert()}
-        style={{flex: 1, backgroundColor: 'red'}}>
+        style={styles.resetBtn}>
         <Text>Reset State</Text>
       </TouchableOpacity>
     </View>

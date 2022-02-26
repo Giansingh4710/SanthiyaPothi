@@ -3,10 +3,9 @@ import {View, Text, StyleSheet} from 'react-native';
 import {Switch, Icon} from 'react-native-elements';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {setDarkMode} from '../../redux/actions';
 
 import {allColors} from '../../assets/styleForEachOption';
-function SwitchBar({SettingTitle, icons, nameInState}) {
+function SwitchBar({SettingTitle, icons, nameInState, setter}) {
   const dispatch = useDispatch();
   const state = useSelector(theState => theState.theReducer);
 
@@ -18,7 +17,7 @@ function SwitchBar({SettingTitle, icons, nameInState}) {
     settingBar: {
       flexDirection: 'row',
       width: '100%',
-      height: '99%',
+      height: '98%',
       backgroundColor: theColors.settingBar.backgroundColor,
     },
     text1: {
@@ -49,7 +48,7 @@ function SwitchBar({SettingTitle, icons, nameInState}) {
             value={settingOnOff}
             onValueChange={newSetting => {
               // setCurrentVal(newSetting);
-              dispatch(setDarkMode(newSetting));
+              dispatch(setter(newSetting));
             }}
           />
         </View>
