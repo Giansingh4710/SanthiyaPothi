@@ -70,7 +70,13 @@ export default function FolderToPdfs({navigation, route}) {
       headerTitle: () => <Text>{folderTitle}</Text>,
       headerRight: () => (
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              const items = baniaList;
+              const randItem = items[Math.floor(Math.random() * items.length)];
+              navigation.navigate('OpenPdf', {pdfTitle: randItem.title});
+            }}>
             <Icon name="shuffle-outline" type="ionicon"></Icon>
           </TouchableOpacity>
           <TouchableOpacity

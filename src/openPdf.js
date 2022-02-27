@@ -120,7 +120,11 @@ export default function OpenPdf({navigation, route}) {
           <View style={headerStyles.headerBtnsCont}>
             <TouchableOpacity
               style={headerStyles.headerBtns}
-              onPress={() => {}}>
+              onPress={() => {
+                const randAng = Math.floor(Math.random() * totalAngs) + 1;
+                this.pdf.setPage(randAng);
+                setCurrentAng(randAng);
+              }}>
               <Icon name="shuffle-outline" type="ionicon"></Icon>
             </TouchableOpacity>
             <TouchableOpacity

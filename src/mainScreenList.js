@@ -42,7 +42,20 @@ function HomeScreen({navigation, route}) {
       },
       headerRight: () => (
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.headerBtns}
+            onPress={() => {
+              const items = allListItems;
+              const randItem = items[Math.floor(Math.random() * items.length)];
+              const theList =
+                randItem.title == 'Added PDFs'
+                  ? state.addedPdfs.list
+                  : randItem.list;
+              navigation.navigate('BanisList', {
+                list: theList,
+                folderTitle: randItem.title, //name of the bar clicked on
+              });
+            }}>
             <Icon name="shuffle-outline" type="ionicon"></Icon>
           </TouchableOpacity>
           <TouchableOpacity
@@ -81,6 +94,13 @@ function HomeScreen({navigation, route}) {
     },
   });
 
+  const allListItems = [
+    ...folderToFileData,
+    {...state.addedPdfs},
+    {
+      title: 'ਪਾਠ Hajari',
+    },
+  ];
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
@@ -96,13 +116,7 @@ function HomeScreen({navigation, route}) {
               />
             );
           }}
-          data={[
-            ...folderToFileData,
-            {...state.addedPdfs},
-            {
-              title: 'ਪਾਠ Hajari',
-            },
-          ]}
+          data={allListItems}
         />
       </View>
     </View>
