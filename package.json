@@ -28,6 +28,7 @@
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-pdf": "^6.3.0",
+    "react-native-popup-menu": "^0.15.12",
     "react-native-reanimated": "^2.2.0",
     "react-native-restart": "^0.0.23",
     "react-native-safe-area-context": "^3.2.0",

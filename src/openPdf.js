@@ -10,6 +10,15 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
+import {HeaderBackButton} from '@react-navigation/stack';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  MenuProvider,
+} from 'react-native-popup-menu';
+
 import Pdf from 'react-native-pdf';
 import TeekaPDF from '../assets/otherScreens/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,6 +29,7 @@ export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(1);
   const [showHeader, setShowHeader] = React.useState(true);
+  const [showBackDropDownMenu, setBackDropDownMenu] = React.useState(false);
 
   const currentAngRef = React.useRef(1); //only for addListner
   const totalAngRef = React.useRef(1); //only for addListner
@@ -30,7 +40,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
+    //this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -85,10 +95,59 @@ export default function OpenPdf({navigation, route}) {
     let showTitle = pdfTitle;
     if (showTitle.length > 15) showTitle = showTitle.slice(0, 15) + '...';
 
+    //<MenuTrigger triggerOnLongPress style={{backgroundColor: 'red'}}>
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
       },
+      headerLeft: () => (
+        <MenuProvider>
+          <TouchableOpacity
+            style={{
+              width: 80,
+              //backgroundColor:'blue'
+            }}
+            onLongPress={() => {
+              setBackDropDownMenu(true);
+            }}
+            onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back"
+              settings-outlinetype="ionicon"
+              style={{
+                margin: 15,
+                left:-10,
+                //width: 60,
+                //backgroundColor: 'red',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+          </TouchableOpacity>
+          <Menu opened={showBackDropDownMenu}>
+            <MenuTrigger></MenuTrigger>
+            <MenuOptions>
+              <MenuOption
+                onSelect={() => {
+                  navigation.goBack();
+                }}
+                text="Save"
+              />
+              <MenuOption
+                onSelect={() => {
+                  setBackDropDownMenu(false);
+                }}
+                text="Don't Save"
+              />
+              <MenuOption
+                onSelect={() => alert(`Not called`)}
+                disabled={true}
+                text="Disabled"
+              />
+            </MenuOptions>
+          </Menu>
+        </MenuProvider>
+      ),
       headerTitle: () => (
         <View style={headerStyles.container}>
           <Text style={headerStyles.title}>{showTitle}</Text>
@@ -101,7 +160,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  this.pdf.setPage(asInt);
+                  //this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -122,7 +181,7 @@ export default function OpenPdf({navigation, route}) {
               style={headerStyles.headerBtns}
               onPress={() => {
                 const randAng = Math.floor(Math.random() * totalAngs) + 1;
-                this.pdf.setPage(randAng);
+                //this.pdf.setPage(randAng);
                 setCurrentAng(randAng);
               }}>
               <Icon name="shuffle-outline" type="ionicon"></Icon>
@@ -177,7 +236,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          this.pdf = pdf;
+          //this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}

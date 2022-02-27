@@ -11,6 +11,9 @@ import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
 import FolderToPdfs2 from './src/subFolder';
+
+//import TEST from './src/test.js'
+//<Stack.Screen name="test" component={TEST} />
 const Stack = createStackNavigator();
 
 function App() {
