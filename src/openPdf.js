@@ -31,6 +31,8 @@ export default function OpenPdf({navigation, route}) {
   const [showHeader, setShowHeader] = React.useState(true);
   const [showBackDropDownMenu, setBackDropDownMenu] = React.useState(false);
 
+  const goBackWithoutSaving=React.useRef(false);
+
   const currentAngRef = React.useRef(1); //only for addListner
   const totalAngRef = React.useRef(1); //only for addListner
 
@@ -40,7 +42,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    //this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
+    this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -90,6 +92,7 @@ export default function OpenPdf({navigation, route}) {
     },
   });
 
+  console.log(goBackWithoutSaving)
   React.useEffect(() => {
     if (pdfTitle === 'Fareedkot Teeka.pdf') return;
     let showTitle = pdfTitle;
@@ -116,7 +119,7 @@ export default function OpenPdf({navigation, route}) {
               settings-outlinetype="ionicon"
               style={{
                 margin: 15,
-                left:-10,
+                left: -10,
                 //width: 60,
                 //backgroundColor: 'red',
                 justifyContent: 'center',
@@ -135,7 +138,8 @@ export default function OpenPdf({navigation, route}) {
               />
               <MenuOption
                 onSelect={() => {
-                  setBackDropDownMenu(false);
+                  goBackWithoutSaving.current=true
+                  navigation.goBack();
                 }}
                 text="Don't Save"
               />
@@ -160,7 +164,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  //this.pdf.setPage(asInt);
+                  this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -181,7 +185,7 @@ export default function OpenPdf({navigation, route}) {
               style={headerStyles.headerBtns}
               onPress={() => {
                 const randAng = Math.floor(Math.random() * totalAngs) + 1;
-                //this.pdf.setPage(randAng);
+                this.pdf.setPage(randAng);
                 setCurrentAng(randAng);
               }}>
               <Icon name="shuffle-outline" type="ionicon"></Icon>
@@ -202,10 +206,16 @@ export default function OpenPdf({navigation, route}) {
 
   React.useEffect(() => {
     navigation.addListener('beforeRemove', () => {
-      dispatch(setAngNum(pdfTitle, currentAngRef.current));
-      if (currentAngRef.current === totalAngRef.current) {
-        if (state.allPdfs[pdfTitle].checked === false) {
-          dispatch(setCheckBox(pdfTitle));
+      console.log("removing...")
+      console.log(goBackWithoutSaving)
+      if (goBackWithoutSaving.current) {
+        console.log('Position of ang not saved!');
+      } else {
+        dispatch(setAngNum(pdfTitle, currentAngRef.current));
+        if (currentAngRef.current === totalAngRef.current) {
+          if (state.allPdfs[pdfTitle].checked === false) {
+            dispatch(setCheckBox(pdfTitle));
+          }
         }
       }
     });
@@ -236,7 +246,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          //this.pdf = pdf;
+          this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}
