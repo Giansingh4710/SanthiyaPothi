@@ -147,8 +147,10 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
   const [modalOn, setModal] = React.useState(false);
   const [data, setData] = React.useState(state.addedPdfs.list);
 
+  console.log(data);
+
   React.useEffect(() => {
-    setData(state.addedPdfs.list);
+    //setData(state.addedPdfs.list);
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
@@ -163,9 +165,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
             }}>
             <Icon name="add-outline" type="ionicon"></Icon>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
-            <Icon name="shuffle-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.headerBtns}
             onPress={() => {
@@ -176,7 +175,7 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
         </View>
       ),
     });
-  }, [navigation.isFocused()]);
+  });
 
   const renderItem = ({item, drag}) => {
     const isFolder = item.list ? true : false;
@@ -187,7 +186,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
       <Icon style={styles.icons} name="folder-outline" type="ionicon" />
     ) : (
       <Icon style={styles.icons} name="document-outline" type="ionicon" />
-      // <></>
     );
     return (
       <ScaleDecorator>
@@ -216,7 +214,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
               <Animated.View style={styles.itemContainer}>
                 {folderOrFileIcon}
                 <Text style={styles.titleText}>{item.title}</Text>
-
                 <CheckBox
                   checked={state.allPdfs[item.title].checked}
                   checkedColor="#0F0"
@@ -239,7 +236,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
                   titleProps={{}}
                   uncheckedColor="#F00"
                 />
-
                 <Icon
                   style={styles.icons}
                   name="trash-outline"
@@ -287,149 +283,3 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
   );
 }
 
-// function AddFileModal({
-//   state,
-//   visible,
-//   setVisibility,
-//   folderTitle,
-//   dispatch,
-//   onlyFiles,
-// }) {
-//   const [folderName, setFolderName] = React.useState();
-
-//   const sameFileAlert = name => {
-//     const msg =
-//       name === ''
-//         ? 'Black name for folder not allowed.'
-//         : `You already have a folder or file named: "${name}"`;
-//     return Alert.alert('Invalid name for a folder or file!!', msg, [
-//       {
-//         text: 'OK',
-//         onPress: () => {},
-//       },
-//     ]);
-//   };
-
-//   const styles = StyleSheet.create({
-//     container: {
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       backgroundColor: '#0FF',
-//       height: '55%',
-//       width: '90%',
-//       top: '15%',
-//       left: '5%',
-//       borderRadius: 40,
-//     },
-//     topRow: {
-//       flexDirection: 'row',
-//     },
-//     icons: {
-//       // backgroundColor: 'red',
-//       flex: 0.75,
-//     },
-//     dateTime: {
-//       flex: 1,
-//     },
-//     underScroll: {
-//       flex: 1,
-//       flexDirection: 'row',
-//     },
-//     ButtomButton: {
-//       padding: 10,
-//       margin: 10,
-//       flex: 1,
-//       flexDirection: 'row',
-//       width: 200,
-//       height: 50,
-//       borderRadius: 40,
-//       backgroundColor: '#f9f871',
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//     },
-//   });
-
-//   async function pickDoc() {
-//     try {
-//       const res = await DocumentPicker.pick({
-//         // type: [DocumentPicker.types.pdf],
-//       });
-//       const name = res[0].name;
-//       const uri = res[0].uri;
-//       const details = {
-//         checked: false,
-//         baniType: folderTitle,
-//         currentAng: 1,
-//         uri: uri,
-//       };
-//       if (state.allPdfs[name]) {
-//         sameFileAlert(name);
-//         return;
-//       }
-//       dispatch(addNdeletePdf(name, details, true));
-//       dispatch(addFileOrFolder(folderTitle, {title: name}));
-//     } catch (err) {
-//       // alert(err);
-//       console.log(err);
-//     }
-//     setVisibility(false);
-//   }
-
-//   const addFolderBtn = onlyFiles ? (
-//     <></>
-//   ) : (
-//     <TouchableOpacity
-//       style={styles.ButtomButton}
-//       onPress={() => {
-//         if (state.allPdfs[folderName] || folderName === '') {
-//           sameFileAlert(folderName);
-//           return;
-//         }
-//         const details = {
-//           checked: false,
-//           baniType: folderTitle,
-//         };
-//         dispatch(addNdeletePdf(folderName, details, true));
-//         dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
-//         setVisibility(false);
-//       }}>
-//       <Text style={styles.shabadtext}>Add a folder</Text>
-//     </TouchableOpacity>
-//   );
-//   return (
-//     <Modal
-//       visible={visible}
-//       transparent
-//       animationType="slide"
-//       onRequestClose={() => {
-//         setVisibility(false);
-//       }}>
-//       <View style={styles.container}>
-//         <TouchableOpacity
-//           style={styles.icons}
-//           onPress={() => {
-//             setVisibility(false);
-//           }}>
-//           <Icon name="close-outline" type="ionicon"></Icon>
-//         </TouchableOpacity>
-//         <TextInput
-//           style={{backgroundColor: '#cecece', borderRadius: 5}}
-//           placeholder="exp: Folder 1"
-//           onChangeText={e => {
-//             setFolderName(e);
-//           }}
-//         />
-//         <View style={styles.underScroll}>
-//           {addFolderBtn}
-//           <TouchableOpacity
-//             style={styles.ButtomButton}
-//             onPress={() => {
-//               pickDoc();
-//             }}>
-//             <Text style={styles.shabadtext}>Add a file</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//     </Modal>
-//   );
-// }

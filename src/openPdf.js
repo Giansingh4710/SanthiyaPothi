@@ -92,7 +92,6 @@ export default function OpenPdf({navigation, route}) {
     },
   });
 
-  console.log(goBackWithoutSaving)
   React.useEffect(() => {
     if (pdfTitle === 'Fareedkot Teeka.pdf') return;
     let showTitle = pdfTitle;
@@ -206,8 +205,6 @@ export default function OpenPdf({navigation, route}) {
 
   React.useEffect(() => {
     navigation.addListener('beforeRemove', () => {
-      console.log("removing...")
-      console.log(goBackWithoutSaving)
       if (goBackWithoutSaving.current) {
         console.log('Position of ang not saved!');
       } else {

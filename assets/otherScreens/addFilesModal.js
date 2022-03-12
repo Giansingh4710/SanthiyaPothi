@@ -14,7 +14,7 @@ import {Icon} from 'react-native-elements';
 import {addFileOrFolder, addNdeletePdf} from '../../redux/actions';
 // import {barStyles, allColors} from '../assets/styleForEachOption';
 
-export default function AddFileModal({
+export default function AddFileModalddFileModal({
   state,
   visible,
   setVisibility,
@@ -121,7 +121,7 @@ export default function AddFileModal({
         dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
         setVisibility(false);
       }}>
-      <Text style={styles.shabadtext}>Add a folder</Text>
+    <Text>Add a FOLDER</Text>
     </TouchableOpacity>
   );
   return (

@@ -16,7 +16,7 @@ export const initialState = {
   addedPdfs: {title: 'Added PDFs', list: []},
 };
 
- setData('state', initialState); //to reset all state
+//setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
