@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {barStyles, allColors} from '../assets/styleForEachOption';
+import {BarOption} from '../assets/otherScreens/baroption';
 import {folderToFileData} from '../assets/longData';
 
 function HomeScreen({navigation, route}) {
@@ -88,10 +89,12 @@ function HomeScreen({navigation, route}) {
       flex: 1,
       padding: 10,
     },
-    icons: {
+    iconsInBar: {
       // flex: 1,
       // padding: 10,
     },
+    //titleText:{
+    //}
   });
 
   const allListItems = [
@@ -123,29 +126,21 @@ function HomeScreen({navigation, route}) {
   );
 }
 
-function EachFolderItem({item, styles, state, navigation}) {
+function EachFolderItem({item, state, navigation}) {
   return (
-    <View>
-      <TouchableOpacity
-        style={styles.itemContainer}
-        onPress={() => {
-          const theList =
-            item.title == 'Added PDFs' ? state.addedPdfs.list : item.list;
-          navigation.navigate('BanisList', {
-            list: theList,
-            folderTitle: item.title, //name of the bar clicked on
-          });
-        }}>
-        <Icon style={styles.icons} name="folder-outline" type="ionicon" />
-        <Text style={styles.titleText}>{item.title}</Text>
-        <Icon
-          style={styles.icons}
-          name="arrow-forward-outline"
-          type="ionicon"
-        />
-      </TouchableOpacity>
-      <View style={styles.gap}></View>
-    </View>
+    <BarOption
+      left={<Icon name="folder-outline" type="ionicon" />}
+      text={item.title}
+      right={<Icon name="arrow-forward-outline" type="ionicon" />}
+      onClick={() => {
+        const theList =
+          item.title == 'Added PDFs' ? state.addedPdfs.list : item.list;
+        navigation.navigate('BanisList', {
+          list: theList,
+          folderTitle: item.title, //name of the bar clicked on
+        });
+      }}
+    />
   );
 }
 export default HomeScreen;

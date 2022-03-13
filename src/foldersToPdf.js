@@ -20,6 +20,7 @@ import {
 } from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
 import AddFileModal from '../assets/otherScreens/addFilesModal';
+import {BarOption} from '../assets/otherScreens/baroption';
 
 export default function FolderToPdfs({navigation, route}) {
   const dispatch = useDispatch();
@@ -108,26 +109,25 @@ export default function FolderToPdfs({navigation, route}) {
 
 function EachBani(navigation, item, styles, state, dispatch) {
   return (
-    <View>
-      <TouchableOpacity
-        style={styles.itemContainer}
-        onPress={() => {
-          navigation.navigate('OpenPdf', {pdfTitle: item.title});
-        }}>
-        <Text style={styles.titleText}>{item.title}</Text>
+    <BarOption
+      left={
+        <Icon style={styles.icons} name="document-outline" type="ionicon" />
+      }
+      text={item.title}
+      right={
         <CheckBox
           checked={state.allPdfs[item.title].checked}
           checkedColor="#0F0"
           checkedTitle="ਸੰਪੂਰਨ"
           containerStyle={{
             borderRadius: 10,
-            padding: 10,
+            //padding: 10,
             backgroundColor: 'black',
           }}
           onPress={() => {
             dispatch(setCheckBox(item.title));
           }}
-          size={20}
+          //size={20}
           textStyle={{
             fontSize: 10,
             height: 20,
@@ -137,9 +137,11 @@ function EachBani(navigation, item, styles, state, dispatch) {
           titleProps={{}}
           uncheckedColor="#F00"
         />
-      </TouchableOpacity>
-      <View style={styles.gap}></View>
-    </View>
+      }
+      onClick={() => {
+        navigation.navigate('OpenPdf', {pdfTitle: item.title});
+      }}
+    />
   );
 }
 
@@ -282,4 +284,3 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
     </View>
   );
 }
-

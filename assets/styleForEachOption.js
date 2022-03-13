@@ -6,7 +6,7 @@
 const barStyle = {
   itemContainer: {
     height: 75,
-    backgroundColor: '#7fcae8',
+    backgroundColor: '#ACDDDE',
     borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -36,7 +36,7 @@ export const barStyles = {
       ...barStyle,
       itemContainer: {
         ...barStyle.itemContainer,
-        backgroundColor: '#a13862',
+        backgroundColor: '#082c6c',
       },
     },
   },
@@ -45,7 +45,7 @@ export const barStyles = {
 //all colors in all files should be here
 export const allColors = {
   false: {
-    headerColor: '#a3fbaa',
+    headerColor: '#FEF8DD',
     mainBackgroundColor: 'rgba(109,106,193,1)',
     //format for the colors: filename > obj-name > propertyName
     settingBarSwitch: {
