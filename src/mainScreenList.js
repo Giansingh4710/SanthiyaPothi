@@ -7,7 +7,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import {BarOption} from '../assets/otherScreens/baroption';
+import {BarOption} from '../assets/components/baroption';
+import {RightOfHeader} from '../assets/components/rightOfHeader';
 import {folderToFileData} from '../assets/longData';
 
 function HomeScreen({navigation, route}) {
@@ -42,41 +43,44 @@ function HomeScreen({navigation, route}) {
         backgroundColor: allColors[state.darkMode].headerColor,
       },
       headerRight: () => (
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              const items = allListItems;
-              const randItem = items[Math.floor(Math.random() * items.length)];
-              const theList =
-                randItem.title == 'Added PDFs'
-                  ? state.addedPdfs.list
-                  : randItem.list;
-              navigation.navigate('BanisList', {
-                list: theList,
-                folderTitle: randItem.title, //name of the bar clicked on
-              });
-            }}>
-            <Icon name="shuffle-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              navigation.navigate('Settings Page');
-            }}>
-            <Icon name="settings-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-        </View>
+        <RightOfHeader
+          icons={[
+            {
+              name: 'open-outline',
+              action: () => {
+                console.log('shabad are');
+              },
+            },
+            {
+              name: 'shuffle-outline',
+              action: () => {
+                const items = allListItems;
+                const randItem =
+                  items[Math.floor(Math.random() * items.length)];
+                const theList =
+                  randItem.title == 'Added PDFs'
+                    ? state.addedPdfs.list
+                    : randItem.list;
+                navigation.navigate('BanisList', {
+                  list: theList,
+                  folderTitle: randItem.title, //name of the bar clicked on
+                });
+              },
+            },
+            {
+              name: 'settings-outline',
+              action: () => {
+                navigation.navigate('Settings Page');
+              },
+            },
+          ]}
+        />
       ),
     });
   });
 
-  const theColors = allColors[state.darkMode].mainScreenList;
-
   const styles = StyleSheet.create({
-    ...barStyles[state.darkMode].barStyle,
     container: {
-      // justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
       height: '100%',
@@ -85,16 +89,6 @@ function HomeScreen({navigation, route}) {
       width: '100%',
       // height: '80%',
     },
-    headerBtns: {
-      flex: 1,
-      padding: 10,
-    },
-    iconsInBar: {
-      // flex: 1,
-      // padding: 10,
-    },
-    //titleText:{
-    //}
   });
 
   const allListItems = [
@@ -111,11 +105,20 @@ function HomeScreen({navigation, route}) {
           keyExtractor={item => item.title} //name of each item like 'Bai Vaara'
           renderItem={({item}) => {
             return (
-              <EachFolderItem
-                item={item}
-                styles={styles}
-                state={state}
-                navigation={navigation}
+              <BarOption
+                left={<Icon name="folder-outline" type="ionicon" />}
+                text={item.title}
+                right={<Icon name="arrow-forward-outline" type="ionicon" />}
+                onClick={() => {
+                  const theList =
+                    item.title == 'Added PDFs'
+                      ? state.addedPdfs.list
+                      : item.list;
+                  navigation.navigate('BanisList', {
+                    list: theList,
+                    folderTitle: item.title, //name of the bar clicked on
+                  });
+                }}
               />
             );
           }}
@@ -126,21 +129,4 @@ function HomeScreen({navigation, route}) {
   );
 }
 
-function EachFolderItem({item, state, navigation}) {
-  return (
-    <BarOption
-      left={<Icon name="folder-outline" type="ionicon" />}
-      text={item.title}
-      right={<Icon name="arrow-forward-outline" type="ionicon" />}
-      onClick={() => {
-        const theList =
-          item.title == 'Added PDFs' ? state.addedPdfs.list : item.list;
-        navigation.navigate('BanisList', {
-          list: theList,
-          folderTitle: item.title, //name of the bar clicked on
-        });
-      }}
-    />
-  );
-}
 export default HomeScreen;

@@ -14,7 +14,7 @@ import {Icon} from 'react-native-elements';
 import {addFileOrFolder, addNdeletePdf} from '../../redux/actions';
 // import {barStyles, allColors} from '../assets/styleForEachOption';
 
-export default function AddFileModalddFileModal({
+export default function AddFileModal({
   state,
   visible,
   setVisibility,

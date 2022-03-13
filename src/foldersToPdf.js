@@ -13,14 +13,14 @@ import Animated from 'react-native-reanimated';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setCheckBox,
-  addFileOrFolder,
   deleteAddedItem,
   addNdeletePdf,
   setList,
 } from '../redux/actions';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import AddFileModal from '../assets/otherScreens/addFilesModal';
-import {BarOption} from '../assets/otherScreens/baroption';
+import {BarOption} from '../assets/components/baroption';
+import {RightOfHeader} from '../assets/components/rightOfHeader.js';
+import AddFileModal from '../assets/components/addFilesModal';
 
 export default function FolderToPdfs({navigation, route}) {
   const dispatch = useDispatch();
@@ -70,78 +70,88 @@ export default function FolderToPdfs({navigation, route}) {
       },
       headerTitle: () => <Text>{folderTitle}</Text>,
       headerRight: () => (
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              const items = baniaList;
-              const randItem = items[Math.floor(Math.random() * items.length)];
-              navigation.navigate('OpenPdf', {pdfTitle: randItem.title});
-            }}>
-            <Icon name="shuffle-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              navigation.navigate('Settings Page');
-            }}>
-            <Icon name="settings-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-        </View>
+        <RightOfHeader
+          icons={[
+            {
+              name: 'open-outline',
+              action: () => {
+                console.log('shabad are');
+              },
+            },
+            {
+              name: 'shuffle-outline',
+              action: () => {
+                const items = baniaList;
+                const randItem =
+                  items[Math.floor(Math.random() * items.length)];
+                navigation.navigate('OpenPdf', {
+                  pdfTitle: randItem.title,
+                });
+              },
+            },
+            {
+              name: 'settings-outline',
+              action: () => {
+                navigation.navigate('Settings Page');
+              },
+            },
+          ]}
+        />
       ),
     });
   }, [navigation]);
 
-  const barStyle = barStyles[state.darkMode].barStyle;
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item => item.title}
         renderItem={({item}) => {
           //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
-          return EachBani(navigation, item, barStyle, state, dispatch);
+          return (
+            <BarOption
+              left={
+                <Icon
+                  style={styles.icons}
+                  name="document-outline"
+                  type="ionicon"
+                />
+              }
+              text={item.title}
+              right={
+                <CheckBox
+                  checked={state.allPdfs[item.title].checked}
+                  checkedColor="#0F0"
+                  checkedTitle="ਸੰਪੂਰਨ"
+                  containerStyle={{
+                    borderRadius: 10,
+                    //padding: 10,
+                    backgroundColor: 'black',
+                  }}
+                  onPress={() => {
+                    dispatch(setCheckBox(item.title));
+                  }}
+                  //size={20}
+                  textStyle={{
+                    fontSize: 10,
+                    height: 20,
+                    color: 'white',
+                  }}
+                  title="Not Done"
+                  titleProps={{}}
+                  uncheckedColor="#F00"
+                />
+              }
+              onClick={() => {
+                navigation.navigate('OpenPdf', {
+                  pdfTitle: item.title,
+                });
+              }}
+            />
+          );
         }}
         data={baniaList}
       />
     </View>
-  );
-}
-
-function EachBani(navigation, item, styles, state, dispatch) {
-  return (
-    <BarOption
-      left={
-        <Icon style={styles.icons} name="document-outline" type="ionicon" />
-      }
-      text={item.title}
-      right={
-        <CheckBox
-          checked={state.allPdfs[item.title].checked}
-          checkedColor="#0F0"
-          checkedTitle="ਸੰਪੂਰਨ"
-          containerStyle={{
-            borderRadius: 10,
-            //padding: 10,
-            backgroundColor: 'black',
-          }}
-          onPress={() => {
-            dispatch(setCheckBox(item.title));
-          }}
-          //size={20}
-          textStyle={{
-            fontSize: 10,
-            height: 20,
-            color: 'white',
-          }}
-          title="Not Done"
-          titleProps={{}}
-          uncheckedColor="#F00"
-        />
-      }
-      onClick={() => {
-        navigation.navigate('OpenPdf', {pdfTitle: item.title});
-      }}
-    />
   );
 }
 
@@ -197,7 +207,9 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
               activeOpacity={1}
               onPress={() => {
                 if (!isFolder)
-                  navigation.navigate('OpenPdf', {pdfTitle: item.title});
+                  navigation.navigate('OpenPdf', {
+                    pdfTitle: item.title,
+                  });
                 else
                   navigation.navigate('BanisList2', {
                     list: item.list,

@@ -79,7 +79,7 @@ function theReducer(state = initialState, action) {
       delete state.allPdfs[fileName];
     }
     theState = state;
-  } else if (action.type === 'SET_LIST') {
+  } else if (action.type === 'SET_LIST_IN_ADDED_PDFS') {
     const listTitle = action.listTitle;
     const theList = action.theList;
 

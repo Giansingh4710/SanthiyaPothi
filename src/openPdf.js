@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
-import {HeaderBackButton} from '@react-navigation/stack';
 import {
   Menu,
   MenuOptions,
@@ -18,9 +17,10 @@ import {
   MenuTrigger,
   MenuProvider,
 } from 'react-native-popup-menu';
+import {RightOfHeader} from '../assets/components/rightOfHeader';
 
 import Pdf from 'react-native-pdf';
-import TeekaPDF from '../assets/otherScreens/teekaPdf';
+import TeekaPDF from '../assets/components/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, setCheckBox} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
@@ -31,7 +31,7 @@ export default function OpenPdf({navigation, route}) {
   const [showHeader, setShowHeader] = React.useState(true);
   const [showBackDropDownMenu, setBackDropDownMenu] = React.useState(false);
 
-  const goBackWithoutSaving=React.useRef(false);
+  const goBackWithoutSaving = React.useRef(false);
 
   const currentAngRef = React.useRef(1); //only for addListner
   const totalAngRef = React.useRef(1); //only for addListner
@@ -42,7 +42,7 @@ export default function OpenPdf({navigation, route}) {
   const {pdfTitle} = route.params;
 
   React.useEffect(() => {
-    this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
+    //this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
   }, [totalAngs]);
 
   const headerStyles = StyleSheet.create({
@@ -137,7 +137,7 @@ export default function OpenPdf({navigation, route}) {
               />
               <MenuOption
                 onSelect={() => {
-                  goBackWithoutSaving.current=true
+                  goBackWithoutSaving.current = true;
                   navigation.goBack();
                 }}
                 text="Don't Save"
@@ -163,7 +163,7 @@ export default function OpenPdf({navigation, route}) {
               onSubmitEditing={e => {
                 const asInt = currrentAng;
                 if (asInt) {
-                  this.pdf.setPage(asInt);
+                  //this.pdf.setPage(asInt);
                   if (asInt > totalAngs) {
                     setCurrentAng(totalAngs);
                   }
@@ -179,27 +179,28 @@ export default function OpenPdf({navigation, route}) {
             />
             <Text style={headerStyles.boxText}>/{totalAngs}</Text>
           </View>
-          <View style={headerStyles.headerBtnsCont}>
-            <TouchableOpacity
-              style={headerStyles.headerBtns}
-              onPress={() => {
-                const randAng = Math.floor(Math.random() * totalAngs) + 1;
-                this.pdf.setPage(randAng);
-                setCurrentAng(randAng);
-              }}>
-              <Icon name="shuffle-outline" type="ionicon"></Icon>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={headerStyles.headerBtns}
-              onPress={() => {
-                navigation.navigate('Settings Page');
-              }}>
-              <Icon name="settings-outline" type="ionicon"></Icon>
-            </TouchableOpacity>
-          </View>
         </View>
       ),
-      headerShown: showHeader,
+      headerRight: () => (
+        <RightOfHeader
+          icons={[
+            {
+              name: 'shuffle-outline',
+              action: () => {
+                const randAng = Math.floor(Math.random() * totalAngs) + 1;
+                //this.pdf.setPage(randAng);
+                setCurrentAng(randAng);
+              },
+            },
+            {
+              name: 'settings-outline',
+              action: () => {
+                navigation.navigate('Settings Page');
+              },
+            },
+          ]}
+        />
+      ),
     });
   });
 
@@ -243,7 +244,7 @@ export default function OpenPdf({navigation, route}) {
     <View style={styles.container}>
       <Pdf
         ref={pdf => {
-          this.pdf = pdf;
+          //this.pdf = pdf;
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={sourceFileName}

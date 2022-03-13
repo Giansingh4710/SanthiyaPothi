@@ -12,7 +12,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 import Animated from 'react-native-reanimated';
 import {barStyles, allColors} from '../assets/styleForEachOption';
-import AddFileModal from '../assets/otherScreens/addFilesModal';
+import AddFileModal from '../assets/components/addFilesModal';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setCheckBox,
