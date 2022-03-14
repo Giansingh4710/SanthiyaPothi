@@ -3,62 +3,30 @@
 //#a3fbaa
 //#cbfc8b
 //#f9f871
-const barStyle = {
-  itemContainer: {
-    height: 75,
-    backgroundColor: '#7fcae8',
-    borderRadius: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-  },
-  titleText: {
-    flex: 1,
-    fontSize: 15,
-    padding: 5,
-    left: 12,
-  },
-  gap: {
-    height: 1,
-    backgroundColor: '#00308F',
-  },
-};
-
-export const barStyles = {
-  false: {
-    //if darkMode false
-    barStyle: {...barStyle},
-  },
-  true: {
-    //if darkMode true
-    barStyle: {
-      ...barStyle,
-      itemContainer: {
-        ...barStyle.itemContainer,
-        backgroundColor: '#a13862',
-      },
-    },
-  },
-};
+//-----------------
+//#041C32
+//#04293A
+//#064663
+//#ECB365
 
 //all colors in all files should be here
+//if darkmode true -> allColors[true] and vice versa
 export const allColors = {
   false: {
-    headerColor: '#a3fbaa',
-    mainBackgroundColor: 'rgba(109,106,193,1)',
+    headerColor: '#CAF1DE',
+    mainBackgroundColor: '#FEF8DD',
     //format for the colors: filename > obj-name > propertyName
     settingBarSwitch: {
       settingBar: {
-        backgroundColor: '#75f1e0',
+        backgroundColor: '#f9f871',
       },
     },
     openPdf: {},
     mainScreenList: {},
   },
   true: {
-    headerColor: '#af8875',
-    mainBackgroundColor: 'rgba(19,16,193,1)',
+    headerColor: '#041C32',
+    mainBackgroundColor: '#064663',
     //format for the colors: filename > obj-name > propertyName
     settingBarSwitch: {
       settingBar: {

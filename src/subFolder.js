@@ -1,6 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 import {CheckBox, Icon} from 'react-native-elements';
 
 import DraggableFlatList, {
@@ -11,8 +10,8 @@ import DraggableFlatList, {
   useOnCellActiveAnimation,
 } from 'react-native-draggable-flatlist';
 import Animated from 'react-native-reanimated';
-import {barStyles, allColors} from '../assets/styleForEachOption';
-import AddFileModal from '../assets/otherScreens/addFilesModal';
+import {allColors} from '../assets/styleForEachOption';
+import AddFileModal from '../assets/components/addFilesModal';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setCheckBox,
@@ -20,6 +19,8 @@ import {
   addNdeletePdf,
   setList,
 } from '../redux/actions';
+import {RightOfHeader} from '../assets/components/rightOfHeader.js';
+import {BarOption} from '../assets/components/baroption';
 
 export default function FolderToPdfs2({navigation, route}) {
   const dispatch = useDispatch();
@@ -62,94 +63,65 @@ export default function FolderToPdfs2({navigation, route}) {
       },
       headerTitle: () => <Text>{folderTitle}</Text>,
       headerRight: () => (
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              setModal(true);
-            }}>
-            <Icon name="add-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
-            <Icon name="shuffle-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.headerBtns}
-            onPress={() => {
-              navigation.navigate('Settings Page');
-            }}>
-            <Icon name="settings-outline" type="ionicon"></Icon>
-          </TouchableOpacity>
-        </View>
+        <RightOfHeader
+          state={state}
+          icons={[
+            {
+              name: 'add-outline',
+              action: () => setModal(true),
+            },
+            {
+              name: 'shuffle-outline',
+              action: () => {},
+            },
+            {
+              name: 'settings-outline',
+              action: () => {
+                navigation.navigate('Settings Page');
+              },
+            },
+          ]}
+        />
       ),
     });
   }, [navigation.isFocused()]);
 
   const renderItem = ({item, drag}) => {
-    const {isActive} = useOnCellActiveAnimation();
-    const styles = barStyles[state.darkMode].barStyle;
-
-    const folderOrFileIcon = (
-      <Icon style={styles.icons} name="document-outline" type="ionicon" />
-    );
-
     return (
       <ScaleDecorator>
         <OpacityDecorator activeOpacity={0.5}>
           <ShadowDecorator>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() =>
-                navigation.navigate('OpenPdf', {pdfTitle: item.title})
-              }
-              style={[
-                styles.rowItem,
-                {
-                  backgroundColor: isActive ? 'red' : item.backgroundColor,
-                  height: item.height,
-                  elevation: isActive ? 1 : 0,
-                },
-              ]}
-              onLongPress={drag}>
-              <Animated.View style={styles.itemContainer}>
-                {/* {folderOrFileIcon} */}
-                <Text style={styles.titleText}>{item.title}</Text>
-
-                <CheckBox
-                  checked={state.allPdfs[item.title].checked}
-                  checkedColor="#0F0"
-                  checkedTitle="ਸੰਪੂਰਨ"
-                  containerStyle={{
-                    borderRadius: 10,
-                    padding: 10,
-                    backgroundColor: 'black',
-                  }}
-                  onPress={() => {
-                    dispatch(setCheckBox(item.title));
-                  }}
-                  size={20}
-                  textStyle={{
-                    fontSize: 10,
-                    height: 20,
-                    color: 'white',
-                  }}
-                  title="Not Done"
-                  titleProps={{}}
-                  uncheckedColor="#F00"
-                />
-                <Icon
-                  style={styles.icons}
-                  name="trash-outline"
-                  type="ionicon"
-                  onPress={() => {
-                    dispatch(deleteAddedItem(item.title));
-                    dispatch(addNdeletePdf(item.title, '_', false));
-                    setData(state.addedPdfs.list[folderInd].list);
-                  }}
-                />
-              </Animated.View>
-              <View style={styles.gap}></View>
-            </TouchableOpacity>
+            <Animated.View>
+              <BarOption
+                state={state}
+                onLongPress={drag}
+                left={
+                  <Icon
+                    name={'document-outline'}
+                    type="ionicon"
+                    color={state.darkMode ? 'white' : 'black'}
+                  />
+                }
+                text={item.title}
+                right={
+                  <Icon
+                    color={state.darkMode ? 'white' : 'black'}
+                    name="trash-outline"
+                    type="ionicon"
+                    onPress={() => {
+                      dispatch(deleteAddedItem(item.title));
+                      dispatch(addNdeletePdf(item.title, '_', false));
+                      setData(state.addedPdfs.list[folderInd].list);
+                    }}
+                  />
+                }
+                onClick={() => {
+                  navigation.navigate('OpenPdf', {
+                    pdfTitle: item.title,
+                  });
+                }}
+              />
+            </Animated.View>
           </ShadowDecorator>
         </OpacityDecorator>
       </ScaleDecorator>

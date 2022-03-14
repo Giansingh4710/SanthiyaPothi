@@ -42,7 +42,7 @@ export const deleteAddedItem = title => dispatch => {
     title,
   });
 };
-export const addNdeletePdffddNdeletePdf = (title, item, toAdd) => dispatch => {
+export const addNdeletePdf = (title, item, toAdd) => dispatch => {
   dispatch({
     type: 'ADD_OR_DELETE_PDF',
     title,
@@ -52,7 +52,7 @@ export const addNdeletePdffddNdeletePdf = (title, item, toAdd) => dispatch => {
 };
 export const setList = (listTitle, theList) => dispatch => {
   dispatch({
-    type: 'SET_LIST',
+    type: 'SET_LIST_IN_ADDED_PDFS',
     listTitle,
     theList,
   });
