@@ -12,7 +12,6 @@ import DocumentPicker from 'react-native-document-picker';
 import {Icon} from 'react-native-elements';
 
 import {addFileOrFolder, addNdeletePdf} from '../../redux/actions';
-// import {barStyles, allColors} from '../assets/styleForEachOption';
 
 export default function AddFileModal({
   state,
@@ -121,7 +120,7 @@ export default function AddFileModal({
         dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
         setVisibility(false);
       }}>
-    <Text>Add a FOLDER</Text>
+      <Text>Add a FOLDER</Text>
     </TouchableOpacity>
   );
   return (
@@ -138,7 +137,11 @@ export default function AddFileModal({
           onPress={() => {
             setVisibility(false);
           }}>
-          <Icon name="close-outline" type="ionicon"></Icon>
+          <Icon
+            name="close-outline"
+            type="ionicon"
+            color={state.darkMode ? 'white' : 'black'}
+          />
         </TouchableOpacity>
         {onlyFiles ? (
           <></>

@@ -10,14 +10,16 @@ import {
 } from 'react-native';
 import RNRestart from 'react-native-restart';
 
+import {Icon} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 import SwitchBar from './settingBarSwitch';
 // import SettingsBar from './settingBar';
 
-import {setDarkMode,setHideHeader} from '../../redux/actions';
+import {setDarkMode, setHideHeader} from '../../redux/actions';
 import {allColors} from '../../assets/styleForEachOption';
 import {setData, initialState} from '../../redux/reducers';
 import {setTheState} from '../../redux/actions';
+import {BarOption} from '../../assets/components/baroption';
 
 function SettingsPage({navigation}) {
   const state = useSelector(theState => theState.theReducer);
@@ -27,35 +29,23 @@ function SettingsPage({navigation}) {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
-      }
+      },
+      headerTintColor: state.darkMode ? 'white' : 'black',
+      headerTitleStyle: {
+        color: state.darkMode ? 'white' : 'black',
+      },
     });
   });
 
-  const theColors = allColors[state.darkMode].settings;
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      alignItems: 'center',
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-      width: '100%',
       height: '100%',
-      paddingTop: '10%',
-    },
-    title: {
-      fontSize: 32,
-      flex: 2,
-      right: 20,
+      paddingTop: '5%',
     },
     scroll: {
       width: '100%',
       // height: '100%',
-    },
-    resetBtn: {
-      margin:10,
-      height: 50,
-      //width: '100%',
-      //height: '99%',
-      backgroundColor: 'red'
     },
   });
   const createThreeButtonAlert = () =>
@@ -90,8 +80,8 @@ function SettingsPage({navigation}) {
         />
         <SwitchBar
           SettingTitle="Hide Header On Scroll"
-          icons={['chevron-up-circle', 'close-outline']} //if true icon=moon, if false icon=sunny
-          nameInState={'hideHeaderOnScroll'} //only true or false
+          icons={['chevron-up-circle', 'close-outline']}
+          nameInState={'hideHeaderOnScroll'}
           setter={setHideHeader}
         />
         {/* <SettingsBar
@@ -111,11 +101,25 @@ function SettingsPage({navigation}) {
           theCurrentOptionIndex={[true, false].indexOf(state.showPopUp)}
         /> */}
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => createThreeButtonAlert()}
-        style={styles.resetBtn}>
-        <Text>Reset State</Text>
-      </TouchableOpacity>
+        <BarOption
+          state={state}
+          left={
+            <Icon
+              name="alert-circle-outline"
+              type="ionicon"
+              color={state.darkMode ? 'white' : 'black'}
+            />
+          }
+          text="Reset the State"
+          right={
+            <Icon
+              name="arrow-forward-outline"
+              type="ionicon"
+              color={state.darkMode ? 'white' : 'black'}
+            />
+          }
+          onClick={() => createThreeButtonAlert()}
+        />
     </View>
   );
 }

@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {setTheState} from '../redux/actions';
 import {initialState} from '../redux/reducers';
-import {barStyles, allColors} from '../assets/styleForEachOption';
+import {allColors} from '../assets/styleForEachOption';
 import {BarOption} from '../assets/components/baroption';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 import {folderToFileData} from '../assets/longData';
@@ -42,8 +42,12 @@ function HomeScreen({navigation, route}) {
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
       },
+      headerTitleStyle: {
+        color: state.darkMode ? 'white' : 'black',
+      },
       headerRight: () => (
         <RightOfHeader
+          state={state}
           icons={[
             {
               name: 'open-outline',
@@ -78,7 +82,6 @@ function HomeScreen({navigation, route}) {
       ),
     });
   });
-
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -106,9 +109,22 @@ function HomeScreen({navigation, route}) {
           renderItem={({item}) => {
             return (
               <BarOption
-                left={<Icon name="folder-outline" type="ionicon" />}
+                state={state}
+                left={
+                  <Icon
+                    name="folder-outline"
+                    type="ionicon"
+                    color={state.darkMode ? 'white' : 'black'}
+                  />
+                }
                 text={item.title}
-                right={<Icon name="arrow-forward-outline" type="ionicon" />}
+                right={
+                  <Icon
+                    name="arrow-forward-outline"
+                    type="ionicon"
+                    color={state.darkMode ? 'white' : 'black'}
+                  />
+                }
                 onClick={() => {
                   const theList =
                     item.title == 'Added PDFs'

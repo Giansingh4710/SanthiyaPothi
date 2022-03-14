@@ -1,60 +1,49 @@
 import * as React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 import {Switch, Icon} from 'react-native-elements';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {allColors} from '../../assets/styleForEachOption';
+import {BarOption} from '../../assets/components/baroption';
+
 function SwitchBar({SettingTitle, icons, nameInState, setter}) {
-  const dispatch = useDispatch();
-  const state = useSelector(theState => theState.theReducer);
+    const dispatch = useDispatch();
+    const state = useSelector(theState => theState.theReducer);
+    function capitalizeFirstLetter(str) {
+        const string = String(str);
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    const settingOnOff = state[nameInState];
 
-  const theColors = allColors[state.darkMode].settingBarSwitch;
-  const styles = StyleSheet.create({
-    container: {
-      height: 50,
-    },
-    settingBar: {
-      flexDirection: 'row',
-      width: '100%',
-      height: '98%',
-      backgroundColor: theColors.settingBar.backgroundColor,
-    },
-    text1: {
-      flex: 1,
-    },
-    rightSide: {
-      flex: 1,
-      flexDirection: 'row',
-    },
-  });
-
-  function capitalizeFirstLetter(str) {
-    const string = String(str);
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-  const settingOnOff = state[nameInState];
-  return (
-    <View style={styles.container}>
-      <View style={styles.settingBar}>
-        <Icon name={settingOnOff ? icons[0] : icons[1]} type="ionicon"></Icon>
-        <Text style={styles.text1}>{SettingTitle}</Text>
-
-        <View style={styles.rightSide}>
-          <Text style={styles.text2}>
-            {capitalizeFirstLetter(settingOnOff)}
-          </Text>
-          <Switch
-            value={settingOnOff}
-            onValueChange={newSetting => {
-              // setCurrentVal(newSetting);
-              dispatch(setter(newSetting));
+    return (
+        <BarOption
+            state={state}
+            left={
+                <Icon
+                    name={settingOnOff ? icons[0] : icons[1]}
+                    type="ionicon"
+                    color={state.darkMode ? 'white' : 'black'}
+                />
+            }
+            text={SettingTitle}
+            right={
+                <View>
+                    <Text style={{color: state.darkMode ? 'white' : 'black'}}>
+                        {capitalizeFirstLetter(settingOnOff)}
+                    </Text>
+                    <Switch
+                        value={settingOnOff}
+                        onValueChange={newSetting => {
+                            // setCurrentVal(newSetting);
+                            dispatch(setter(newSetting));
+                        }}
+                    />
+                </View>
+            }
+            onClick={() => {
+                console.log(SettingTitle,':',settingOnOff)
             }}
-          />
-        </View>
-      </View>
-    </View>
-  );
+        />
+    );
 }
-
 export default SwitchBar;

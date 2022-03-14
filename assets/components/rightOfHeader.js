@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 
-export function RightOfHeader({icons}) {
+export function RightOfHeader({icons, state}) {
   const styles = StyleSheet.create({
     container: {
       //backgroundColor: 'red',
@@ -26,7 +26,11 @@ export function RightOfHeader({icons}) {
           <TouchableOpacity
             onPress={() => item.action()}
             style={styles.headerBtns}>
-            <Icon name={item.name} type="ionicon" />
+            <Icon
+              name={item.name}
+              type="ionicon"
+              color={state.darkMode ? 'white' : 'black'}
+            />
           </TouchableOpacity>
         );
       }}
