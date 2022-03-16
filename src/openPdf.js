@@ -7,7 +7,7 @@ import {
     TextInput,
     Alert,
 } from 'react-native';
-import {Icon, Header} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 
 import Pdf from 'react-native-pdf';
@@ -55,27 +55,26 @@ export default function OpenPdf({navigation, route}) {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: 'space-between',
+            //alignItems: 'center',
             backgroundColor: allColors[state.darkMode].mainBackgroundColor,
         },
         pdf: {
             width: '100%',
-            height: '100%',
+            height: '91%',
             borderRadius: 15,
             //position: 'absolute'
         },
     });
     return (
         <View style={styles.container}>
-            <Header1
+            <Header
                 title={pdfTitle}
                 currentAng={currentAng}
                 totalAngs={totalAngs}
                 state={state}
                 navigation={navigation}
             />
-            {/*
 
             <Pdf
                 ref={pdf => {
@@ -125,160 +124,66 @@ export default function OpenPdf({navigation, route}) {
                 }}
                 style={styles.pdf}
             />
-*/}
         </View>
     );
 }
 
-function Header1({title, currentAng, totalAngs, state, navigation}) {
+function Header({title, currentAng, totalAngs, state, navigation}) {
+    const angNumFontSize = 25;
     const styles = StyleSheet.create({
-        container: {
-            //flex:1,
+        headerContainer: {
+            justifyContent: 'space-between',
             alignItems: 'center',
             backgroundColor: allColors[state.darkMode].headerColor,
             width: '100%',
-            height: '10%',
-            //top: 30,
-            //position:'absolute',
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            //padding:15,
-        },
-        angInfo: {
-            alignItems: 'center',
-            justifyContent: 'center',
-            //fontSize: 20,
-            borderRadius: 10,
-            //padding:5,
-            backgroundColor: '#077b8a',
+            paddingHorizontal: 15,
+            height: '9%',
+            //top: 30,
+            //marginBottom: 20,
+            //paddingVertical: 15,
+            //position:'absolute',
         },
         title: {
-            backgroundColor: 'red',
+            backgroundColor: '#077b8a',
+            padding:5,
+            borderRadius:5,
             textAlign: 'center',
+            color: state.darkMode ? 'white' : 'black',
         },
         angNumInfo: {
-            //padding:10,
-            //margin:5,
+            padding:1,
+            margin:5,
+            borderRadius:5,
             backgroundColor: '#078b8a',
             flexDirection: 'row',
             alignItems: 'center',
         },
         setAngNumBox: {
+            margin:3,
+            padding:5,
             //top:"2%",
             borderRadius: 5,
             backgroundColor: '#a2d5c6',
             textAlign: 'right',
-            fontSize: 25,
+            fontSize: angNumFontSize,
         },
         totalAngsInfo: {
-            fontSize: 25,
+            fontSize: angNumFontSize,
         },
         headerBtns: {},
 
-        headerContainer: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: allColors[state.darkMode].headerColor,
-            marginBottom: 20,
-            width: '100%',
-            paddingVertical: 15,
-        },
-        heading: {
-            color: 'white',
-            fontSize: 22,
-            fontWeight: 'bold',
-        },
         headerRight: {
             display: 'flex',
             flexDirection: 'row',
             marginTop: 5,
         },
-        subheaderText: {
-            color: 'white',
-            fontSize: 16,
-            fontWeight: 'bold',
-        },
     });
     let showTitle = title;
-    //if (showTitle.length > 10) showTitle = showTitle.slice(0, 10) + '...';
+    if (showTitle.length > 10) showTitle = showTitle.slice(0, 10) + '...';
     const iconsSize = 25;
     return (
-        <Header
-            backgroundColor={allColors[state.darkMode].headerColor}
-            leftComponent={
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={styles.headerBtns}>
-                    <Icon
-                        name="arrow-back-outline"
-                        size={iconsSize}
-                        type="ionicon"
-                        color={state.darkMode ? 'white' : 'black'}
-                    />
-                </TouchableOpacity>
-            }
-            centerComponent={
-                <View style={styles.angInfo}>
-                    <Text style={styles.title}>{showTitle}</Text>
-                    <View style={styles.angNumInfo}>
-                        <TextInput
-                            style={styles.setAngNumBox}
-                            keyboardType="numeric"
-                            //value={'1456'}
-                            //value={currentAng.toString()}
-                            placeholder={currentAng.toString()}
-                            //onSubmitEditing={e => {
-                            //const asInt = currentAng;
-                            //if (asInt) {
-                            //// this.pdf.setPage(asInt);
-                            //if (asInt > totalAngs) {
-                            ////setCurrentAng(totalAngs);
-                            //}
-                            //}
-                            //}}
-                            //onChangeText={text => {
-                            //console.log(text)
-                            //if (text.length === 0) {
-                            ////setCurrentAng('');
-                            //} else if (text.length < 5) {
-                            ////setCurrentAng(parseInt(text));
-                            //}
-                            //}}
-                        />
-                        <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
-                    </View>
-                </View>
-            }
-            rightComponent={
-                <View style={styles.headerRight}>
-                    <TouchableOpacity
-                        style={styles.headerBtns}
-                        onPress={() => {}}>
-                        <Icon
-                            size={iconsSize}
-                            name="shuffle-outline"
-                            type="ionicon"
-                            color={state.darkMode ? 'white' : 'black'}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.headerBtns}
-                        onPress={() => {
-                            navigation.navigate('Settings Page');
-                        }}>
-                        <Icon
-                            size={iconsSize}
-                            name="settings-outline"
-                            type="ionicon"
-                            color={state.darkMode ? 'white' : 'black'}
-                        />
-                    </TouchableOpacity>
-                </View>
-            }
-        />
-    );
-    return (
-        <View style={styles.container}>
+        <View style={styles.headerContainer}>
             <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={styles.headerBtns}>
@@ -289,56 +194,56 @@ function Header1({title, currentAng, totalAngs, state, navigation}) {
                     color={state.darkMode ? 'white' : 'black'}
                 />
             </TouchableOpacity>
-            <View style={styles.angInfo}>
-                <Text style={styles.title}>{showTitle}</Text>
-                <View style={styles.angNumInfo}>
-                    <TextInput
-                        style={styles.setAngNumBox}
-                        keyboardType="numeric"
-                        //value={'1456'}
-                        //value={currentAng.toString()}
-                        placeholder={currentAng.toString()}
-                        //onSubmitEditing={e => {
-                        //const asInt = currentAng;
-                        //if (asInt) {
-                        //// this.pdf.setPage(asInt);
-                        //if (asInt > totalAngs) {
-                        ////setCurrentAng(totalAngs);
-                        //}
-                        //}
-                        //}}
-                        //onChangeText={text => {
-                        //console.log(text)
-                        //if (text.length === 0) {
-                        ////setCurrentAng('');
-                        //} else if (text.length < 5) {
-                        ////setCurrentAng(parseInt(text));
-                        //}
-                        //}}
-                    />
-                    <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
-                </View>
+            <Text style={styles.title}>{showTitle}</Text>
+            <View style={styles.angNumInfo}>
+                <TextInput
+                    style={styles.setAngNumBox}
+                    keyboardType="numeric"
+                    value={'14560'}
+                    //value={currentAng.toString()}
+                    placeholder={currentAng.toString()}
+                    //onSubmitEditing={e => {
+                    //const asInt = currentAng;
+                    //if (asInt) {
+                    //// this.pdf.setPage(asInt);
+                    //if (asInt > totalAngs) {
+                    ////setCurrentAng(totalAngs);
+                    //}
+                    //}
+                    //}}
+                    //onChangeText={text => {
+                    //console.log(text)
+                    //if (text.length === 0) {
+                    ////setCurrentAng('');
+                    //} else if (text.length < 5) {
+                    ////setCurrentAng(parseInt(text));
+                    //}
+                    //}}
+                />
+                <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
             </View>
-            <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
-                <Icon
-                    size={iconsSize}
-                    name="shuffle-outline"
-                    type="ionicon"
-                    color={state.darkMode ? 'white' : 'black'}
-                />
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.headerBtns}
-                onPress={() => {
-                    navigation.navigate('Settings Page');
-                }}>
-                <Icon
-                    size={iconsSize}
-                    name="settings-outline"
-                    type="ionicon"
-                    color={state.darkMode ? 'white' : 'black'}
-                />
-            </TouchableOpacity>
+            <View style={styles.headerRight}>
+                <TouchableOpacity style={styles.headerBtns} onPress={() => {}}>
+                    <Icon
+                        size={iconsSize}
+                        name="shuffle-outline"
+                        type="ionicon"
+                        color={state.darkMode ? 'white' : 'black'}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.headerBtns}
+                    onPress={() => {
+                        navigation.navigate('Settings Page');
+                    }}>
+                    <Icon
+                        size={iconsSize}
+                        name="settings-outline"
+                        type="ionicon"
+                        color={state.darkMode ? 'white' : 'black'}
+                    />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
