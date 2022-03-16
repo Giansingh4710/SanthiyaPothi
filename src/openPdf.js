@@ -26,13 +26,12 @@ export default function OpenPdf({navigation, route}) {
   const [headerShown, setHeaderShown] = React.useState(true);
 
   const currentAngRef = React.useRef(1); //only for addListner
-  const pdfRef=React.useRef(null);
+  const pdfRef = React.useRef(null);
 
   const state = useSelector(theState => theState.theReducer);
   const dispatch = useDispatch();
 
   const {pdfTitle} = route.params;
-
   const fileName = pdfTitle.split(' ').join(''); //replaces " " with ""
   const sourceFileName = {uri: state.allPdfs[pdfTitle].uri};
   //const sourceFileName = { uri: 'http://kathadata.host/pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf', cache: true };
@@ -40,6 +39,22 @@ export default function OpenPdf({navigation, route}) {
   if (fileName === 'FareedkotTeeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
+  const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
+
+  React.useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus('Keyboard Shown');
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus('Keyboard Hidden');
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+  console.log(keyboardStatus)
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -51,7 +66,6 @@ export default function OpenPdf({navigation, route}) {
     //pick up where you left off from last time
     pdfRef.current.setPage(state.allPdfs[pdfTitle].currentAng);
     navigation.addListener('beforeRemove', () => {
-      //console.log('ran',currentAngRef,currrentAng);
       dispatch(setAngNum(pdfTitle, currentAngRef.current));
     });
   }, [totalAngs, navigation]);
@@ -65,7 +79,6 @@ export default function OpenPdf({navigation, route}) {
     },
     pdf: {
       width: '100%',
-      //height: '91%',
       height: '100%',
       borderRadius: 15,
       //position: 'absolute'
@@ -135,7 +148,8 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
 
   const [textInput, setInput] = React.useState('');
   const angNumFontSize = 25;
-  const inputRef=React.useRef(null);
+  const inputRef = React.useRef(null);
+  //if (inputRef.current!==null) inputRef.current.focus();
   const styles = StyleSheet.create({
     headerContainer: {
       justifyContent: 'space-between',
@@ -242,7 +256,9 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
           icons={[
             {
               name: 'shuffle-outline',
-              action: () => {inputRef.current.focus()},
+              action: () => {
+                inputRef.current.focus();
+              },
             },
             {
               name: 'settings-outline',
