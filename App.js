@@ -25,7 +25,11 @@ function App() {
           <Stack.Screen name="Settings Page" component={SettingsPage} />
           <Stack.Screen name="BanisList" component={FolderToPdfs} />
           <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
-          <Stack.Screen name="OpenPdf" component={OpenPdf} />
+          <Stack.Screen
+            name="OpenPdf"
+            component={OpenPdf}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
