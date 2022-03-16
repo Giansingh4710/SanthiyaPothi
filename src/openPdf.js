@@ -178,7 +178,7 @@ function Header1({title, currentAng, totalAngs, state, navigation}) {
         headerContainer: {
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#397af8',
+            backgroundColor: allColors[state.darkMode].headerColor,
             marginBottom: 20,
             width: '100%',
             paddingVertical: 15,
@@ -204,6 +204,7 @@ function Header1({title, currentAng, totalAngs, state, navigation}) {
     const iconsSize = 25;
     return (
         <Header
+            backgroundColor={allColors[state.darkMode].headerColor}
             leftComponent={
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
@@ -215,6 +216,38 @@ function Header1({title, currentAng, totalAngs, state, navigation}) {
                         color={state.darkMode ? 'white' : 'black'}
                     />
                 </TouchableOpacity>
+            }
+            centerComponent={
+                <View style={styles.angInfo}>
+                    <Text style={styles.title}>{showTitle}</Text>
+                    <View style={styles.angNumInfo}>
+                        <TextInput
+                            style={styles.setAngNumBox}
+                            keyboardType="numeric"
+                            //value={'1456'}
+                            //value={currentAng.toString()}
+                            placeholder={currentAng.toString()}
+                            //onSubmitEditing={e => {
+                            //const asInt = currentAng;
+                            //if (asInt) {
+                            //// this.pdf.setPage(asInt);
+                            //if (asInt > totalAngs) {
+                            ////setCurrentAng(totalAngs);
+                            //}
+                            //}
+                            //}}
+                            //onChangeText={text => {
+                            //console.log(text)
+                            //if (text.length === 0) {
+                            ////setCurrentAng('');
+                            //} else if (text.length < 5) {
+                            ////setCurrentAng(parseInt(text));
+                            //}
+                            //}}
+                        />
+                        <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
+                    </View>
+                </View>
             }
             rightComponent={
                 <View style={styles.headerRight}>
@@ -242,7 +275,6 @@ function Header1({title, currentAng, totalAngs, state, navigation}) {
                     </TouchableOpacity>
                 </View>
             }
-            centerComponent={{text: 'Header', style: styles.heading}}
         />
     );
     return (
