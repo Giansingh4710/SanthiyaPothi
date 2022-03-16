@@ -12,6 +12,7 @@ export const setData = async (title, state) => {
 export const initialState = {
   darkMode: false,
   hideHeaderOnScroll:false,
+  showHeaderOnScroll:false,
   allPdfs: {...allPdfs},
   addedPdfs: {title: 'Added PDFs', list: []},
 };
@@ -49,6 +50,12 @@ function theReducer(state = initialState, action) {
     const newState = {
       ...state,
       hideHeaderOnScroll: action.mode,
+    };
+    theState = newState;
+  } else if (action.type === 'SET_SHOW_HEADER') {
+    const newState = {
+      ...state,
+      showHeaderOnScroll: action.mode,
     };
     theState = newState;
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {

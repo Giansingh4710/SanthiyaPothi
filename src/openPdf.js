@@ -20,7 +20,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 export default function OpenPdf({navigation, route}) {
     const [totalAngs, setTotalAngs] = React.useState(0);
     const [currentAng, setCurrentAng] = React.useState(1);
-    const [showHeader, setShowHeader] = React.useState(true);
+    const [headerShown, setHeaderShown] = React.useState(true);
 
     const currentAngRef = React.useRef(1); //only for addListner
 
@@ -61,21 +61,14 @@ export default function OpenPdf({navigation, route}) {
         },
         pdf: {
             width: '100%',
-            height: '91%',
+            //height: '91%',
+            height: '100%',
             borderRadius: 15,
             //position: 'absolute'
         },
     });
     return (
         <View style={styles.container}>
-            <Header
-                title={pdfTitle}
-                currentAng={currentAng}
-                totalAngs={totalAngs}
-                state={state}
-                navigation={navigation}
-            />
-
             <Pdf
                 ref={pdf => {
                     //this.pdf = pdf;
@@ -89,20 +82,24 @@ export default function OpenPdf({navigation, route}) {
                 }}
                 onPageChanged={(page, numberOfPages) => {
                     setCurrentAng(page);
-                    //navigation.setOptions({title:page})
-                    //navigation.goBack();
                     if (
-                        showHeader &&
+                        headerShown &&
                         state.hideHeaderOnScroll &&
                         page > currentAng
                     ) {
-                        setShowHeader(false);
+                        setHeaderShown(false);
+                    } else if (
+                        !headerShown &&
+                        state.showHeaderOnScroll &&
+                        page < currentAng
+                    ) {
+                        setHeaderShown(true);
                     }
                     currentAngRef.current = page;
                     //console.log(currentAngRef)
                 }}
                 onPageSingleTap={() => {
-                    setShowHeader(!showHeader);
+                    setHeaderShown(!headerShown);
                 }}
                 onError={error => {
                     Alert.alert(
@@ -124,11 +121,20 @@ export default function OpenPdf({navigation, route}) {
                 }}
                 style={styles.pdf}
             />
+            <Header
+                title={pdfTitle}
+                currentAng={currentAng}
+                totalAngs={totalAngs}
+                state={state}
+                navigation={navigation}
+                hidden={!headerShown}
+            />
         </View>
     );
 }
 
-function Header({title, currentAng, totalAngs, state, navigation}) {
+function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
+    if (hidden) return null;
     const angNumFontSize = 25;
     const styles = StyleSheet.create({
         headerContainer: {
@@ -142,26 +148,26 @@ function Header({title, currentAng, totalAngs, state, navigation}) {
             //top: 30,
             //marginBottom: 20,
             //paddingVertical: 15,
-            //position:'absolute',
+            position: 'absolute',
         },
         title: {
             backgroundColor: '#077b8a',
-            padding:5,
-            borderRadius:5,
+            padding: 5,
+            borderRadius: 5,
             textAlign: 'center',
             color: state.darkMode ? 'white' : 'black',
         },
         angNumInfo: {
-            padding:1,
-            margin:5,
-            borderRadius:5,
+            padding: 1,
+            margin: 5,
+            borderRadius: 5,
             backgroundColor: '#078b8a',
             flexDirection: 'row',
             alignItems: 'center',
         },
         setAngNumBox: {
-            margin:3,
-            padding:5,
+            margin: 3,
+            padding: 5,
             //top:"2%",
             borderRadius: 5,
             backgroundColor: '#a2d5c6',
@@ -199,7 +205,7 @@ function Header({title, currentAng, totalAngs, state, navigation}) {
                 <TextInput
                     style={styles.setAngNumBox}
                     keyboardType="numeric"
-                    value={'14560'}
+                    //value={'14560'}
                     //value={currentAng.toString()}
                     placeholder={currentAng.toString()}
                     //onSubmitEditing={e => {

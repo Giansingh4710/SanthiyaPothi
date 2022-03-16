@@ -15,7 +15,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import SwitchBar from './settingBarSwitch';
 // import SettingsBar from './settingBar';
 
-import {setDarkMode, setHideHeader} from '../../redux/actions';
+import {setDarkMode, setHideHeader,setShowHeader} from '../../redux/actions';
 import {allColors} from '../../assets/styleForEachOption';
 import {setData, initialState} from '../../redux/reducers';
 import {setTheState} from '../../redux/actions';
@@ -84,6 +84,12 @@ function SettingsPage({navigation}) {
           nameInState={'hideHeaderOnScroll'}
           setter={setHideHeader}
         />
+        <SwitchBar
+          SettingTitle="Show Header On Scroll"
+          icons={['chevron-down-circle', 'close-outline']}
+          nameInState={'showHeaderOnScroll'}
+          setter={setShowHeader}
+        />
         {/* <SettingsBar
           theSetting="Type of Words"
           theList={['Both', 'Gurbani', 'Punjabi']} // the 0 index in theList is the default setting
@@ -123,7 +129,4 @@ function SettingsPage({navigation}) {
     </View>
   );
 }
-
-// TODO - Move all colors to separate file and import as variables.
-
 export default SettingsPage;
