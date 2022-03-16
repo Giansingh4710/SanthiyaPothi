@@ -5,10 +5,7 @@ import {
   View,
   ActivityIndicator,
   TextInput,
-  ScrollView,
   Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
@@ -39,31 +36,7 @@ export default function OpenPdf({navigation, route}) {
   if (fileName === 'FareedkotTeeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
-  const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
-
   React.useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardStatus('Keyboard Shown');
-    });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardStatus('Keyboard Hidden');
-    });
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
-  console.log(keyboardStatus)
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
-
-  React.useEffect(() => {
-    //pick up where you left off from last time
     pdfRef.current.setPage(state.allPdfs[pdfTitle].currentAng);
     navigation.addListener('beforeRemove', () => {
       dispatch(setAngNum(pdfTitle, currentAngRef.current));
@@ -74,14 +47,12 @@ export default function OpenPdf({navigation, route}) {
     container: {
       flex: 1,
       justifyContent: 'space-between',
-      //alignItems: 'center',
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
     },
     pdf: {
       width: '100%',
       height: '100%',
       borderRadius: 15,
-      //position: 'absolute'
     },
   });
   return (
@@ -95,7 +66,6 @@ export default function OpenPdf({navigation, route}) {
           setTotalAngs(numberOfPages);
         }}
         onPageChanged={(page, numberOfPages) => {
-          setCurrentAng(page);
           if (headerShown && state.hideHeaderOnScroll && page > currentAng) {
             setHeaderShown(false);
           } else if (
@@ -105,8 +75,8 @@ export default function OpenPdf({navigation, route}) {
           ) {
             setHeaderShown(true);
           }
+          setCurrentAng(page);
           currentAngRef.current = page;
-          //console.log(currentAngRef)
         }}
         onPageSingleTap={() => {
           setHeaderShown(!headerShown);
@@ -138,18 +108,25 @@ export default function OpenPdf({navigation, route}) {
         state={state}
         navigation={navigation}
         hidden={!headerShown}
+        pdfRef={pdfRef}
       />
     </View>
   );
 }
 
-function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
+function Header({
+  title,
+  currentAng,
+  totalAngs,
+  state,
+  navigation,
+  hidden,
+  pdfRef,
+}) {
   if (hidden) return null;
 
   const [textInput, setInput] = React.useState('');
   const angNumFontSize = 25;
-  const inputRef = React.useRef(null);
-  //if (inputRef.current!==null) inputRef.current.focus();
   const styles = StyleSheet.create({
     headerContainer: {
       justifyContent: 'space-between',
@@ -159,9 +136,6 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
       flexDirection: 'row',
       paddingHorizontal: 15,
       height: '9%',
-      //top: 30,
-      //marginBottom: 20,
-      //paddingVertical: 15,
       position: 'absolute',
     },
     title: {
@@ -191,16 +165,9 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
     totalAngsInfo: {
       fontSize: angNumFontSize,
     },
-
-    headerBtns: {},
-    headerRight: {
-      display: 'flex',
-      flexDirection: 'row',
-      marginTop: 5,
-    },
   });
   let showTitle = title;
-  if (showTitle.length > 10) showTitle = showTitle.slice(0, 10) + '...';
+  if (showTitle.length > 10) showTitle = showTitle.slice(0, 7) + '..';
   const iconsSize = 25;
   return (
     <View style={styles.headerContainer}>
@@ -222,31 +189,16 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
       </TouchableOpacity>
       <View style={styles.angNumInfo}>
         <TextInput
-          ref={inputRef}
           style={styles.setAngNumBox}
-          //keyboardType="numeric"
-          //value={'14560'}
-          value={textInput}
-          onChangeText={setInput}
-          //value={currentAng.toString()}
+          keyboardType="numeric"
           placeholder={currentAng.toString()}
-          //onSubmitEditing={e => {
-          //const asInt = currentAng;
-          //if (asInt) {
-          //// this.pdf.setPage(asInt);
-          //if (asInt > totalAngs) {
-          ////setCurrentAng(totalAngs);
-          //}
-          //}
-          //}}
-          //onChangeText={text => {
-          //console.log(text)
-          //if (text.length === 0) {
-          ////setCurrentAng('');
-          //} else if (text.length < 5) {
-          ////setCurrentAng(parseInt(text));
-          //}
-          //}}
+          value={textInput}
+          onChangeText={txt => setInput(txt)}
+          onSubmitEditing={e => {
+            const num = Number.parseInt(e.nativeEvent.text, 10);
+            pdfRef.current.setPage(num);
+            setInput('');
+          }}
         />
         <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
       </View>
@@ -257,7 +209,8 @@ function Header({title, currentAng, totalAngs, state, navigation, hidden}) {
             {
               name: 'shuffle-outline',
               action: () => {
-                inputRef.current.focus();
+                const randAng = Math.floor(Math.random() * totalAngs) + 1;
+                pdfRef.current.setPage(randAng);
               },
             },
             {
