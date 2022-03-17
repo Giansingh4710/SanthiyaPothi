@@ -38,9 +38,9 @@ export default function OpenPdf({navigation, route}) {
     return <TeekaPDF navigation={navigation} />;
   }
   React.useEffect(() => {
-    pdfRef.current.setPage(state.allPdfs[pdfTitle].currentAng);
+    pdfRef.current.setPage(state.allPdfs[folderTitle][pdfTitle].currentAng);
     navigation.addListener('beforeRemove', () => {
-      dispatch(setAngNum(pdfTitle, currentAngRef.current));
+      dispatch(setAngNum(folderTitle,pdfTitle, currentAngRef.current));
     });
   }, [totalAngs, navigation]);
 

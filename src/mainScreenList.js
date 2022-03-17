@@ -96,8 +96,9 @@ function HomeScreen({navigation}) {
 
   const allListItems = [
     ...Object.keys(folderToFileData),
+    'ਪਾਠ Hajari',
+    'All Pdfs',
   ];
-  console.log(allListItems)
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
@@ -123,8 +124,7 @@ function HomeScreen({navigation}) {
                   />
                 }
                 onClick={() => {
-                  const theList =folderToFileData[item]
-                  console.log(theList)
+                  const theList =folderToFileData[item] //theList is {}(object) data type
                   navigation.navigate('BanisList', {
                     list: theList,
                     folderTitle: item, //name of the bar clicked on

@@ -1,7 +1,8 @@
-export const setCheckBox = baniTitle => dispatch => {
+export const setCheckBox = (baniTitle,thefolder) => dispatch => {
   dispatch({
     type: 'SET_CHECKBOX',
     theBani: baniTitle,
+    theFolder:thefolder,
   });
 };
 export const setTheState = state => dispatch => {
@@ -10,9 +11,10 @@ export const setTheState = state => dispatch => {
     state,
   });
 };
-export const setAngNum = (bani, angNum) => dispatch => {
+export const setAngNum = (folder,bani, angNum) => dispatch => {
   dispatch({
     type: 'SET_ANG_NUM',
+    folder,
     bani,
     angNum,
   });

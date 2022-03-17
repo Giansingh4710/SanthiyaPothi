@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {allPdfs} from '../assets/longData';
+import {folderToFileData} from '../assets/longData';
 
 export const setData = async (title, state) => {
   try {
@@ -13,11 +13,11 @@ export const initialState = {
   darkMode: false,
   hideHeaderOnScroll:false,
   showHeaderOnScroll:false,
-  allPdfs: {...allPdfs},
-  addedPdfs: {title: 'Added PDFs', list: []},
+  allPdfs: {...folderToFileData},
+  //addedPdfs: {title: 'Added PDFs', list: []},
 };
 
-//setData('state', initialState); //to reset all state
+setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -28,14 +28,14 @@ function theReducer(state = initialState, action) {
     theState = newState;
   } else if (action.type === 'SET_CHECKBOX') {
     const newallPdfs = {...state.allPdfs};
-    newallPdfs[action.theBani].checked = !newallPdfs[action.theBani].checked;
+    newallPdfs[action.theFolder][action.theBani].checked = !newallPdfs[action.theFolder][action.theBani].checked;
     const newState = {
       ...state,
       allPdfs: newallPdfs,
     };
     theState = newState;
   } else if (action.type === 'SET_ANG_NUM') {
-    state.allPdfs[action.bani].currentAng = action.angNum;
+    state.allPdfs[action.folder][action.bani].currentAng = action.angNum;
     const newState = {
       ...state,
     };
