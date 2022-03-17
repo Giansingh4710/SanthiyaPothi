@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+//import {RNFS} from 'react-native-fs';
+var RNFS = require('react-native-fs');
 import {Icon} from 'react-native-elements';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 
@@ -38,7 +40,6 @@ export default function OpenPdf({navigation, route}) {
         : state.allPdfs[folderTitle][pdfTitle].downloadedUri,
     //cache: true,
   };
-  sourceFileName.uri='/storage/emulated/0/Download/Adi Maharaj.pdf'  
   if (pdfTitle === 'Fareedkot Teeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
@@ -61,7 +62,7 @@ export default function OpenPdf({navigation, route}) {
       borderRadius: 15,
     },
   });
-  console.log(sourceFileName)
+  console.log(sourceFileName);
   return (
     <View style={styles.container}>
       <Pdf
@@ -106,7 +107,7 @@ export default function OpenPdf({navigation, route}) {
               cancelable: true,
             },
           );
-          console.log(error)
+          console.log(error);
         }}
         onPressLink={uri => {
           console.log(`Link presse: ${uri}`);
@@ -229,25 +230,32 @@ function Header({
               name: 'cloud-download-outline',
               action: () => {
                 const {config, fs} = RNFetchBlob;
-                const date = new Date();
-
                 const {DownloadDir} = fs.dirs; // You can check the available directories in the wiki.
-                console.log(DownloadDir);
+
+                const DirectoryPath = DownloadDir + '/' + 'SanthiyaPothi';
+                RNFS.exists(DirectoryPath).then(dirExists => {
+                  if (dirExists) {
+                    console.log('SanthiyaPothi Dir already exists');
+                  } else {
+                    RNFS.mkdir(DirectoryPath);
+                    console.log('Just Made The Directory');
+                  }
+                });
+
                 const options = {
                   fileCache: true,
                   addAndroidDownloads: {
                     useDownloadManager: true, // true will use native manager and be shown on notification bar.
                     notification: true,
-                    path: `${DownloadDir}/${title}.pdf`,
+                    path: `${DirectoryPath}/${title}.pdf`,
                     description: 'Downloading.',
                   },
                 };
-
                 config(options)
                   .fetch('GET', link)
                   .then(res => {
                     console.log(res);
-                    dispatch(addDownloadedUri(folder, title, res.data));
+                    //dispatch(addDownloadedUri(folder, title, res.data));
                     //console.log('do some magic in here');
                   })
                   .catch(err => {
