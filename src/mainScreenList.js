@@ -99,6 +99,7 @@ function HomeScreen({navigation, route}) {
     {...state.addedPdfs},
     {
       title: 'ਪਾਠ Hajari',
+      list:[]
     },
   ];
   return (

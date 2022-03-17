@@ -34,6 +34,7 @@ function SwitchBar({SettingTitle, icons, nameInState, setter}) {
                     <Switch
                         value={settingOnOff}
                         onValueChange={newSetting => {
+            console.log(newSetting)
                             // setCurrentVal(newSetting);
                             dispatch(setter(newSetting));
                         }}

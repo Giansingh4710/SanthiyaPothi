@@ -523,3 +523,28 @@
     "timeStamp": 1641527132176,
     "type": undefined
 }
+
+
+pdfRef
+{
+  "current": {
+    "_downloadFile": [Function _callee7],
+    "_loadFromSource": [Function anonymous],
+    "_mounted": true,
+    "_onChange": [Function anonymous],
+    "_onError": [Function anonymous],
+    "_prepareFile": [Function _callee3],
+    "_reactInternalInstance": {},
+    "_reactInternals": {"_debugHookTypes": null, "_debugID": 9440, "_debugNeedsRemount": false, "_debugOwner": [FiberNode], "_debugSource": [Object], "actualDuration": 0.00739598274230957, "actualStartTime": 1189036105.592064, "alternate": [FiberNode], "child": [FiberNode], "childLanes": 0, "dependencies": null, "elementType": [Function Pdf], "firstEffect": null, "flags": 0, "index": 0, "key": null, "lanes": 0, "lastEffect": null, "memoizedProps": [Object], "memoizedState": [Object], "mode": 8, "nextEffect": null, "pendingProps": [Object], "ref": [Circular], "return": [FiberNode], "selfBaseDuration": 0.2958850860595703, "sibling": [FiberNode], "stateNode": [Circular], "tag": 1, "treeBaseDuration": 0.4271359443664551, "type": [Function Pdf], "updateQueue": [Object]},
+    "_root": {"_children": [Array], "_internalFiberInstanceHandleDEV": [FiberNode], "_nativeTag": 935, "viewConfig": [Object]},
+    "_unlinkFile": [Function _callee8],
+    "context": {},
+    "lastRNBFTask": null,
+    "props": {"activityIndicator": <ActivityIndicator … />, "activityIndicatorProps": [Object], "enableAnnotationRendering": true, "enableAntialiasing": true, "enablePaging": false, "enableRTL": false, "fitPolicy": 2, "horizontal": false, "maxScale": 3, "minScale": 1, "onError": [Function onError], "onLoadComplete": [Function onLoadComplete], "onLoadProgress": [Function onLoadProgress], "onPageChanged": [Function onPageChanged], "onPageSingleTap": [Function onPageSingleTap], "onPressLink": [Function onPressLink], "onScaleChanged": [Function onScaleChanged], "page": 1, "password": "", "scale": 1, "singlePage": false, "source": [Object], "spacing": 10, "style": [Object], "trustAllCerts": true, "usePDFKit": true}, 
+    "refs": {},
+    "setNativeProps": [Function anonymous],
+    "state": {"isDownloaded": true, "isSupportPDFKit": -1, "path": "/data/user/0/com.larrivarpothi/cache/cc177d8ff1b116a0eb2f2d2dfcf1287c52828a13.pdf", "progress": 1},
+    "updater": {"enqueueForceUpdate": [Function enqueueForceUpdate], "enqueueReplaceState": [Function enqueueReplaceState], "enqueueSetState": [Function enqueueSetState], "isMounted": [Function isMounted]}
+  }
+}
+

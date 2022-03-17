@@ -1,241 +1,232 @@
 import React from 'react';
 import {
-    Text,
-    StyleSheet,
-    View,
-    ActivityIndicator,
-    TextInput,
-    Alert,
-    TouchableOpacity,
+  Text,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  TextInput,
+  Alert,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 
 import Pdf from 'react-native-pdf';
 import TeekaPDF from '../assets/components/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
-import {setAngNum, setCheckBox} from '../redux/actions';
+import {setAngNum} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function OpenPdf({navigation, route}) {
-    const [totalAngs, setTotalAngs] = React.useState(0);
-    const [currrentAng, setCurrentAng] = React.useState(1);
-    const [showHeader, setShowHeader] = React.useState(true);
-    const [showBackDropDownMenu, setBackDropDownMenu] = React.useState(false);
+  const [totalAngs, setTotalAngs] = React.useState(0);
+  const [currentAng, setCurrentAng] = React.useState(1);
+  const [headerShown, setHeaderShown] = React.useState(true);
 
-    const goBackWithoutSaving = React.useRef(false);
+  const currentAngRef = React.useRef(1); //only for addListner
+  const pdfRef = React.useRef(null);
 
-    const currentAngRef = React.useRef(1); //only for addListner
-    const totalAngRef = React.useRef(1); //only for addListner
+  const state = useSelector(theState => theState.theReducer);
+  const dispatch = useDispatch();
 
-    const state = useSelector(theState => theState.theReducer);
-    const dispatch = useDispatch();
+  const {pdfTitle} = route.params;
+  const fileName = pdfTitle.split(' ').join(''); //replaces " " with ""
+  const sourceFileName = {uri: state.allPdfs[pdfTitle].uri};
+  //const sourceFileName = { uri: 'http://kathadata.host/pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf', cache: true };
 
-    const {pdfTitle} = route.params;
-
-    React.useEffect(() => {
-        //pick up where you left off from last time
-        //this.pdf.setPage(state.allPdfs[pdfTitle].currentAng);
-    }, [totalAngs]);
-
-    const headerStyles = StyleSheet.create({
-        container: {
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-        },
-        title: {
-            flex: 1,
-            margin: 10,
-            borderRadius: 5,
-            height: '75%',
-            backgroundColor: '#077b8a',
-            justifyContent: 'center',
-            textAlign: 'center',
-        },
-        pagesBox: {
-            flex: 1.5,
-            margin: 10,
-            borderRadius: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
-            // justifyContent: 'space-evenly',
-            fontSize: 20,
-            flexDirection: 'row',
-            backgroundColor: '#077b8a',
-        },
-        setAngNumBox: {
-            borderRadius: 5,
-            height: '95%',
-            fontSize: 20,
-            backgroundColor: '#a2d5c6',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-        },
-        boxText: {
-            fontSize: 25,
-        },
-        headerBtnsCont: {
-            flex: 1,
-            flexDirection: 'row',
-        },
-        headerBtns: {
-            flex: 1,
-            paddingTop: 20,
-        },
+  if (fileName === 'FareedkotTeeka.pdf') {
+    return <TeekaPDF navigation={navigation} />;
+  }
+  React.useEffect(() => {
+    pdfRef.current.setPage(state.allPdfs[pdfTitle].currentAng);
+    navigation.addListener('beforeRemove', () => {
+      dispatch(setAngNum(pdfTitle, currentAngRef.current));
     });
+  }, [totalAngs, navigation]);
 
-    React.useEffect(() => {
-        if (pdfTitle === 'Fareedkot Teeka.pdf') return;
-        let showTitle = pdfTitle;
-        if (showTitle.length > 15) showTitle = showTitle.slice(0, 15) + '...';
-
-        navigation.setOptions({
-            headerShown: showHeader,
-            headerTintColor: state.darkMode ? 'white' : 'black',
-            headerStyle: {
-                backgroundColor: allColors[state.darkMode].headerColor,
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'space-between',
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+    },
+    pdf: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 15,
+    },
+  });
+  return (
+    <View style={styles.container}>
+      <Pdf
+        style={styles.pdf}
+        ref={pdfRef}
+        source={sourceFileName}
+        activityIndicator={<ActivityIndicator size="large" color="blue" />}
+        onLoadComplete={(numberOfPages, filePath) => {
+          setTotalAngs(numberOfPages);
+        }}
+        onPageChanged={(page, numberOfPages) => {
+          if (
+            headerShown &&
+            state.hideHeaderOnScroll &&
+            page == currentAng + 1
+          ) {
+            setHeaderShown(false);
+          } else if (
+            !headerShown &&
+            state.showHeaderOnScroll &&
+            page + 1 == currentAng
+          ) {
+            setHeaderShown(true);
+          }
+          setCurrentAng(page);
+          currentAngRef.current = page;
+        }}
+        onPageSingleTap={() => {
+          setHeaderShown(!headerShown);
+        }}
+        onError={error => {
+          Alert.alert(
+            'PDF ERROR',
+            String(error),
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+            ],
+            {
+              cancelable: true,
             },
-            headerTitle: () => (
-                <View style={headerStyles.container}>
-                    <Text style={headerStyles.title}>{showTitle}</Text>
-                    <View style={headerStyles.pagesBox}>
-                        <TextInput
-                            keyboardType="numeric"
-                            value={currrentAng.toString()}
-                            style={headerStyles.setAngNumBox}
-                            placeholder="ex: 5"
-                            onChangeText={text => {
-                                if (text.length === 0) {
-                                    setCurrentAng('');
-                                } else if (text.length < 5) {
-                                    setCurrentAng(parseInt(text));
-                                }
-                            }}
-                            onSubmitEditing={e => {
-                                const asInt = currrentAng;
-                                if (asInt) {
-                                    //this.pdf.setPage(asInt);
-                                    if (asInt > totalAngs) {
-                                        setCurrentAng(totalAngs);
-                                    }
-                                }
-                            }}
-                        />
-                        <Text style={headerStyles.boxText}>/{totalAngs}</Text>
-                    </View>
-                </View>
-            ),
-            headerRight: () => (
-                <RightOfHeader
-                    state={state}
-                    icons={[
-                        {
-                            name: 'shuffle-outline',
-                            action: () => {
-                                const randAng =
-                                    Math.floor(Math.random() * totalAngs) + 1;
-                                //this.pdf.setPage(randAng);
-                                setCurrentAng(randAng);
-                            },
-                        },
-                        {
-                            name: 'settings-outline',
-                            action: () => {
-                                navigation.navigate('Settings Page');
-                            },
-                        },
-                    ]}
-                />
-            ),
-        });
-    });
+          );
+        }}
+        onPressLink={uri => {
+          console.log(`Link presse: ${uri}`);
+        }}
+      />
+      <Header
+        //header on the bottom so it can be drawn on top of the pdf.
+        title={pdfTitle}
+        currentAng={currentAng}
+        totalAngs={totalAngs}
+        state={state}
+        navigation={navigation}
+        hidden={!headerShown}
+        pdfRef={pdfRef}
+      />
+    </View>
+  );
+}
 
-    React.useEffect(() => {
-        navigation.addListener('beforeRemove', () => {
-            if (goBackWithoutSaving.current) {
-                console.log('Position of ang not saved!');
-            } else {
-                dispatch(setAngNum(pdfTitle, currentAngRef.current));
-                if (currentAngRef.current === totalAngRef.current) {
-                    if (state.allPdfs[pdfTitle].checked === false) {
-                        dispatch(setCheckBox(pdfTitle));
-                    }
-                }
-            }
-        });
-    }, [navigation]);
+function Header({
+  title,
+  currentAng,
+  totalAngs,
+  state,
+  navigation,
+  hidden,
+  pdfRef,
+}) {
+  if (hidden) return null;
 
-    const fileName = pdfTitle.split(' ').join(''); //replaces " " with ""
-    const sourceFileName = {uri: state.allPdfs[pdfTitle].uri};
-
-    if (fileName === 'FareedkotTeeka.pdf') {
-        return <TeekaPDF navigation={navigation} />;
-    }
-
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-        },
-        pdf: {
-            width: '100%',
-            height: '99%',
-            borderRadius: 15,
-        },
-    });
-    return (
-        <View style={styles.container}>
-            <Pdf
-                ref={pdf => {
-                    //this.pdf = pdf;
-                }}
-                activityIndicator={
-                    <ActivityIndicator size="large" color="blue" />
-                }
-                source={sourceFileName}
-                onLoadComplete={(numberOfPages, filePath) => {
-                    setTotalAngs(numberOfPages);
-                    totalAngRef.current = numberOfPages;
-                }}
-                onPageChanged={(page, numberOfPages) => {
-                    if (
-                        showHeader &&
-                        state.hideHeaderOnScroll &&
-                        page > currrentAng
-                    ) {
-                        setShowHeader(false);
-                    }
-                    setCurrentAng(page);
-                    currentAngRef.current = page;
-                    //console.log(currentAngRef)
-                }}
-                onPageSingleTap={() => {
-                    setShowHeader(!showHeader);
-                }}
-                onError={error => {
-                    Alert.alert(
-                        'PDF ERROR',
-                        String(error),
-                        [
-                            {
-                                text: 'Cancel',
-                                style: 'cancel',
-                            },
-                        ],
-                        {
-                            cancelable: true,
-                        },
-                    );
-                }}
-                onPressLink={uri => {
-                    console.log(`Link presse: ${uri}`);
-                }}
-                style={styles.pdf}
-            />
-        </View>
-    );
+  const [textInput, setInput] = React.useState('');
+  const angNumFontSize = 25;
+  const styles = StyleSheet.create({
+    headerContainer: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: allColors[state.darkMode].headerColor,
+      width: '100%',
+      flexDirection: 'row',
+      paddingHorizontal: 15,
+      //height: '9%',
+      position: 'absolute',
+    },
+    title: {
+      backgroundColor: '#077b8a',
+      padding: 5,
+      borderRadius: 5,
+      textAlign: 'center',
+      color: state.darkMode ? 'white' : 'black',
+    },
+    angNumInfo: {
+      padding: 1,
+      margin: 5,
+      borderRadius: 5,
+      backgroundColor: '#078b8a',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    setAngNumBox: {
+      margin: 3,
+      padding: 5,
+      //top:"2%",
+      borderRadius: 5,
+      backgroundColor: '#a2d5c6',
+      textAlign: 'right',
+      fontSize: angNumFontSize,
+    },
+    totalAngsInfo: {
+      fontSize: angNumFontSize,
+    },
+  });
+  let showTitle = title;
+  if (showTitle.length > 10) showTitle = showTitle.slice(0, 7) + '..';
+  const iconsSize = 25;
+  return (
+    <View style={styles.headerContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.headerBtns}>
+        <Icon
+          name="arrow-back-outline"
+          size={iconsSize}
+          type="ionicon"
+          color={state.darkMode ? 'white' : 'black'}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          console.log(title);
+        }}>
+        <Text style={styles.title}>{showTitle}</Text>
+      </TouchableOpacity>
+      <View style={styles.angNumInfo}>
+        <TextInput
+          style={styles.setAngNumBox}
+          keyboardType="numeric"
+          placeholder={currentAng.toString()}
+          value={textInput}
+          onChangeText={txt => setInput(txt)}
+          onSubmitEditing={e => {
+            const num = Number.parseInt(e.nativeEvent.text, 10);
+            setInput('');
+            if (!num) return;
+            pdfRef.current.setPage(num);
+          }}
+        />
+        <Text style={styles.totalAngsInfo}>/{totalAngs}</Text>
+      </View>
+      <View>
+        <RightOfHeader
+          state={state}
+          icons={[
+            {
+              name: 'shuffle-outline',
+              action: () => {
+                const randAng = Math.floor(Math.random() * totalAngs) + 1;
+                pdfRef.current.setPage(randAng);
+              },
+            },
+            {
+              name: 'settings-outline',
+              action: () => {
+                navigation.navigate('Settings Page');
+              },
+            },
+          ]}
+        />
+      </View>
+    </View>
+  );
 }

@@ -27,18 +27,11 @@ export default function FolderToPdfs({navigation, route}) {
     const state = useSelector(theState => theState.theReducer);
 
     const folderTitle = route.params.folderTitle;
+    let baniaList = route.params.list;
     const styles = StyleSheet.create({
         container: {
             backgroundColor: allColors[state.darkMode].mainBackgroundColor,
             height: '100%',
-        },
-        headerBtnsCont: {
-            flex: 1,
-            flexDirection: 'row',
-        },
-        headerBtns: {
-            flex: 1,
-            padding: 10,
         },
     });
 
@@ -51,22 +44,16 @@ export default function FolderToPdfs({navigation, route}) {
                 styles={styles}
             />
         );
+    else if (folderTitle === 'ਪਾਠ Hajari')
+        baniaList = Object.entries(state.allPdfs)
+            .filter(bani => {
+                return bani[1].currentAng !== 1 && bani[1].checked === false;
+            })
+            .map(bani => {
+                return {title: bani[0]};
+            });
 
-    const [baniaList, setBaniaList] = React.useState(route.params.list);
     React.useEffect(() => {
-        if (folderTitle === 'ਪਾਠ Hajari')
-            setBaniaList(
-                Object.entries(state.allPdfs)
-                    .filter(bani => {
-                        return (
-                            bani[1].currentAng !== 1 &&
-                            bani[1].checked === false
-                        );
-                    })
-                    .map(bani => {
-                        return {title: bani[0]};
-                    }),
-            );
         navigation.setOptions({
             headerStyle: {
                 backgroundColor: allColors[state.darkMode].headerColor,
