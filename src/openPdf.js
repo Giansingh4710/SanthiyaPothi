@@ -7,16 +7,16 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 import {Icon} from 'react-native-elements';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 
 import Pdf from 'react-native-pdf';
 import TeekaPDF from '../assets/components/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
-import {setAngNum} from '../redux/actions';
+import {setAngNum, addDownloadedUri} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {folderToFileData} from '../assets/longData';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
@@ -31,16 +31,21 @@ export default function OpenPdf({navigation, route}) {
 
   const {pdfTitle} = route.params;
   const {folderTitle} = route.params;
-  const sourceFileName = {uri: folderToFileData[folderTitle][pdfTitle].uri,cache:true};
-  //const sourceFileName = { uri: 'http://kathadata.host/pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf', cache: true };
-
+  const sourceFileName = {
+    uri:
+      state.allPdfs[folderTitle][pdfTitle].downloadedUri === ''
+        ? state.allPdfs[folderTitle][pdfTitle].uri
+        : state.allPdfs[folderTitle][pdfTitle].downloadedUri,
+    //cache: true,
+  };
+  sourceFileName.uri='/storage/emulated/0/Download/Adi Maharaj.pdf'  
   if (pdfTitle === 'Fareedkot Teeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
   React.useEffect(() => {
     pdfRef.current.setPage(state.allPdfs[folderTitle][pdfTitle].currentAng);
     navigation.addListener('beforeRemove', () => {
-      dispatch(setAngNum(folderTitle,pdfTitle, currentAngRef.current));
+      dispatch(setAngNum(folderTitle, pdfTitle, currentAngRef.current));
     });
   }, [totalAngs, navigation]);
 
@@ -56,6 +61,7 @@ export default function OpenPdf({navigation, route}) {
       borderRadius: 15,
     },
   });
+  console.log(sourceFileName)
   return (
     <View style={styles.container}>
       <Pdf
@@ -100,6 +106,7 @@ export default function OpenPdf({navigation, route}) {
               cancelable: true,
             },
           );
+          console.log(error)
         }}
         onPressLink={uri => {
           console.log(`Link presse: ${uri}`);
@@ -107,19 +114,24 @@ export default function OpenPdf({navigation, route}) {
       />
       <Header
         //header on the bottom so it can be drawn on top of the pdf.
+        folder={folderTitle}
         title={pdfTitle}
         currentAng={currentAng}
         totalAngs={totalAngs}
         state={state}
+        dispatch={dispatch}
         navigation={navigation}
         hidden={!headerShown}
         pdfRef={pdfRef}
+        link={state.allPdfs[folderTitle][pdfTitle].uri}
       />
     </View>
   );
 }
 
 function Header({
+  dispatch,
+  folder,
   title,
   currentAng,
   totalAngs,
@@ -127,6 +139,7 @@ function Header({
   navigation,
   hidden,
   pdfRef,
+  link,
 }) {
   if (hidden) return null;
 
@@ -212,6 +225,36 @@ function Header({
         <RightOfHeader
           state={state}
           icons={[
+            {
+              name: 'cloud-download-outline',
+              action: () => {
+                const {config, fs} = RNFetchBlob;
+                const date = new Date();
+
+                const {DownloadDir} = fs.dirs; // You can check the available directories in the wiki.
+                console.log(DownloadDir);
+                const options = {
+                  fileCache: true,
+                  addAndroidDownloads: {
+                    useDownloadManager: true, // true will use native manager and be shown on notification bar.
+                    notification: true,
+                    path: `${DownloadDir}/${title}.pdf`,
+                    description: 'Downloading.',
+                  },
+                };
+
+                config(options)
+                  .fetch('GET', link)
+                  .then(res => {
+                    console.log(res);
+                    dispatch(addDownloadedUri(folder, title, res.data));
+                    //console.log('do some magic in here');
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              },
+            },
             {
               name: 'shuffle-outline',
               action: () => {

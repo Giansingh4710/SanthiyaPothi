@@ -11,8 +11,8 @@ export const setData = async (title, state) => {
 
 export const initialState = {
   darkMode: false,
-  hideHeaderOnScroll:false,
-  showHeaderOnScroll:false,
+  hideHeaderOnScroll: false,
+  showHeaderOnScroll: false,
   allPdfs: {...folderToFileData},
   //addedPdfs: {title: 'Added PDFs', list: []},
 };
@@ -28,7 +28,8 @@ function theReducer(state = initialState, action) {
     theState = newState;
   } else if (action.type === 'SET_CHECKBOX') {
     const newallPdfs = {...state.allPdfs};
-    newallPdfs[action.theFolder][action.theBani].checked = !newallPdfs[action.theFolder][action.theBani].checked;
+    newallPdfs[action.theFolder][action.theBani].checked =
+      !newallPdfs[action.theFolder][action.theBani].checked;
     const newState = {
       ...state,
       allPdfs: newallPdfs,
@@ -58,6 +59,10 @@ function theReducer(state = initialState, action) {
       showHeaderOnScroll: action.mode,
     };
     theState = newState;
+  } else if (action.type === 'SET_URI') {
+    state.allPdfs[action.folder][action.file] = action.uri;
+    theState = state;
+    console.log(theState.allPdfs[action.folder][action.file]);
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;
