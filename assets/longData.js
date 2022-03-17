@@ -293,49 +293,49 @@ export const allPdfs = {
     currentAng: 1,
     uri: 'bundle-assets://pdfs/BhagatBani/24)SalokBhagatFareedJeeKi.pdf',
   },
-  'Panch_Granthavali.pdf': {
+  'Panch Granthavali.pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/Panch_Granthavali.pdf',
   },
-  'Adhyatam_Prakash.pdf': {
+  'Adhyatam Prakash.pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/Adhyatam_Prakash.pdf',
   },
-  'Bavras_Amrit.pdf': {
+  'Bavras Amrit.pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/Bavras_Amrit.pdf',
   },
-  'CaNaka_Rajniti.pdf': {
+  'CaNaka Rajniti.pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/CaNaka_Rajniti.pdf',
   },
-  'Sarkutavali.pdf': {
+  'Sarkutavali .pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/Sarkutavali.pdf',
   },
-  'Vichar_Mala.pdf': {
+  'Vichar Mala.pdf': {
     checked: false,
     baniType: 'Vidya Sagar Pothis',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/VidyaSagarPothis/Vichar_Mala.pdf',
   },
-  'Sri_Nanak_Parkash_1.pdf': {
+  'Sri Nanak Parkash 1.pdf': {
     checked: false,
     baniType: 'Sri Nanak Parkash',
     currentAng: 1,
     uri: 'bundle-assets://pdfs/SriNanakParkash/Sri_Nanak_Parkash_1.pdf',
   },
-  'Sri_Nanak_Parkash_2.pdf': {
+  'Sri Nanak Parkash 2.pdf': {
     checked: false,
     baniType: 'Sri Nanak Parkash',
     currentAng: 1,
@@ -445,120 +445,464 @@ export const allPdfs = {
   },
 };
 
-export const folderToFileData = [
-  {
-    title: 'Sri Guru Granth Sahib Jee',
-    list: [{title: 'Adi Maharaj.pdf'}, {title: 'Fareedkot Teeka.pdf'}],
+export const folderToFileData = {
+  'Sri Guru Granth Sahib Jee': {
+    'Adi Maharaj.pdf': {
+      checked: false,
+      baniType: 'Sri Guru Granth Sahib Jee',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/AdiMaharaj.pdf',
+    },
+    'Fareedkot Teeka.pdf': {
+      checked: false,
+      baniType: 'Sri Guru Granth Sahib Jee',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/FareedkotTeeka.pdf',
+    },
   },
-  {
-    title: 'Panj Granthi',
-    list: [
-      {title: 'Gauri Bavan Akahri.pdf'},
-      {title: 'Sukhmani Sahib.pdf'},
-      {title: 'Asa Ki Vaar.pdf'},
-      {title: 'Dakhni Oankaar.pdf'},
-      {title: 'Sidh Gosth.pdf'},
-    ],
+  'Panj Granthi': {
+    'Gauri Bavan Akahri.pdf': {
+      checked: false,
+      baniType: 'Panj Granthi',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/PanjGranthi/GauriBavanAkahri.pdf',
+    },
+    'Sukhmani Sahib.pdf': {
+      checked: false,
+      baniType: 'Panj Granthi',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/PanjGranthi/SukhmaniSahib.pdf',
+    },
+    'Asa Ki Vaar.pdf': {
+      checked: false,
+      baniType: 'Panj Granthi',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/PanjGranthi/AsaKiVaar.pdf',
+    },
+    'Dakhni Oankaar.pdf': {
+      checked: false,
+      baniType: 'Panj Granthi',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/PanjGranthi/DakhniOankaar.pdf',
+    },
+    'Sidh Gosth.pdf': {
+      checked: false,
+      baniType: 'Panj Granthi',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/PanjGranthi/SidhGosth.pdf',
+    },
   },
-  {
-    title: 'Bai Varra',
-    list: [
-      {title: '1) Sri Raag Ki Vaar Mahala 4.pdf'},
-      {title: '2) Vaar Maajh Ki Mahala 1.pdf'},
-      {title: '3) Goauri Ki Vaar Mahala 4.pdf'},
-      {title: '4) Goauri Ki Vaar Mahala 5.pdf'},
-      {title: '5) Asa Vaar Mahala 1.pdf'},
-      {title: '6) Goojri Ki Vaar Mahala 3.pdf'},
-      {title: '7) Goojri Ki Vaar Mahala 5.pdf'},
-      {title: '8) Bihagra Ki Vaar Mahala 4.pdf'},
-      {title: '9) Vidhans Ki Vaar Mahala 4.pdf'},
-      {title: '10) Sorath Ki Vaar Mahala 4.pdf'},
-      {title: '11) Jaitsri Ki Vaar Mahala 5.pdf'},
-      {title: '12) Soohi KI Vaar Mahala 3.pdf'},
-      {title: '13) Bilval Ki Vaar Mahala 4.pdf'},
-      {title: '14) Ramkali Ki Vaar Mahala 3.pdf'},
-      {title: '15) Ramkali Ki Vaar Mahala 5.pdf'},
-      {title: '16) Ramkali Ki Vaar Rai Satta Balvand.pdf'},
-      {title: '17) Maroo Ki Vaar - Mahala 3.pdf'},
-      {title: '18) Maroo Ki Vaar - Mahala 5 Dakhne.pdf'},
-      {title: '19) Basant Ki Vaar Mahala 5.pdf'},
-      {title: '20) Sarang Ki Vaar Mahala 4.pdf'},
-      {title: '21) Malaar Ki Vaar Mahala 1.pdf'},
-      {title: '22) Kanre Ki Vaar Mahala 4.pdf'},
-    ],
+  'Bai Varra': {
+    '1) Sri Raag Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf',
+    },
+    '2) Vaar Maajh Ki Mahala 1.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/2)VaarMaajhKiMahala1.pdf',
+    },
+    '3) Goauri Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/3)GoauriKiVaarMahala4.pdf',
+    },
+    '4) Goauri Ki Vaar Mahala 5.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/4)GoauriKiVaarMahala5.pdf',
+    },
+    '5) Asa Vaar Mahala 1.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/5)AsaVaarMahala1.pdf',
+    },
+    '6) Goojri Ki Vaar Mahala 3.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/6)GoojriKiVaarMahala3.pdf',
+    },
+    '7) Goojri Ki Vaar Mahala 5.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/7)GoojriKiVaarMahala5.pdf',
+    },
+    '8) Bihagra Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/8)BihagraKiVaarMahala4.pdf',
+    },
+    '9) Vidhans Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/9)VidhansKiVaarMahala4.pdf',
+    },
+    '10) Sorath Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/10)SorathKiVaarMahala4.pdf',
+    },
+    '11) Jaitsri Ki Vaar Mahala 5.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/11)JaitsriKiVaarMahala5.pdf',
+    },
+    '12) Soohi KI Vaar Mahala 3.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/12)SoohiKIVaarMahala3.pdf',
+    },
+    '13) Bilval Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/13)BilvalKiVaarMahala4.pdf',
+    },
+    '14) Ramkali Ki Vaar Mahala 3.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/14)RamkaliKiVaarMahala3.pdf',
+    },
+    '15) Ramkali Ki Vaar Mahala 5.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/15)RamkaliKiVaarMahala5.pdf',
+    },
+    '16) Ramkali Ki Vaar Rai Satta Balvand.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/16)RamkaliKiVaarRaiSattaBalvand.pdf',
+    },
+    '17) Maroo Ki Vaar - Mahala 3.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/17)MarooKiVaar-Mahala3.pdf',
+    },
+    '18) Maroo Ki Vaar - Mahala 5 Dakhne.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/18)MarooKiVaar-Mahala5Dakhne.pdf',
+    },
+    '19) Basant Ki Vaar Mahala 5.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/19)BasantKiVaarMahala5.pdf',
+    },
+    '20) Sarang Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/20)SarangKiVaarMahala4.pdf',
+    },
+    '21) Malaar Ki Vaar Mahala 1.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/21)MalaarKiVaarMahala1.pdf',
+    },
+    '22) Kanre Ki Vaar Mahala 4.pdf': {
+      checked: false,
+      baniType: 'Bai Varra',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BaiVarra/22)KanreKiVaarMahala4.pdf',
+    },
   },
-  {
-    title: 'Bhagat Bani',
-    list: [
-      {title: '1) Sri raag.pdf'},
-      {title: '2) Raag Gaurii.pdf'},
-      {title: '3) Raag Asa.pdf'},
-      {title: '4) Raag Goojri.pdf'},
-      {title: '5) Raag Sorath.pdf'},
-      {title: '6) Raag Dhanasri.pdf'},
-      {title: '7) Raag Jaatsri.pdf'},
-      {title: '8) Raag Todi.pdf'},
-      {title: '9) Raag Tilang.pdf'},
-      {title: '10) Raag Soohi.pdf'},
-      {title: '11) Raag Bilawal.pdf'},
-      {title: '12) Raag Goand.pdf'},
-      {title: '13) Raag Raamkali.pdf'},
-      {title: '14) Raag Mali Goara.pdf'},
-      {title: '15) Raag Maroo.pdf'},
-      {title: '16) Raag keydara.pdf'},
-      {title: '17) Raag Bhaaro.pdf'},
-      {title: '18) Raag Basant.pdf'},
-      {title: '19) Raag Sarang.pdf'},
-      {title: '20) Raag Malaar.pdf'},
-      {title: '21) Raag Kaanra.pdf'},
-      {title: '22) Raag Parbati.pdf'},
-      {title: '23) Salok Bhagat Kabir Jio Ki.pdf'},
-      {title: '24) Salok Bhagat Fareed Jee Ki.pdf'},
-      //'Bhagat Bani Tatkara.jpeg'
-    ],
+  'Bhagat Bani': {
+    '1) Sri raag.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/1)Sriraag.pdf',
+    },
+    '2) Raag Gaurii.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/2)RaagGaurii.pdf',
+    },
+    '3) Raag Asa.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/3)RaagAsa.pdf',
+    },
+    '4) Raag Goojri.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/4)RaagGoojri.pdf',
+    },
+    '5) Raag Sorath.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/5)RaagSorath.pdf',
+    },
+    '6) Raag Dhanasri.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/6)RaagDhanasri.pdf',
+    },
+    '7) Raag Jaatsri.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/7)RaagJaatsri.pdf',
+    },
+    '8) Raag Todi.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/8)RaagTodi.pdf',
+    },
+    '9) Raag Tilang.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/9)RaagTilang.pdf',
+    },
+    '10) Raag Soohi.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/10)RaagSoohi.pdf',
+    },
+    '11) Raag Bilawal.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/11)RaagBilawal.pdf',
+    },
+    '12) Raag Goand.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/12)RaagGoand.pdf',
+    },
+    '13) Raag Raamkali.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/13)RaagRaamkali.pdf',
+    },
+    '14) Raag Mali Goara.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/14)RaagMaliGoara.pdf',
+    },
+    '15) Raag Maroo.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/15)RaagMaroo.pdf',
+    },
+    '16) Raag keydara.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/16)Raagkeydara.pdf',
+    },
+    '17) Raag Bhaaro.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/17)RaagBhaaro.pdf',
+    },
+    '18) Raag Basant.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/18)RaagBasant.pdf',
+    },
+    '19) Raag Sarang.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/19)RaagSarang.pdf',
+    },
+    '20) Raag Malaar.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/20)RaagMalaar.pdf',
+    },
+    '21) Raag Kaanra.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/21)RaagKaanra.pdf',
+    },
+    '22) Raag Parbati.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/22)RaagParbati.pdf',
+    },
+    '23) Salok Bhagat Kabir Jio Ki.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/23)SalokBhagatKabirJioKi.pdf',
+    },
+    '24) Salok Bhagat Fareed Jee Ki.pdf': {
+      checked: false,
+      baniType: 'Bhagat Bani',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhagatBani/24)SalokBhagatFareedJeeKi.pdf',
+    },
+    //'Bhagat Bani Tatkara.jpeg'
   },
-  {
-    title: 'Bhattaa De Swaiye',
-    list: [
-      {title: 'Swaiye Sri Mukhvaakea Mahalla 5.pdf'},
-      {title: 'Swaiye Sri Mukhvaakea Mahalla 5-2.pdf'},
-      {title: 'Swaiye Mahallay Peheley Ky.pdf'},
-      {title: 'Swaiye Mahallay Doojey Ky.pdf'},
-      {title: 'Swaiye Mahallay Tejey Ky.pdf'},
-      {title: 'Swaiye Mahallay Chothey Ky.pdf'},
-      {title: 'Swaiye Mahallay Panjvey Ky.pdf'},
-    ],
+  'Bhattaa De Swaiye': {
+    'Swaiye Sri Mukhvaakea Mahalla 5.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeSriMukhvaakeaMahalla5.pdf',
+    },
+    'Swaiye Sri Mukhvaakea Mahalla 5-2.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeSriMukhvaakeaMahalla5-2.pdf',
+    },
+    'Swaiye Mahallay Peheley Ky.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeMahallayPeheleyKy.pdf',
+    },
+    'Swaiye Mahallay Doojey Ky.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeMahallayDoojeyKy.pdf',
+    },
+    'Swaiye Mahallay Tejey Ky.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeMahallayTejeyKy.pdf',
+    },
+    'Swaiye Mahallay Chothey Ky.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeMahallayChotheyKy.pdf',
+    },
+    'Swaiye Mahallay Panjvey Ky.pdf': {
+      checked: false,
+      baniType: 'Bhattaa De Swaiye',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/BhattaaDeSwaiye/SwaiyeMahallayPanjveyKy.pdf',
+    },
   },
-  {
-    title: 'Vaara De Vadeek',
-    list: [
-      {title: 'Vaara Di Vadeek Mahalla 1.pdf'},
-      {title: 'Vaara Di Vadeek Mahalla 3.pdf'},
-      {title: 'Vaara Di Vadeek Mahalla 4.pdf'},
-      {title: 'Vaara Di Vadeek Mahalla 5.pdf'},
-    ],
+  'Vaara De Vadeek': {
+    'Vaara Di Vadeek Mahalla 1.pdf': {
+      checked: false,
+      baniType: 'Vaara De Vadeek',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VaaraDeVadeek/VaaraDiVadeekMahalla1.pdf',
+    },
+    'Vaara Di Vadeek Mahalla 3.pdf': {
+      checked: false,
+      baniType: 'Vaara De Vadeek',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VaaraDeVadeek/VaaraDiVadeekMahalla3.pdf',
+    },
+    'Vaara Di Vadeek Mahalla 4.pdf': {
+      checked: false,
+      baniType: 'Vaara De Vadeek',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VaaraDeVadeek/VaaraDiVadeekMahalla4.pdf',
+    },
+    'Vaara Di Vadeek Mahalla 5.pdf': {
+      checked: false,
+      baniType: 'Vaara De Vadeek',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VaaraDeVadeek/VaaraDiVadeekMahalla5.pdf',
+    },
   },
-  {
-    title: 'Vidya Sagar Pothis',
-    list: [
-      {title: 'Adhyatam_Prakash.pdf'},
-      {title: 'Bavras_Amrit.pdf'},
-      {title: 'CaNaka_Rajniti.pdf'},
-      {title: 'Sarkutavali.pdf'},
-      {title: 'Vichar_Mala.pdf'},
-      {title: 'Panch_Granthavali.pdf'},
-      //'Bhagat Bani Tatkara.jpeg'
-    ],
+  'Vidya Sagar Pothis': {
+    'Adhyatam Prakash.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Adhyatam_Prakash.pdf',
+    },
+    'Bavras Amrit.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Bavras_Amrit.pdf',
+    },
+    'CaNaka Rajniti.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/CaNaka_Rajniti.pdf',
+    },
+    'Sarkutavali .pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Sarkutavali.pdf',
+    },
+    'Vichar Mala.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Vichar_Mala.pdf',
+    },
+    'Panch Granthavali.pdf': {
+      checked: false,
+      baniType: 'Vidya Sagar Pothis',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/VidyaSagarPothis/Panch_Granthavali.pdf',
+    },
+    //'Bhagat Bani Tatkara.jpeg'
   },
-  {
-    title: 'Sri Nanak Parkash',
-    list: [
-      {title: 'Sri_Nanak_Parkash_1.pdf'},
-      {title: 'Sri_Nanak_Parkash_2.pdf'},
-      {title: 'Ajit Singh Teeka Pothi 1.pdf'},
-    ],
+  'Sri Nanak Parkash': {
+    'Sri Nanak Parkash 1.pdf': {
+      checked: false,
+      baniType: 'Sri Nanak Parkash',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/SriNanakParkash/Sri_Nanak_Parkash_1.pdf',
+    },
+    'Sri Nanak Parkash 2.pdf': {
+      checked: false,
+      baniType: 'Sri Nanak Parkash',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/SriNanakParkash/Sri_Nanak_Parkash_2.pdf',
+    },
+    'Ajit Singh Teeka Pothi 1.pdf': {
+      checked: false,
+      baniType: 'Sri Nanak Parkash',
+      currentAng: 1,
+      uri: 'bundle-assets://pdfs/SriNanakParkash/AjitSinghTeekaPothi1.pdf',
+    },
   },
-];
+};
 
 // const allInitialFolders = folderToFileData.map(item => item.title);
 // allInitialFolders.push('ਪਾਠ Hajari');

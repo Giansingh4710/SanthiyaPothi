@@ -16,6 +16,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {folderToFileData} from '../assets/longData';
 
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
@@ -29,11 +30,11 @@ export default function OpenPdf({navigation, route}) {
   const dispatch = useDispatch();
 
   const {pdfTitle} = route.params;
-  const fileName = pdfTitle.split(' ').join(''); //replaces " " with ""
-  const sourceFileName = {uri: state.allPdfs[pdfTitle].uri};
+  const {folderTitle} = route.params;
+  const sourceFileName = {uri: folderToFileData[folderTitle][pdfTitle].uri};
   //const sourceFileName = { uri: 'http://kathadata.host/pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf', cache: true };
 
-  if (fileName === 'FareedkotTeeka.pdf') {
+  if (pdfTitle === 'Fareedkot Teeka.pdf') {
     return <TeekaPDF navigation={navigation} />;
   }
   React.useEffect(() => {
