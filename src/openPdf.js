@@ -31,7 +31,7 @@ export default function OpenPdf({navigation, route}) {
 
   const {pdfTitle} = route.params;
   const {folderTitle} = route.params;
-  const sourceFileName = {uri: folderToFileData[folderTitle][pdfTitle].uri};
+  const sourceFileName = {uri: folderToFileData[folderTitle][pdfTitle].uri,cache:true};
   //const sourceFileName = { uri: 'http://kathadata.host/pdfs/BaiVarra/1)SriRaagKiVaarMahala4.pdf', cache: true };
 
   if (pdfTitle === 'Fareedkot Teeka.pdf') {
