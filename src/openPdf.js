@@ -66,7 +66,6 @@ export default function OpenPdf({navigation, route}) {
           setTotalAngs(numberOfPages);
         }}
         onPageChanged={(page, numberOfPages) => {
-          console.log(page, currentAng);
           if (
             headerShown &&
             state.hideHeaderOnScroll &&
