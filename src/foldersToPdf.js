@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
 import {CheckBox, Icon} from 'react-native-elements';
 
 import DraggableFlatList, {
@@ -25,16 +25,7 @@ import AddFileModal from '../assets/components/addFilesModal';
 export default function FolderToPdfs({navigation, route}) {
     const dispatch = useDispatch();
     const state = useSelector(theState => theState.theReducer);
-
     const folderTitle = route.params.folderTitle;
-    let baniaList = route.params.list;
-    const styles = StyleSheet.create({
-        container: {
-            backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-            height: '100%',
-        },
-    });
-
     if (folderTitle === 'Added PDFs')
         return (
             <ForAddedPdfsScreen
@@ -44,14 +35,6 @@ export default function FolderToPdfs({navigation, route}) {
                 styles={styles}
             />
         );
-    else if (folderTitle === 'ਪਾਠ Hajari')
-        baniaList = Object.entries(state.allPdfs)
-            .filter(bani => {
-                return bani[1].currentAng !== 1 && bani[1].checked === false;
-            })
-            .map(bani => {
-                return {title: bani[0]};
-            });
 
     React.useEffect(() => {
         navigation.setOptions({
@@ -76,7 +59,8 @@ export default function FolderToPdfs({navigation, route}) {
                                         Math.floor(Math.random() * items.length)
                                     ];
                                 navigation.navigate('OpenPdf', {
-                                    pdfTitle: randItem.title,
+                                    pdfTitle: randItem,
+                                    folderTitle: folderTitle,
                                 });
                             },
                         },
@@ -91,13 +75,29 @@ export default function FolderToPdfs({navigation, route}) {
             ),
         });
     });
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+            height: '100%',
+        },
+    });
+    if (folderTitle === 'All Pdfs' || folderTitle === 'ਪਾਠ Hajari')
+        return (
+            <ForPathHajariOrAllPdfs
+                state={state}
+                dispatch={dispatch}
+                navigation={navigation}
+                styles={styles}
+                folderType={folderTitle}
+            />
+        );
 
+    let baniaList = Object.keys(route.params.list);
     return (
         <View style={styles.container}>
             <FlatList
-                keyExtractor={item => item.title}
+                keyExtractor={item => item}
                 renderItem={({item}) => {
-                    //item={"title": "11) Jaitsri Ki Vaar Mahala 5.pdf"}
                     return (
                         <BarOption
                             state={state}
@@ -108,10 +108,13 @@ export default function FolderToPdfs({navigation, route}) {
                                     color={state.darkMode ? 'white' : 'black'}
                                 />
                             }
-                            text={item.title}
+                            text={item}
                             right={
                                 <CheckBox
-                                    checked={state.allPdfs[item.title].checked}
+                                    //checked={state.allPdfs[item.title].checked}
+                                    checked={
+                                        state.allPdfs[folderTitle][item].checked
+                                    }
                                     checkedColor="#0F0"
                                     checkedTitle="ਸੰਪੂਰਨ"
                                     containerStyle={{
@@ -120,7 +123,9 @@ export default function FolderToPdfs({navigation, route}) {
                                         backgroundColor: 'black',
                                     }}
                                     onPress={() => {
-                                        dispatch(setCheckBox(item.title));
+                                        dispatch(
+                                            setCheckBox(item, folderTitle),
+                                        );
                                     }}
                                     //size={20}
                                     textStyle={{
@@ -135,7 +140,8 @@ export default function FolderToPdfs({navigation, route}) {
                             }
                             onClick={() => {
                                 navigation.navigate('OpenPdf', {
-                                    pdfTitle: item.title,
+                                    folderTitle: folderTitle,
+                                    pdfTitle: item,
                                 });
                             }}
                         />
@@ -147,12 +153,99 @@ export default function FolderToPdfs({navigation, route}) {
     );
 }
 
+function ForPathHajariOrAllPdfs({
+    state,
+    dispatch,
+    navigation,
+    styles,
+    folderType,
+}) {
+    function getPdfsFromDiffFolders(pdfObj, lstType, pdfsLstForAllPdfs = []) {
+        for (const item of Object.keys(pdfObj)) {
+            if (!pdfObj[item].currentAng) {
+                //means if isfolder
+                getPdfsFromDiffFolders(
+                    pdfObj[item],
+                    lstType,
+                    pdfsLstForAllPdfs,
+                );
+                continue;
+            }
+            if (lstType === 'All Pdfs')
+                pdfsLstForAllPdfs.push([item, pdfObj[item]]);
+            else {
+                if (pdfObj[item].currentAng > 2 && !pdfObj[item].checked)
+                    pdfsLstForAllPdfs.push([item, pdfObj[item]]);
+            }
+        }
+        return pdfsLstForAllPdfs;
+    }
+
+    const baniaList = getPdfsFromDiffFolders(state.allPdfs, folderType);
+    return (
+        <View style={styles.container}>
+            <FlatList
+                keyExtractor={item => item[0]}
+                renderItem={obj => {
+                    const lst = obj['item'];
+                    const folderTitle = lst[1].baniType;
+                    const item = lst[0];
+                    return (
+                        <BarOption
+                            state={state}
+                            left={
+                                <Icon
+                                    name="document-outline"
+                                    type="ionicon"
+                                    color={state.darkMode ? 'white' : 'black'}
+                                />
+                            }
+                            text={item}
+                            right={
+                                <CheckBox
+                                    checked={
+                                        state.allPdfs[folderTitle][item].checked
+                                    }
+                                    checkedColor="#0F0"
+                                    checkedTitle="ਸੰਪੂਰਨ"
+                                    containerStyle={{
+                                        borderRadius: 10,
+                                        //padding: 10,
+                                        backgroundColor: 'black',
+                                    }}
+                                    onPress={() => {
+                                        dispatch(
+                                            setCheckBox(item, folderTitle),
+                                        );
+                                    }}
+                                    textStyle={{
+                                        fontSize: 10,
+                                        height: 20,
+                                        color: 'white',
+                                    }}
+                                    title="Not Done"
+                                    titleProps={{}}
+                                    uncheckedColor="#F00"
+                                />
+                            }
+                            onClick={() => {
+                                navigation.navigate('OpenPdf', {
+                                    folderTitle: folderTitle,
+                                    pdfTitle: item,
+                                });
+                            }}
+                        />
+                    );
+                }}
+                data={baniaList}
+            />
+        </View>
+    );
+}
 function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
     const [modalOn, setModal] = React.useState(false);
     const [data, setData] = React.useState(state.addedPdfs.list);
-
     console.log(data);
-
     React.useEffect(() => {
         //setData(state.addedPdfs.list);
         navigation.setOptions({
@@ -187,10 +280,8 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
             ),
         });
     });
-
     const renderItem = ({item, drag}) => {
         const isFolder = item.list ? true : false;
-
         return (
             <ScaleDecorator>
                 <OpacityDecorator activeOpacity={0.5}>
@@ -269,7 +360,6 @@ function ForAddedPdfsScreen({state, dispatch, navigation, styles}) {
             </ScaleDecorator>
         );
     };
-
     return (
         <View style={styles.container}>
             <DraggableFlatList

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {allPdfs} from '../assets/longData';
+import {folderToFileData} from '../assets/longData';
 
 export const setData = async (title, state) => {
   try {
@@ -11,13 +11,13 @@ export const setData = async (title, state) => {
 
 export const initialState = {
   darkMode: false,
-  hideHeaderOnScroll:false,
-  showHeaderOnScroll:false,
-  allPdfs: {...allPdfs},
-  addedPdfs: {title: 'Added PDFs', list: []},
+  hideHeaderOnScroll: false,
+  showHeaderOnScroll: false,
+  allPdfs: {...folderToFileData},
+  //addedPdfs: {title: 'Added PDFs', list: []},
 };
 
-//setData('state', initialState); //to reset all state
+setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -28,14 +28,15 @@ function theReducer(state = initialState, action) {
     theState = newState;
   } else if (action.type === 'SET_CHECKBOX') {
     const newallPdfs = {...state.allPdfs};
-    newallPdfs[action.theBani].checked = !newallPdfs[action.theBani].checked;
+    newallPdfs[action.theFolder][action.theBani].checked =
+      !newallPdfs[action.theFolder][action.theBani].checked;
     const newState = {
       ...state,
       allPdfs: newallPdfs,
     };
     theState = newState;
   } else if (action.type === 'SET_ANG_NUM') {
-    state.allPdfs[action.bani].currentAng = action.angNum;
+    state.allPdfs[action.folder][action.bani].currentAng = action.angNum;
     const newState = {
       ...state,
     };
@@ -58,6 +59,15 @@ function theReducer(state = initialState, action) {
       showHeaderOnScroll: action.mode,
     };
     theState = newState;
+  } else if (action.type === 'ADD_URI') {
+    state.allPdfs[action.folder][action.file].uris.unshift(action.uri);
+    theState = state;
+    console.log(theState.allPdfs[action.folder][action.file]);
+  } else if (action.type === 'REMOVE_URI') {
+    if (state.allPdfs[action.folder][action.file].uris.length > 1)
+      state.allPdfs[action.folder][action.file].uris.shift();
+    theState = state;
+    console.log(theState.allPdfs[action.folder][action.file]);
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;

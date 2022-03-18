@@ -11,7 +11,7 @@ import {BarOption} from '../assets/components/baroption';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 import {folderToFileData} from '../assets/longData';
 
-function HomeScreen({navigation, route}) {
+function HomeScreen({navigation}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
@@ -61,13 +61,11 @@ function HomeScreen({navigation, route}) {
                 const items = allListItems;
                 const randItem =
                   items[Math.floor(Math.random() * items.length)];
-                const theList =
-                  randItem.title == 'Added PDFs'
-                    ? state.addedPdfs.list
-                    : randItem.list;
+                const theList = state.allPdfs[randItem];
+                console.log(theList);
                 navigation.navigate('BanisList', {
                   list: theList,
-                  folderTitle: randItem.title, //name of the bar clicked on
+                  folderTitle: randItem, //name of the bar clicked on
                 });
               },
             },
@@ -95,18 +93,15 @@ function HomeScreen({navigation, route}) {
   });
 
   const allListItems = [
-    ...folderToFileData,
-    {...state.addedPdfs},
-    {
-      title: 'ਪਾਠ Hajari',
-      list:[]
-    },
+    ...Object.keys(folderToFileData),
+    'ਪਾਠ Hajari',
+    'All Pdfs',
   ];
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
         <FlatList
-          keyExtractor={item => item.title} //name of each item like 'Bai Vaara'
+          keyExtractor={item => item} //name of each item like 'Bai Vaara'
           renderItem={({item}) => {
             return (
               <BarOption
@@ -118,7 +113,7 @@ function HomeScreen({navigation, route}) {
                     color={state.darkMode ? 'white' : 'black'}
                   />
                 }
-                text={item.title}
+                text={item}
                 right={
                   <Icon
                     name="arrow-forward-outline"
@@ -127,13 +122,10 @@ function HomeScreen({navigation, route}) {
                   />
                 }
                 onClick={() => {
-                  const theList =
-                    item.title == 'Added PDFs'
-                      ? state.addedPdfs.list
-                      : item.list;
+                  const theList = folderToFileData[item]; //theList is {}(object) data type
                   navigation.navigate('BanisList', {
                     list: theList,
-                    folderTitle: item.title, //name of the bar clicked on
+                    folderTitle: item, //name of the bar clicked on
                   });
                 }}
               />
