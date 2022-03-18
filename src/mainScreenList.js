@@ -61,13 +61,11 @@ function HomeScreen({navigation}) {
                 const items = allListItems;
                 const randItem =
                   items[Math.floor(Math.random() * items.length)];
-                const theList =
-                  randItem.title == 'Added PDFs'
-                    ? state.addedPdfs.list
-                    : randItem.list;
+                const theList = state.allPdfs[randItem];
+                console.log(theList);
                 navigation.navigate('BanisList', {
                   list: theList,
-                  folderTitle: randItem.title, //name of the bar clicked on
+                  folderTitle: randItem, //name of the bar clicked on
                 });
               },
             },
@@ -124,7 +122,7 @@ function HomeScreen({navigation}) {
                   />
                 }
                 onClick={() => {
-                  const theList =folderToFileData[item] //theList is {}(object) data type
+                  const theList = folderToFileData[item]; //theList is {}(object) data type
                   navigation.navigate('BanisList', {
                     list: theList,
                     folderTitle: item, //name of the bar clicked on

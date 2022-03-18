@@ -59,7 +59,8 @@ export default function FolderToPdfs({navigation, route}) {
                                         Math.floor(Math.random() * items.length)
                                     ];
                                 navigation.navigate('OpenPdf', {
-                                    pdfTitle: randItem.title,
+                                    pdfTitle: randItem,
+                                    folderTitle: folderTitle,
                                 });
                             },
                         },

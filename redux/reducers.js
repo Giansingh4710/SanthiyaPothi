@@ -59,8 +59,13 @@ function theReducer(state = initialState, action) {
       showHeaderOnScroll: action.mode,
     };
     theState = newState;
-  } else if (action.type === 'SET_URI') {
-    state.allPdfs[action.folder][action.file] = action.uri;
+  } else if (action.type === 'ADD_URI') {
+    state.allPdfs[action.folder][action.file].uris.unshift(action.uri);
+    theState = state;
+    console.log(theState.allPdfs[action.folder][action.file]);
+  } else if (action.type === 'REMOVE_URI') {
+    if (state.allPdfs[action.folder][action.file].uris.length > 1)
+      state.allPdfs[action.folder][action.file].uris.shift();
     theState = state;
     console.log(theState.allPdfs[action.folder][action.file]);
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {

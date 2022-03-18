@@ -2,9 +2,13 @@
   package="com.larrivarpothi">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
       android:requestLegacyExternalStorage="true"
+      android:usesCleartextTraffic="true"
       android:largeHeap="true"
       android:name=".MainApplication"
       android:label="@string/app_name"

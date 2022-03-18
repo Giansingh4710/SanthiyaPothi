@@ -12,7 +12,7 @@ import {
 import Pdf from 'react-native-pdf';
 // import {useSelector, useDispatch} from 'react-redux';
 
-export default function TeekaPDF() {
+export default function TeekaPDF({uri}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currrentAng, setCurrentAng] = React.useState(0);
   const [inputAng, setInputAng] = React.useState('');
@@ -1505,7 +1505,7 @@ export default function TeekaPDF() {
         }}
         activityIndicator={<ActivityIndicator size="large" color="blue" />}
         source={{
-          uri: 'bundle-assets://pdfs/SriGuruGranthSahibJee/FareedkotTeeka.pdf',
+          uri:uri,
         }}
         onLoadComplete={(numberOfPages, filePath) => {
           setTotalAngs(numberOfPages);

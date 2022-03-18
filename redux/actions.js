@@ -37,12 +37,19 @@ export const setShowHeader = mode => dispatch => {
     mode,
   });
 };
-export const addDownloadedUri = (folder, file, uri) => dispatch => {
+export const addUriPath = (folder, file, uri) => dispatch => {
   dispatch({
-    type: 'SET_URI',
+    type: 'ADD_URI',
     folder,
     file,
     uri,
+  });
+};
+export const removeUriPath = (folder, file) => dispatch => {
+  dispatch({
+    type: 'REMOVE_URI',
+    folder,
+    file,
   });
 };
 
