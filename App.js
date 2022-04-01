@@ -11,7 +11,7 @@ import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
 import FolderToPdfs2 from './src/subFolder';
-import ShabadScreen from './src/shabad_modal.js';
+import ShabadScreen from './src/shabadPage/shabadPage.js';
 
 const Stack = createStackNavigator();
 
