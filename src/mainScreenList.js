@@ -53,6 +53,7 @@ function HomeScreen({navigation}) {
               name: 'open-outline',
               action: () => {
                 console.log('shabad are');
+                navigation.navigate('ShabadScreen')
               },
             },
             {
