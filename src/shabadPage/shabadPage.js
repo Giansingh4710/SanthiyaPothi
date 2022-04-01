@@ -9,11 +9,13 @@ import {
     ScrollView,
     Image,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {allColors} from '../../assets/styleForEachOption';
 import {useDispatch, useSelector} from 'react-redux';
-import {RightOfHeader} from '../../assets/components/rightOfHeader';
+import {Icon} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {allColors} from '../../assets/styleForEachOption';
+import {setFontSize} from '../../redux/actions';
+import {RightOfHeader} from '../../assets/components/rightOfHeader';
+import {ALLSHABADS} from '../../assets/allShabads.js';
 
 const HEIGHT = Dimensions.get('window').height;
 const WIDTH = Dimensions.get('window').width;
@@ -72,7 +74,7 @@ export default function ShabadScreen({navigation}) {
         },
         wrap: {
             width: WIDTH,
-            height: HEIGHT * 0.7,
+            height: HEIGHT * 0.8,
         },
         scrollView: {
             //padding: 10,
@@ -85,7 +87,7 @@ export default function ShabadScreen({navigation}) {
         eachComponent: {
             width: WIDTH,
             //backgroundColor: 'red',
-            //padding: 10,
+            padding: 10,
             alignItems: 'center',
             justifyContent: 'center',
         },
@@ -105,7 +107,10 @@ export default function ShabadScreen({navigation}) {
         },
     });
 
-    const images = [<ShabadView state={state} dispatch={dispatch}/>];
+    const images = [
+        <ShabadView state={state} dispatch={dispatch} />,
+        <ShabadView state={state} dispatch={dispatch} />,
+    ];
 
     return (
         <SafeAreaView style={styles.container}>
@@ -144,72 +149,93 @@ export default function ShabadScreen({navigation}) {
 }
 
 function ShabadView({state, dispatch}) {
-    async function getGurbaniJi() {
-        let shabad = '';
-        await fetch('https://api.gurbaninow.com/v2/shabad/random')
-            .then(res => res.json())
-            .then(resJson => {
-                const shabadOLstbj = resJson.shabad;
-                for (const index in shabadOLstbj) {
-                    const gurmukhi = shabadOLstbj[index].line.larivaar.unicode;
-                    const translation =
-                        shabadOLstbj[index].line.translation.english.default;
-                    shabad += gurmukhi + '\n' + translation + '\n';
-                }
-            })
-            .catch(er => {
-                shabad = 'Vaheguru. No internet';
-                console.log(er);
-            });
-        return shabad;
-    }
-
-    const [shabad, setShabad] = React.useState('Vaheguru');
+    const [shabad, setShabad] = React.useState(false);
+    const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
 
     const styles = StyleSheet.create({
         container: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            //backgroundColor: '#007FFF',
-            width: WIDTH * 0.9,
+            backgroundColor: '#007FFF',
+            borderRadius: 5,
+            padding: 10,
+            //width: WIDTH * 0.9,
+            width: WIDTH * 0.99,
+        },
+        gurbaniScrollView: {
+            backgroundColor: '#888',
+            height: '90%',
+            padding: 10,
+            borderRadius: 10,
         },
         shabadText: {
-            padding:10,
-            color: state.darkMode ? 'white' : 'black',        },
-        newShabad: {
-            //borderRadius: 5,
-            //padding: 10,
+            fontSize: fontsz,
+            color: state.darkMode ? 'white' : 'black',
+        },
+        plusMinusRow: {
+            margin: 5,
+            flexDirection: 'row',
+        },
+        newShabadBtn: {
+            //height: '9%',
+            borderRadius: 5,
+            padding: 4,
             backgroundColor: '#00FFFF',
         },
     });
 
+    console.log(fontsz)
+    function fontszGood(num){
+        if (num<10) return "small"; //too small
+        if (num>27) return "big"; // too big
+        return true;
+    }
     return (
         <View style={styles.container}>
-            <Text style={styles.shabadText}>{shabad}</Text>
-            <TouchableOpacity
-                style={styles.newShabad}
-                onPress={() => {
-                    getGurbaniJi().then(res => {
-                        setShabad(res);
-                        //const currentDate = new Date();
-                        //dispatch(
-                        //setShabad(
-                        //res, //the shabad text
-                        //currentDate.toLocaleDateString(), // the date
-                        //String(currentDate.getHours()).padStart(2, '0') +
-                        //':' +
-                        //String(currentDate.getMinutes()).padStart(2, '0'),
-                        //true, //add to shabad lst
-                        //'0', //0 means no id so id needed
-                        //false, //saved=false
-                        ////0, //the index here will be zero because we put this to top of list
-                        //),
-                        //);
-                    });
-                }}>
-                <Text>Get New Random Shabad</Text>
-            </TouchableOpacity>
+            {shabad == false ? (
+                <></>
+            ) : (
+                <ScrollView style={styles.gurbaniScrollView}>
+                    <Text style={styles.shabadText}>{shabad}</Text>
+                </ScrollView>
+            )}
+            <View style={styles.plusMinusRow}>
+                <Icon
+                    name="remove-outline"
+                    type="ionicon"
+                    onPress={() => {
+                        if(fontszGood(fontsz)==='small') return;
+                        setfontsz(prev => prev - 1);
+                        dispatch(setFontSize(fontsz));
+                    }}
+                    size={fontsz + 12}
+                    color={state.darkMode ? 'white' : 'black'}
+                />
+                <TouchableOpacity
+                    style={styles.newShabadBtn}
+                    onPress={() => setShabad(getRandomShabad())}>
+                    <Text style={styles.shabadText}>Get New Random Shabad</Text>
+                </TouchableOpacity>
+                <Icon
+                    size={fontsz * 2}
+                    color={state.darkMode ? 'white' : 'black'}
+                    name="add-outline"
+                    type="ionicon"
+                    onPress={() => {
+                        if(fontszGood(fontsz)==='big') return;
+                        setfontsz(prev => prev + 1);
+                        dispatch(setFontSize(fontsz));
+                    }}
+                />
+            </View>
         </View>
     );
+}
+
+function getRandomShabad() {
+    const keys = Object.keys(ALLSHABADS);
+    console.log(keys.length);
+    const prop = keys[Math.floor(Math.random() * keys.length)];
+    return ALLSHABADS[prop];
 }

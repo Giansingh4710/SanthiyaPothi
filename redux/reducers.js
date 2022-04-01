@@ -14,10 +14,11 @@ export const initialState = {
   hideHeaderOnScroll: false,
   showHeaderOnScroll: false,
   allPdfs: {...folderToFileData},
+  fontSizeForShabad: 16,
   //addedPdfs: {title: 'Added PDFs', list: []},
 };
 
-//setData('state', initialState); //to reset all state
+setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -68,6 +69,9 @@ function theReducer(state = initialState, action) {
       state.allPdfs[action.folder][action.file].uris.shift();
     theState = state;
     console.log(theState.allPdfs[action.folder][action.file]);
+  } else if (action.type === 'SET_FONT_SIZE') {
+    state.fontSizeForShabad = action.fontSize;
+    theState = state;
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;

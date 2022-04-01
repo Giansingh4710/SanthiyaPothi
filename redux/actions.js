@@ -81,6 +81,13 @@ export const setList = (listTitle, theList) => dispatch => {
     theList,
   });
 };
+export const setFontSize=(fontSize)=> dispatch =>{
+  dispatch({
+    type: 'SET_FONT_SIZE',
+    fontSize,
+  });
+}
+
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',
