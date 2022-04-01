@@ -11,9 +11,8 @@ import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
 import FolderToPdfs2 from './src/subFolder';
+import ShabadScreen from './src/shabad_modal.js';
 
-//import TEST from './src/test.js'
-//<Stack.Screen name="test" component={TEST} />
 const Stack = createStackNavigator();
 
 function App() {
@@ -21,15 +20,16 @@ function App() {
     <Provider store={Store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Settings Page" component={SettingsPage} />
-          <Stack.Screen name="BanisList" component={FolderToPdfs} />
-          <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
-          <Stack.Screen
-            name="OpenPdf"
-            component={OpenPdf}
-            options={{headerShown: false}}
-          />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Settings Page" component={SettingsPage} />
+            <Stack.Screen name="BanisList" component={FolderToPdfs} />
+            <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
+            <Stack.Screen
+              name="OpenPdf"
+              component={OpenPdf}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="ShabadScreen" component={ShabadScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
