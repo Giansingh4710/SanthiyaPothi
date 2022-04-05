@@ -10,12 +10,13 @@ export const setData = async (title, state) => {
 };
 
 export const initialState = {
-  darkMode: false,
-  hideHeaderOnScroll: false,
-  showHeaderOnScroll: false,
+  darkMode: true,
+  hideHeaderOnScroll: true,
+  showHeaderOnScroll: true,
   allPdfs: {...folderToFileData},
   fontSizeForShabad: 16,
   //addedPdfs: {title: 'Added PDFs', list: []},
+  shabadHistory:['1YU','NG0'],
 };
 
 setData('state', initialState); //to reset all state
@@ -113,6 +114,13 @@ function theReducer(state = initialState, action) {
         }
       }
     }
+    theState = state;
+  } else if (action.type === 'ADD_TO_SHABAD_HISTORY') {
+    state.shabadHistory.push(action.shabadId)
+    theState = state;
+  } else if (action.type === 'DELETE_FROM_SHABAD_HISTORY') {
+    const realIndex=state.shabadHistory.length-action.index-1;
+    state.shabadHistory.splice(realIndex,1);
     theState = state;
   } else {
     return state;

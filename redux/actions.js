@@ -87,6 +87,18 @@ export const setFontSize=(fontSize)=> dispatch =>{
     fontSize,
   });
 }
+export const addToShabadHistory=(shabadId)=> dispatch =>{
+  dispatch({
+    type: 'ADD_TO_SHABAD_HISTORY',
+    shabadId,
+  });
+}
+export const deleteShabadFromHistory=(shabadIndex)=> dispatch =>{
+  dispatch({
+    type: 'DELETE_FROM_SHABAD_HISTORY',
+    index:shabadIndex,
+  });
+}
 
 // export const setTheState = state => {
 //   return {
