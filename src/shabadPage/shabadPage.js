@@ -30,7 +30,7 @@ export default function ShabadScreen({navigation}) {
   let state = useSelector(theState => theState.theReducer);
   const [shabadModalStuff, setShabadModalStuff] = React.useState({
     visible: false,
-    shabadId: getRandomShabadId(),
+    shabadData: {saved: false, shabadId: '1YU'},
   });
   //const { width }=useWindowDimensions();
   //console.log(width);
@@ -59,7 +59,7 @@ export default function ShabadScreen({navigation}) {
               },
             },
           ]}
-          />
+        />
       ),
     });
   });
@@ -85,6 +85,8 @@ export default function ShabadScreen({navigation}) {
     },
   });
 
+  console.log("Main: ",state.shabadHistory.slice().reverse())
+  console.log("Main: ",state.shabadHistory)
   const pages = [
     <ShabadHistoryView
       key={'1'}
@@ -93,19 +95,9 @@ export default function ShabadScreen({navigation}) {
       setModal={setShabadModalStuff}
       modalInfo={shabadModalStuff}
       deleteShabad={deleteShabadFromHistory}
-      listOfData={state.shabadHistory}
+      listOfData={state.shabadHistory.slice().reverse()}
       title="All History"
-      />,
-    <ShabadHistoryView
-      key={'2'}
-      state={state}
-      dispatch={dispatch}
-      setModal={setShabadModalStuff}
-      modalInfo={shabadModalStuff}
-      deleteShabad={deleteShabadFromHistory}
-      listOfData={state.shabadHistory}
-      title="Saved Shabads"
-      />,
+    />,
   ];
 
   return (
@@ -114,12 +106,13 @@ export default function ShabadScreen({navigation}) {
         style={styles.openShabadBtn}
         onPress={() => {
           const theID = getRandomShabadId();
+          const theObj = {shabadId: theID, saved: false};
           setShabadModalStuff(prev => ({
             ...prev,
             visible: true,
-            shabadId: theID,
+            shabadData: theObj,
           }));
-          dispatch(addToShabadHistory(theID));
+          dispatch(addToShabadHistory(theObj));
         }}>
         <Text>Open Random Shabad</Text>
       </TouchableOpacity>
@@ -131,13 +124,13 @@ export default function ShabadScreen({navigation}) {
         renderItem={({item}) => {
           return <View style={styles.eachPage}>{item}</View>;
         }}
-        />
+      />
       <ShabadViewModal
         setModal={setShabadModalStuff}
         modalInfo={shabadModalStuff}
         state={state}
         dispatch={dispatch}
-        />
+      />
     </SafeAreaView>
   );
 }
@@ -168,7 +161,7 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
       width: '100%',
       flexDirection: 'row',
       padding: 10,
-      },
+    },
     gurbaniScrollView: {
       //backgroundColor: '#888',
       borderColor: state.darkMode ? 'white' : 'black',
@@ -193,7 +186,6 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
     },
   });
 
-  //console.log('from modal', modalInfo);
   return (
     <Modal
       visible={modalInfo['visible']}
@@ -202,15 +194,15 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
       onRequestClose={() =>
         setModal(prev => {
           return {...prev, visible: false};
-          })
-    }>
+        })
+      }>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
               setModal(prev => {
                 return {...prev, visible: false};
-                });
+              });
             }}
             style={styles.headerBtns}>
             <Icon
@@ -218,22 +210,20 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
               size={25}
               type="ionicon"
               color={state.darkMode ? 'white' : 'black'}
-              />
+            />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {}}
-            style={styles.headerBtns}>
+          <TouchableOpacity onPress={() => {}} style={styles.headerBtns}>
             <Icon
               name="bookmark-outline"
               size={25}
               type="ionicon"
               color={state.darkMode ? 'white' : 'black'}
-              />
+            />
           </TouchableOpacity>
         </View>
         <ScrollView style={styles.gurbaniScrollView}>
           <Text style={styles.shabadText}>
-            {ALLSHABADS[modalInfo.shabadId]}
+            {ALLSHABADS[modalInfo.shabadData.shabadId]}
           </Text>
         </ScrollView>
         <View style={styles.plusMinusRow}>
@@ -247,7 +237,7 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
             }}
             size={fontsz + 12}
             color={state.darkMode ? 'white' : 'black'}
-            />
+          />
           <Icon
             size={fontsz * 2}
             color={state.darkMode ? 'white' : 'black'}
@@ -258,7 +248,7 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
               setfontsz(prev => prev + 1);
               dispatch(setFontSize(fontsz));
             }}
-            />
+          />
         </View>
       </View>
     </Modal>
@@ -273,11 +263,9 @@ function ShabadHistoryView({
   listOfData,
   title,
 }) {
-  const [refreshFlatlist, setRefreshFlatList] = React.useState(false);
   function getShabadTitle(id) {
     return ALLSHABADS[id].slice(0, 30).replace(/\n/g, ' ') + '...';
   }
-  const {WIDTH} = useWindowDimensions();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -293,89 +281,81 @@ function ShabadHistoryView({
       color: state.darkMode ? 'white' : 'black',
     },
   });
+  //console.log(listOfData)
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>{title}</Text>
-      {listOfData.length === 0 ? (
-        <BarOption
-          state={state}
-          onClick={() => {
-            const theID = getRandomShabadId();
-            setModal(prev => ({
-              ...prev,
-              visible: true,
-              shabadId: theID,
-            }));
-            dispatch(addToShabadHistory(theID));
-          }}
-          left={
-          <Icon
-            name="reader-outline"
-            type="ionicon"
-            color={state.darkMode ? 'white' : 'black'}
-            />
-        }
-          text={'Click Here to Open Shabad.       '}
-          right={
-          <Icon
-            name="arrow-forward-outline"
-            size={25}
-            type="ionicon"
-            color={state.darkMode ? 'white' : 'black'}
-            />
-        }
-          />
-      ) : (
-          <FlatList
-            extraData={refreshFlatlist}
-            data={listOfData.slice().reverse()}
-            keyExtractor={id => id}
-            renderItem={({item, index}) => {
-              return (
-                <BarOption
-                  state={state}
-                  onClick={() => {
-                    setModal(prev => ({
-                      ...prev,
-                      shabadId: item,
-                      visible: true,
-                    }));
-                  }}
-                  left={
+      <FlatList
+        extraData={listOfData}
+        data={listOfData}
+        keyExtractor={item => item.shabadId + Math.random()} //incase shabadId is same twice
+        renderItem={({item, index}) => {
+          return (
+            <BarOption
+              state={state}
+              onClick={() => {
+                setModal(prev => ({
+                  ...prev,
+                  shabadData: item,
+                  visible: true,
+                }));
+              }}
+              left={
+                <Icon
+                  name="reader-outline"
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
+              }
+              text={getShabadTitle(item.shabadId)}
+              right={
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(deleteShabad(index));
+                  }}>
                   <Icon
-                    name="reader-outline"
+                    name="trash-outline"
+                    size={25}
                     type="ionicon"
-                    color={
-                    state.darkMode ? 'white' : 'black'
-                  }
-                    />
-                }
-                  text={getShabadTitle(item)}
-                  right={
-                  <TouchableOpacity
-                    onPress={() => {
-                      dispatch(deleteShabad(index));
-                      setRefreshFlatList(
-                        !refreshFlatlist,
-                      );
-                    }}>
-                    <Icon
-                      name="trash-outline"
-                      size={25}
-                      type="ionicon"
-                      color={
-                      state.darkMode
-                        ? 'white'
-                        : 'black'
-                    }
-                      />
-                  </TouchableOpacity>
-                }
+                    color={state.darkMode ? 'white' : 'black'}
                   />
-              );
-            }}
+                </TouchableOpacity>
+              }
             />
-        )}
+          );
+        }}
+        ListEmptyComponent={
+          <BarOption
+            state={state}
+            onClick={() => {
+              const theID = getRandomShabadId();
+              const theObj = {shabadId: theID, saved: false};
+              setModal(prev => ({
+                ...prev,
+                visible: true,
+                shabadData: theObj,
+              }));
+              dispatch(addToShabadHistory(theObj));
+            }}
+            left={
+              <Icon
+                name="reader-outline"
+                type="ionicon"
+                color={state.darkMode ? 'white' : 'black'}
+              />
+            }
+            text={'Click Here to Open Shabad.       '}
+            right={
+              <Icon
+                name="arrow-forward-outline"
+                size={25}
+                type="ionicon"
+                color={state.darkMode ? 'white' : 'black'}
+              />
+            }
+          />
+        }
+      />
     </View>
   );
 }

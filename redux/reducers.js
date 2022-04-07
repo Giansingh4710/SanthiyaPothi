@@ -16,7 +16,7 @@ export const initialState = {
   allPdfs: {...folderToFileData},
   fontSizeForShabad: 16,
   //addedPdfs: {title: 'Added PDFs', list: []},
-  shabadHistory:['1YU','NG0'],
+  shabadHistory:[{shabadId:'1YU',saved:false}],
 };
 
 setData('state', initialState); //to reset all state
