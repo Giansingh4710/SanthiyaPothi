@@ -93,11 +93,6 @@ export const addToShabadHistory=(shabadObj)=> dispatch =>{
     shabadObj,
   });
 }
-export const clearHistory=()=> dispatch =>{
-  dispatch({
-    type: 'CLEAR_HISTORY',
-  });
-}
 
 // export const setTheState = state => {
 //   return {

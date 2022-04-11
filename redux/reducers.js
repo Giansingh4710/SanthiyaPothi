@@ -118,9 +118,6 @@ function theReducer(state = initialState, action) {
   } else if (action.type === 'ADD_TO_SHABAD_HISTORY') {
     state.shabadHistory.push(action.shabadObj)
     theState = state;
-  } else if (action.type === 'CLEAR_HISTORY') {
-    state.shabadHistory=[]
-    theState = state;
   } else {
     return state;
   }

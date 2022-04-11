@@ -14,14 +14,10 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {Icon} from 'react-native-elements';
+import {Icon, Switch} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {allColors} from '../../assets/styleForEachOption';
-import {
-  setFontSize,
-  addToShabadHistory,
-  clearHistory,
-} from '../../redux/actions';
+import {setFontSize, addToShabadHistory} from '../../redux/actions';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
 import {ALLSHABADS} from '../../assets/allShabads.js';
 import {BarOption} from '../../assets/components/baroption';
@@ -95,38 +91,11 @@ export default function ShabadScreen({navigation}) {
       setModal={setShabadModalStuff}
       modalInfo={shabadModalStuff}
       listOfData={state.shabadHistory.slice().reverse()}
-      title="All History"
     />,
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          Alert.alert(
-            'Delete Histroy!',
-            "Are you sure you want to delete ALL your history? This action can't be undone",
-            [
-              {
-                text: 'Cancle',
-                onPress: () => {},
-              },
-              {
-                text: 'OK',
-                onPress: () => {
-                  dispatch(clearHistory());
-                },
-              },
-            ],
-          );
-        }}>
-        <Icon
-          name="trash-outline"
-          size={25}
-          type="ionicon"
-          color={state.darkMode ? 'white' : 'black'}
-        />
-      </TouchableOpacity>
       <TouchableOpacity
         style={styles.openShabadBtn}
         onPress={() => {
@@ -281,7 +250,8 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
   );
 }
 
-function ShabadHistoryView({state, dispatch, setModal, listOfData, title}) {
+function ShabadHistoryView({state, dispatch, setModal, listOfData}) {
+  const [showSaved, setShowSaved] = React.useState(false);
   function getShabadTitle(id) {
     return ALLSHABADS[id].slice(0, 30).replace(/\n/g, ' ') + '...';
   }
@@ -303,12 +273,20 @@ function ShabadHistoryView({state, dispatch, setModal, listOfData, title}) {
   //console.log(listOfData)
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>{title}</Text>
+      <Text style={styles.titleText}>{showSaved?'Saved Shabads':'All History'}</Text>
+      {/*
+      <Switch
+        value={showSaved}
+        onValueChange={newSetting => {
+          setShowSaved(newSetting);
+        }}
+      />
+      */}
       <FlatList
-        extraData={listOfData}
-        data={listOfData}
+        data={!showSaved ? listOfData : listOfData.filter(ele => ele.saved)}
         keyExtractor={item => item.shabadId + Math.random()} //incase shabadId is same twice
         renderItem={({item, index}) => {
+          if(showSaved && !item.saved) return
           return (
             <BarOption
               state={state}
