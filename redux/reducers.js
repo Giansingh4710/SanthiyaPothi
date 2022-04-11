@@ -116,11 +116,10 @@ function theReducer(state = initialState, action) {
     }
     theState = state;
   } else if (action.type === 'ADD_TO_SHABAD_HISTORY') {
-    state.shabadHistory.push(action.shabadId)
+    state.shabadHistory.push(action.shabadObj)
     theState = state;
-  } else if (action.type === 'DELETE_FROM_SHABAD_HISTORY') {
-    const realIndex=state.shabadHistory.length-action.index-1;
-    state.shabadHistory.splice(realIndex,1);
+  } else if (action.type === 'CLEAR_HISTORY') {
+    state.shabadHistory=[]
     theState = state;
   } else {
     return state;

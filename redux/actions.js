@@ -87,16 +87,15 @@ export const setFontSize=(fontSize)=> dispatch =>{
     fontSize,
   });
 }
-export const addToShabadHistory=(shabadId)=> dispatch =>{
+export const addToShabadHistory=(shabadObj)=> dispatch =>{
   dispatch({
     type: 'ADD_TO_SHABAD_HISTORY',
-    shabadId,
+    shabadObj,
   });
 }
-export const deleteShabadFromHistory=(shabadIndex)=> dispatch =>{
+export const clearHistory=()=> dispatch =>{
   dispatch({
-    type: 'DELETE_FROM_SHABAD_HISTORY',
-    index:shabadIndex,
+    type: 'CLEAR_HISTORY',
   });
 }
 

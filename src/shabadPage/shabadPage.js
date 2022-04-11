@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   FlatList,
   Text,
   StyleSheet,
@@ -19,7 +20,7 @@ import {allColors} from '../../assets/styleForEachOption';
 import {
   setFontSize,
   addToShabadHistory,
-  deleteShabadFromHistory,
+  clearHistory,
 } from '../../redux/actions';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
 import {ALLSHABADS} from '../../assets/allShabads.js';
@@ -85,8 +86,7 @@ export default function ShabadScreen({navigation}) {
     },
   });
 
-  console.log("Main: ",state.shabadHistory.slice().reverse())
-  console.log("Main: ",state.shabadHistory)
+  console.log('Main: ', state.shabadHistory);
   const pages = [
     <ShabadHistoryView
       key={'1'}
@@ -94,7 +94,6 @@ export default function ShabadScreen({navigation}) {
       dispatch={dispatch}
       setModal={setShabadModalStuff}
       modalInfo={shabadModalStuff}
-      deleteShabad={deleteShabadFromHistory}
       listOfData={state.shabadHistory.slice().reverse()}
       title="All History"
     />,
@@ -102,6 +101,32 @@ export default function ShabadScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert(
+            'Delete Histroy!',
+            "Are you sure you want to delete ALL your history? This action can't be undone",
+            [
+              {
+                text: 'Cancle',
+                onPress: () => {},
+              },
+              {
+                text: 'OK',
+                onPress: () => {
+                  dispatch(clearHistory());
+                },
+              },
+            ],
+          );
+        }}>
+        <Icon
+          name="trash-outline"
+          size={25}
+          type="ionicon"
+          color={state.darkMode ? 'white' : 'black'}
+        />
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.openShabadBtn}
         onPress={() => {
@@ -122,7 +147,8 @@ export default function ShabadScreen({navigation}) {
         showsHorizontalScrollIndicator
         pagingEnabled
         renderItem={({item}) => {
-          return <View style={styles.eachPage}>{item}</View>;
+          return item;
+          //return <View style={styles.eachPage}>{item}</View>;
         }}
       />
       <ShabadViewModal
@@ -255,14 +281,7 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
   );
 }
 
-function ShabadHistoryView({
-  state,
-  dispatch,
-  setModal,
-  deleteShabad,
-  listOfData,
-  title,
-}) {
+function ShabadHistoryView({state, dispatch, setModal, listOfData, title}) {
   function getShabadTitle(id) {
     return ALLSHABADS[id].slice(0, 30).replace(/\n/g, ' ') + '...';
   }
@@ -309,17 +328,12 @@ function ShabadHistoryView({
               }
               text={getShabadTitle(item.shabadId)}
               right={
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(deleteShabad(index));
-                  }}>
-                  <Icon
-                    name="trash-outline"
-                    size={25}
-                    type="ionicon"
-                    color={state.darkMode ? 'white' : 'black'}
-                  />
-                </TouchableOpacity>
+                <Icon
+                  name="arrow-forward-outline"
+                  size={25}
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
               }
             />
           );
