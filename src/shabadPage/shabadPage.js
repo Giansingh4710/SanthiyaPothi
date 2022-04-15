@@ -1,23 +1,36 @@
 import React from 'react';
 import {
+  Alert,
+  FlatList,
   Text,
   StyleSheet,
   View,
   Button,
+  TouchableOpacity,
   Dimensions,
   ScrollView,
   Image,
+  Modal,
+  useWindowDimensions,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {allColors} from '../../assets/styleForEachOption';
 import {useDispatch, useSelector} from 'react-redux';
-import {RightOfHeader} from '../../assets/components/rightOfHeader';
+import {Icon, Switch} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {allColors} from '../../assets/styleForEachOption';
+import {
+  setFontSize,
+  addToShabadHistory,
+  clearHistory,
+  toggleSaveForShabad,
+} from '../../redux/actions';
+import {RightOfHeader} from '../../assets/components/rightOfHeader';
+import {ALLSHABADS} from '../../assets/allShabads.js';
+import {BarOption} from '../../assets/components/baroption';
 
 export default function ShabadScreen({navigation}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
-
+  const [shabadModalStuff, setShabadModalStuff] = React.useState({});
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -47,83 +60,338 @@ export default function ShabadScreen({navigation}) {
       ),
     });
   });
-
-  const [imgActive, setImgActive] = React.useState(0);
-  const HEIGHT = Dimensions.get('window').height;
-  const WIDTH = Dimensions.get('window').width;
-
   const styles = StyleSheet.create({
     container: {
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
       flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    wrap: {
-      width: WIDTH,
-      height: HEIGHT * 0.5,
+    openShabadBtn: {
+      backgroundColor: 'blue',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 5,
+      margin: 10,
     },
-    wrapDot: {
-      position: 'absolute',
-      bottom: -20,
-      flexDirection: 'row',
-      alignSelf: 'center',
-    },
-    dotActive: {
-      margin: 3,
-      color: 'black',
-    },
-    dot: {
-      margin: 3,
-      color: '#888',
+    eachPage: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 5,
     },
   });
 
-  const onchange = nativeEvent => {
-    if(nativeEvent){
-      const slide=Math.ceil(nativeEvent.contentOffset.x /nativeEvent.layoutMeasurement.width)
-      if (slide!=imgActive){
-        setImgActive(slide);
-      }
-    }
-  };
-  const images = [
-    'https://cdn.pixabay.com/photo/2020/01/03/17/18/architecture-4738647_960_720.jpg',
-    'https://www.sikhnet.com/files/styles/hero-image/public/news/image/main/Vaheguru_0.jpg?itok=_bL549vp',
-    //'https://www.sikhnet.com/files/styles/hero-image/public/news/image/main/Vaheguru_0.jpg?itok=_bL549vp',
+  const pages = [
+    <ShabadHistoryView
+      key={'1'}
+      state={state}
+      dispatch={dispatch}
+      setModal={setShabadModalStuff}
+      modalInfo={shabadModalStuff}
+      navigation={navigation}
+    />,
   ];
 
-  //<Text style={{fontSize: 30}}>This is a modal!</Text>
-  //<Button onPress={() => navigation.goBack()} title="Dismiss" />
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.wrap}>
-        <ScrollView
-          onScroll={({nativeEvent}) => onchange(nativeEvent)}
-          showsHorizontalScrollIndicator={false}
-          paddingEnabled
-          horizontal
-          //style={styles.wrap}
-        >
-          {images.map((e, index) => {
-            return (
-              <Image
-                key={e}
-                resizeMode={'stretch'}
-                style={styles.wrap}
-                source={{uri: e}}
-              />
-            );
-          })}
-        </ScrollView>
-        <View style={styles.wrapDot}>
-          {images.map((e, index) => (
-            <Text
-              key={e}
-              style={imgActive === index ? styles.dotActive : styles.dot}>
-              ●
-            </Text>
-          ))}
-        </View>
-      </View>
+      <TouchableOpacity
+        style={styles.openShabadBtn}
+        onPress={() => {
+          const theID = getRandomShabadId();
+          const theObj = {shabadId: theID, saved: false};
+          setShabadModalStuff(prev => ({
+            visible: true,
+            shabadData: theObj,
+            index: state.shabadHistory.length,
+          }));
+          dispatch(addToShabadHistory(theObj));
+        }}>
+        <Text>Open Random Shabad</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={pages}
+        horizontal
+        showsHorizontalScrollIndicator
+        pagingEnabled
+        renderItem={({item}) => {
+          return item;
+          //return <View style={styles.eachPage}>{item}</View>;
+        }}
+      />
+      <ShabadViewModal
+        setModal={setShabadModalStuff}
+        modalInfo={shabadModalStuff}
+        state={state}
+        dispatch={dispatch}
+      />
     </SafeAreaView>
   );
+}
+
+function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
+  if (Object.keys(modalInfo).length == 0) return <></>;
+  const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
+  const [shabadSaved,setSavedShabad]=React.useState(modalInfo.shabadData.saved);
+  console.log(modalInfo);
+  React.useEffect(()=>{
+    setSavedShabad(modalInfo.shabadData.saved)
+  },[modalInfo])
+  function fontszGood(num) {
+    if (num < 10) return 'small'; //too small
+    if (num > 24) return 'big'; // too big
+    return true;
+  }
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: allColors[state.darkMode].shabadPage.container,
+      borderRadius: 5,
+      padding: 10,
+      //width: WIDTH,
+    },
+    headerContainer: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+      flexDirection: 'row',
+      padding: 10,
+    },
+    gurbaniScrollView: {
+      //backgroundColor: '#888',
+      borderColor: state.darkMode ? 'white' : 'black',
+      borderWidth: 1,
+      height: '90%',
+      padding: 10,
+      borderRadius: 10,
+    },
+    shabadText: {
+      fontSize: fontsz,
+      color: state.darkMode ? 'white' : 'black',
+    },
+    plusMinusRow: {
+      margin: 5,
+      flexDirection: 'row',
+    },
+    newShabadBtn: {
+      //height: '9%',
+      borderRadius: 5,
+      padding: 4,
+      backgroundColor: state.darkMode ? '#316B83' : '#87a194',
+    },
+  });
+  return (
+    <Modal
+      visible={modalInfo['visible']}
+      transparent
+      animationType="slide"
+      onRequestClose={() =>
+        setModal(prev => {
+          return {...prev, visible: false};
+        })
+      }>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setModal(prev => {
+                return {...prev, visible: false};
+              });
+            }}
+            style={styles.headerBtns}>
+            <Icon
+              name="arrow-back-outline"
+              size={25}
+              type="ionicon"
+              color={state.darkMode ? 'white' : 'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(toggleSaveForShabad(modalInfo.index));
+              setSavedShabad(prev=>!prev)
+            }}
+            style={styles.headerBtns}>
+            <Icon
+              name={
+                shabadSaved ? 'bookmark' : 'bookmark-outline'
+              }
+              //name="bookmark-outline"
+              size={25}
+              type="ionicon"
+              color={state.darkMode ? 'white' : 'black'}
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={styles.gurbaniScrollView}>
+          <Text style={styles.shabadText}>
+            {ALLSHABADS[modalInfo.shabadData.shabadId]}
+          </Text>
+        </ScrollView>
+        <View style={styles.plusMinusRow}>
+          <Icon
+            name="remove-outline"
+            type="ionicon"
+            onPress={() => {
+              if (fontszGood(fontsz) === 'small') return;
+              setfontsz(prev => prev - 1);
+              dispatch(setFontSize(fontsz));
+            }}
+            size={fontsz + 12}
+            color={state.darkMode ? 'white' : 'black'}
+          />
+          <Icon
+            size={fontsz * 2}
+            color={state.darkMode ? 'white' : 'black'}
+            name="add-outline"
+            type="ionicon"
+            onPress={() => {
+              if (fontszGood(fontsz) === 'big') return;
+              setfontsz(prev => prev + 1);
+              dispatch(setFontSize(fontsz));
+            }}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+function ShabadHistoryView({state, dispatch, setModal, navigation}) {
+  const [showSaved, setShowSaved] = React.useState(false);
+  const listOfData = state.shabadHistory.slice().reverse();
+  function getShabadTitle(id) {
+    return ALLSHABADS[id].slice(0, 30).replace(/\n/g, ' ') + '...';
+  }
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 5,
+      margin: 5,
+      padding: 5,
+      //width: WIDTH,
+      //backgroundColor: 'blue',
+    },
+    titleText: {
+      color: state.darkMode ? 'white' : 'black',
+    },
+  });
+  //console.log(listOfData)
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titleText}>
+        {showSaved ? 'Saved Shabads' : 'All History'}
+      </Text>
+      <Switch
+        value={showSaved}
+        onValueChange={newSetting => {
+          setShowSaved(newSetting);
+        }}
+      />
+      <FlatList
+        data={listOfData}
+        keyExtractor={item => item.shabadId + Math.random()} //incase shabadId is same twice
+        renderItem={({item, index}) => {
+          if (showSaved && !item.saved) return;
+          return (
+            <BarOption
+              state={state}
+              onClick={() => {
+                setModal(prev => ({
+                  index: listOfData.length - 1 - index,
+                  shabadData: item,
+                  visible: true,
+                }));
+              }}
+              left={
+                <Icon
+                  name="reader-outline"
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
+              }
+              text={getShabadTitle(item.shabadId)}
+              right={
+                <Icon
+                  name="arrow-forward-outline"
+                  size={25}
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
+              }
+            />
+          );
+        }}
+        ListEmptyComponent={
+          <BarOption
+            state={state}
+            onClick={() => {
+              const theID = getRandomShabadId();
+              const theObj = {shabadId: theID, saved: false};
+              setModal(prev => ({
+                visible: true,
+                shabadData: theObj,
+                index: 0, //this will only show up if list is empty so automaticly know its 0
+              }));
+              dispatch(addToShabadHistory(theObj));
+            }}
+            left={
+              <Icon
+                name="reader-outline"
+                type="ionicon"
+                color={state.darkMode ? 'white' : 'black'}
+              />
+            }
+            text={'Click Here to Open Shabad.       '}
+            right={
+              <Icon
+                name="arrow-forward-outline"
+                size={25}
+                type="ionicon"
+                color={state.darkMode ? 'white' : 'black'}
+              />
+            }
+          />
+        }
+      />
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert(
+            'Delete All Shabad History!',
+            "By Clicking 'OK', You will delete all your history. This can not be undone.",
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'OK',
+                onPress: () => {
+                  dispatch(clearHistory());
+                  navigation.goBack(); // it didn't refresh right away so go back when you delete all history
+                },
+              },
+            ],
+          );
+          dispatch(clearHistory());
+        }}>
+        <Icon
+          name="trash-outline"
+          size={25}
+          type="ionicon"
+          color={state.darkMode ? 'white' : 'black'}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function getRandomShabadId() {
+  const keys = Object.keys(ALLSHABADS);
+  const prop = keys[Math.floor(Math.random() * keys.length)];
+  return prop;
 }

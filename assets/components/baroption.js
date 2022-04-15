@@ -1,7 +1,9 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 
 export function BarOption({left, text, right, onClick, onLongPress, state}) {
+    const { WIDTH }=useWindowDimensions();
+
     const styles = StyleSheet.create({
         itemContainer: {
             height: 75,
@@ -11,6 +13,7 @@ export function BarOption({left, text, right, onClick, onLongPress, state}) {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: state.darkMode ? '#04293A' : '#ACDDDE',
+            width:WIDTH,
         },
         iconsInBar: {
             //flex: 1,

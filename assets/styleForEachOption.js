@@ -21,6 +21,9 @@ export const allColors = {
         backgroundColor: '#f9f871',
       },
     },
+    shabadPage:{
+      container:"#b8f5d7",
+    },
     openPdf: {},
     mainScreenList: {},
   },
@@ -32,6 +35,9 @@ export const allColors = {
       settingBar: {
         backgroundColor: '#d09374',
       },
+    },
+    shabadPage:{
+      container:"#04293A",
     },
     openPdf: {},
     mainScreenList: {},

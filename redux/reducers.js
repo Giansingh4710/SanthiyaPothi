@@ -10,11 +10,14 @@ export const setData = async (title, state) => {
 };
 
 export const initialState = {
-  darkMode: false,
-  hideHeaderOnScroll: false,
-  showHeaderOnScroll: false,
+  darkMode: true,
+  hideHeaderOnScroll: true,
+  showHeaderOnScroll: true,
   allPdfs: {...folderToFileData},
+  fontSizeForShabad: 16,
   //addedPdfs: {title: 'Added PDFs', list: []},
+  //shabadHistory:[{shabadId:'1YU',saved:false}],
+  shabadHistory:[],
 };
 
 //setData('state', initialState); //to reset all state
@@ -68,6 +71,9 @@ function theReducer(state = initialState, action) {
       state.allPdfs[action.folder][action.file].uris.shift();
     theState = state;
     console.log(theState.allPdfs[action.folder][action.file]);
+  } else if (action.type === 'SET_FONT_SIZE') {
+    state.fontSizeForShabad = action.fontSize;
+    theState = state;
   } else if (action.type === 'ADD_FILE_OR_FOLDER') {
     const theFolderToPutIn = action.folderTitle;
     const theFile = action.item;
@@ -110,6 +116,17 @@ function theReducer(state = initialState, action) {
       }
     }
     theState = state;
+  } else if (action.type === 'ADD_TO_SHABAD_HISTORY') {
+    state.shabadHistory.push(action.shabadObj)
+    theState = state;
+  } else if (action.type === 'CLEAR_HISTORY') {
+    state.shabadHistory=[]
+    theState = state;
+  } else if (action.type === 'TOGGLE_SAVE_FOR_SHABAD') {
+    const oldState=state.shabadHistory[action.index].saved;
+    state.shabadHistory[action.index].saved=!oldState;
+    theState = state;
+    console.log(state.shabadHistory[action.index])
   } else {
     return state;
   }

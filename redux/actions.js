@@ -81,6 +81,30 @@ export const setList = (listTitle, theList) => dispatch => {
     theList,
   });
 };
+export const setFontSize = fontSize => dispatch => {
+  dispatch({
+    type: 'SET_FONT_SIZE',
+    fontSize,
+  });
+};
+export const addToShabadHistory = shabadObj => dispatch => {
+  dispatch({
+    type: 'ADD_TO_SHABAD_HISTORY',
+    shabadObj,
+  });
+};
+export const clearHistory = () => dispatch => {
+  dispatch({
+    type: 'CLEAR_HISTORY',
+  });
+};
+export const toggleSaveForShabad = (index) => dispatch => {
+  dispatch({
+    type: 'TOGGLE_SAVE_FOR_SHABAD',
+    index,
+  });
+};
+
 // export const setTheState = state => {
 //   return {
 //     type: 'SET_THE_STATE',
