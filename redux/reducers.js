@@ -16,10 +16,11 @@ export const initialState = {
   allPdfs: {...folderToFileData},
   fontSizeForShabad: 16,
   //addedPdfs: {title: 'Added PDFs', list: []},
-  shabadHistory:[{shabadId:'1YU',saved:false}],
+  //shabadHistory:[{shabadId:'1YU',saved:false}],
+  shabadHistory:[],
 };
 
-setData('state', initialState); //to reset all state
+//setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -118,6 +119,14 @@ function theReducer(state = initialState, action) {
   } else if (action.type === 'ADD_TO_SHABAD_HISTORY') {
     state.shabadHistory.push(action.shabadObj)
     theState = state;
+  } else if (action.type === 'CLEAR_HISTORY') {
+    state.shabadHistory=[]
+    theState = state;
+  } else if (action.type === 'TOGGLE_SAVE_FOR_SHABAD') {
+    const oldState=state.shabadHistory[action.index].saved;
+    state.shabadHistory[action.index].saved=!oldState;
+    theState = state;
+    console.log(state.shabadHistory[action.index])
   } else {
     return state;
   }

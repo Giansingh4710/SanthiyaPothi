@@ -17,7 +17,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Icon, Switch} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {allColors} from '../../assets/styleForEachOption';
-import {setFontSize, addToShabadHistory} from '../../redux/actions';
+import {
+  setFontSize,
+  addToShabadHistory,
+  clearHistory,
+  toggleSaveForShabad,
+} from '../../redux/actions';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
 import {ALLSHABADS} from '../../assets/allShabads.js';
 import {BarOption} from '../../assets/components/baroption';
@@ -25,12 +30,7 @@ import {BarOption} from '../../assets/components/baroption';
 export default function ShabadScreen({navigation}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
-  const [shabadModalStuff, setShabadModalStuff] = React.useState({
-    visible: false,
-    shabadData: {saved: false, shabadId: '1YU'},
-  });
-  //const { width }=useWindowDimensions();
-  //console.log(width);
+  const [shabadModalStuff, setShabadModalStuff] = React.useState({});
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -60,7 +60,6 @@ export default function ShabadScreen({navigation}) {
       ),
     });
   });
-
   const styles = StyleSheet.create({
     container: {
       backgroundColor: allColors[state.darkMode].mainBackgroundColor,
@@ -82,7 +81,6 @@ export default function ShabadScreen({navigation}) {
     },
   });
 
-  console.log('Main: ', state.shabadHistory);
   const pages = [
     <ShabadHistoryView
       key={'1'}
@@ -90,7 +88,7 @@ export default function ShabadScreen({navigation}) {
       dispatch={dispatch}
       setModal={setShabadModalStuff}
       modalInfo={shabadModalStuff}
-      listOfData={state.shabadHistory.slice().reverse()}
+      navigation={navigation}
     />,
   ];
 
@@ -102,9 +100,9 @@ export default function ShabadScreen({navigation}) {
           const theID = getRandomShabadId();
           const theObj = {shabadId: theID, saved: false};
           setShabadModalStuff(prev => ({
-            ...prev,
             visible: true,
             shabadData: theObj,
+            index: state.shabadHistory.length,
           }));
           dispatch(addToShabadHistory(theObj));
         }}>
@@ -131,15 +129,18 @@ export default function ShabadScreen({navigation}) {
 }
 
 function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
-  //const [shabad, setShabad] = React.useState(ALLSHABADS[shabadId]);
+  if (Object.keys(modalInfo).length == 0) return <></>;
   const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
-
+  const [shabadSaved,setSavedShabad]=React.useState(modalInfo.shabadData.saved);
+  console.log(modalInfo);
+  React.useEffect(()=>{
+    setSavedShabad(modalInfo.shabadData.saved)
+  },[modalInfo])
   function fontszGood(num) {
     if (num < 10) return 'small'; //too small
     if (num > 24) return 'big'; // too big
     return true;
   }
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -180,7 +181,6 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
       backgroundColor: state.darkMode ? '#316B83' : '#87a194',
     },
   });
-
   return (
     <Modal
       visible={modalInfo['visible']}
@@ -207,9 +207,17 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
               color={state.darkMode ? 'white' : 'black'}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.headerBtns}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(toggleSaveForShabad(modalInfo.index));
+              setSavedShabad(prev=>!prev)
+            }}
+            style={styles.headerBtns}>
             <Icon
-              name="bookmark-outline"
+              name={
+                shabadSaved ? 'bookmark' : 'bookmark-outline'
+              }
+              //name="bookmark-outline"
               size={25}
               type="ionicon"
               color={state.darkMode ? 'white' : 'black'}
@@ -250,8 +258,9 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
   );
 }
 
-function ShabadHistoryView({state, dispatch, setModal, listOfData}) {
+function ShabadHistoryView({state, dispatch, setModal, navigation}) {
   const [showSaved, setShowSaved] = React.useState(false);
+  const listOfData = state.shabadHistory.slice().reverse();
   function getShabadTitle(id) {
     return ALLSHABADS[id].slice(0, 30).replace(/\n/g, ' ') + '...';
   }
@@ -273,26 +282,26 @@ function ShabadHistoryView({state, dispatch, setModal, listOfData}) {
   //console.log(listOfData)
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>{showSaved?'Saved Shabads':'All History'}</Text>
-      {/*
+      <Text style={styles.titleText}>
+        {showSaved ? 'Saved Shabads' : 'All History'}
+      </Text>
       <Switch
         value={showSaved}
         onValueChange={newSetting => {
           setShowSaved(newSetting);
         }}
       />
-      */}
       <FlatList
-        data={!showSaved ? listOfData : listOfData.filter(ele => ele.saved)}
+        data={listOfData}
         keyExtractor={item => item.shabadId + Math.random()} //incase shabadId is same twice
         renderItem={({item, index}) => {
-          if(showSaved && !item.saved) return
+          if (showSaved && !item.saved) return;
           return (
             <BarOption
               state={state}
               onClick={() => {
                 setModal(prev => ({
-                  ...prev,
+                  index: listOfData.length - 1 - index,
                   shabadData: item,
                   visible: true,
                 }));
@@ -323,9 +332,9 @@ function ShabadHistoryView({state, dispatch, setModal, listOfData}) {
               const theID = getRandomShabadId();
               const theObj = {shabadId: theID, saved: false};
               setModal(prev => ({
-                ...prev,
                 visible: true,
                 shabadData: theObj,
+                index: 0, //this will only show up if list is empty so automaticly know its 0
               }));
               dispatch(addToShabadHistory(theObj));
             }}
@@ -348,6 +357,35 @@ function ShabadHistoryView({state, dispatch, setModal, listOfData}) {
           />
         }
       />
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert(
+            'Delete All Shabad History!',
+            "By Clicking 'OK', You will delete all your history. This can not be undone.",
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'OK',
+                onPress: () => {
+                  dispatch(clearHistory());
+                  navigation.goBack(); // it didn't refresh right away so go back when you delete all history
+                },
+              },
+            ],
+          );
+          dispatch(clearHistory());
+        }}>
+        <Icon
+          name="trash-outline"
+          size={25}
+          type="ionicon"
+          color={state.darkMode ? 'white' : 'black'}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
