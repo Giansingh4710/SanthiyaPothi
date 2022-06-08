@@ -12,6 +12,7 @@ import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
 import FolderToPdfs2 from './src/subFolder';
 import ShabadScreen from './src/shabadPage/shabadPage.js';
+import ReadShabad from './src/shabadPage/readShabad.js';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ function App() {
               options={{headerShown: false}}
             />
             <Stack.Screen name="ShabadScreen" component={ShabadScreen} />
+            <Stack.Screen name="ReadShabad" component={ReadShabad} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -30,7 +30,11 @@ import {BarOption} from '../../assets/components/baroption';
 export default function ShabadScreen({navigation}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
-  const [shabadModalStuff, setShabadModalStuff] = React.useState({});
+  const [shabadModalStuff, setShabadModalStuff] = React.useState({
+    visible: false,
+    shabadData: {saved: false, shabadId: "EWD"},
+    index:-1,
+  });
   React.useEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -97,13 +101,14 @@ export default function ShabadScreen({navigation}) {
       <TouchableOpacity
         style={styles.openShabadBtn}
         onPress={() => {
+          navigation.navigate('ReadShabad')
           const theID = getRandomShabadId();
           const theObj = {shabadId: theID, saved: false};
-          setShabadModalStuff(prev => ({
+          setShabadModalStuff({
             visible: true,
             shabadData: theObj,
             index: state.shabadHistory.length,
-          }));
+          });
           dispatch(addToShabadHistory(theObj));
         }}>
         <Text>Open Random Shabad</Text>
@@ -129,7 +134,7 @@ export default function ShabadScreen({navigation}) {
 }
 
 function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
-  if (Object.keys(modalInfo).length == 0) return <></>;
+  //if (Object.keys(modalInfo).length == 0) return <></>;
   const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
   const [shabadSaved,setSavedShabad]=React.useState(modalInfo.shabadData.saved);
   console.log(modalInfo);
@@ -181,6 +186,7 @@ function ShabadViewModal({state, dispatch, setModal, modalInfo}) {
       backgroundColor: state.darkMode ? '#316B83' : '#87a194',
     },
   });
+
   return (
     <Modal
       visible={modalInfo['visible']}
@@ -295,16 +301,18 @@ function ShabadHistoryView({state, dispatch, setModal, navigation}) {
         data={listOfData}
         keyExtractor={item => item.shabadId + Math.random()} //incase shabadId is same twice
         renderItem={({item, index}) => {
+          //console.log(item);
+          //item={"saved": false, "shabadId": "EWD"}
           if (showSaved && !item.saved) return;
           return (
             <BarOption
               state={state}
               onClick={() => {
-                setModal(prev => ({
-                  index: listOfData.length - 1 - index,
-                  shabadData: item,
+                setModal({
                   visible: true,
-                }));
+                  shabadData: item,
+                  index: listOfData.length - 1 - index,
+                });
               }}
               left={
                 <Icon
