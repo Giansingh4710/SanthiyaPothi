@@ -34,8 +34,8 @@ export default function ReadShabad({navigation, route}) {
   //if (Object.keys(modalInfo).length == 0) return <></>;
 
   const modalInfo = route.params;
-  console.log(modalInfo);
   const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
+  const [larrivar, setLarrivar] = React.useState(true);
   const [shabadSaved, setSavedShabad] = React.useState(
     modalInfo.shabadData.saved,
   );
@@ -126,7 +126,7 @@ export default function ReadShabad({navigation, route}) {
     <View style={styles.container}>
       <ScrollView style={styles.gurbaniScrollView}>
         <Text style={styles.shabadText}>
-          {ALLSHABADS[modalInfo.shabadData.shabadId]}
+          {showShabad(ALLSHABADS[modalInfo.shabadData.shabadId],larrivar)}
         </Text>
       </ScrollView>
       <View style={styles.plusMinusRow}>
@@ -141,6 +141,14 @@ export default function ReadShabad({navigation, route}) {
             }}
             size={fontsz * 2}
             color={state.darkMode ? 'white' : 'black'}
+          />
+        </View>
+        <View style={styles.btn}>
+          <Switch
+            value={larrivar}
+            onValueChange={newSetting => {
+              setLarrivar(newSetting);
+            }}
           />
         </View>
         <View style={styles.btn}>
@@ -161,8 +169,15 @@ export default function ReadShabad({navigation, route}) {
   );
 }
 
-function getRandomShabadId() {
-  const keys = Object.keys(ALLSHABADS);
-  const prop = keys[Math.floor(Math.random() * keys.length)];
-  return prop;
+function showShabad(sbd,larrivar) {
+  let ans=""
+  const sbdLst=sbd.split('\n');
+  for(let i=0;i<sbdLst.length;i++){
+    let line=sbdLst[i];
+    if(larrivar && i%3==0){
+        line=line.replace(/ /g,"");
+    }
+    ans+=line+"\n";
+  }
+  return ans;
 }
