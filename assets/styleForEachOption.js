@@ -21,8 +21,11 @@ export const allColors = {
         backgroundColor: '#f9f871',
       },
     },
-    shabadPage:{
+    readShabad:{
       container:"#b8f5d7",
+    },
+    shabadPage:{
+      openShabadBtn:"#b8f5d7",
     },
     openPdf: {},
     mainScreenList: {},
@@ -36,8 +39,11 @@ export const allColors = {
         backgroundColor: '#d09374',
       },
     },
-    shabadPage:{
+    readShabad:{
       container:"#04293A",
+    },
+    shabadPage:{
+      openShabadBtn:"#04293A",
     },
     openPdf: {},
     mainScreenList: {},
