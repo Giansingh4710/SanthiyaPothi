@@ -13,25 +13,38 @@ import SettingsPage from './src/settingsPage/settings';
 import FolderToPdfs2 from './src/subFolder';
 import ShabadScreen from './src/shabadPage/shabadPage.js';
 import ReadShabad from './src/shabadPage/readShabad.js';
+import {folderToFileData} from './assets/longData';
 
 const Stack = createStackNavigator();
 
 function App() {
+  const allListItems = [
+    ...Object.keys(folderToFileData),
+    'ਪਾਠ Hajari',
+    'All Pdfs',
+  ];
   return (
     <Provider store={Store}>
       <NavigationContainer>
         <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Settings Page" component={SettingsPage} />
-            <Stack.Screen name="BanisList" component={FolderToPdfs} />
-            <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
-            <Stack.Screen
-              name="OpenPdf"
-              component={OpenPdf}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="ShabadScreen" component={ShabadScreen} />
-            <Stack.Screen name="ReadShabad" component={ReadShabad} />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            initialParams={{
+              data: folderToFileData,
+              title: 'Home!!!',
+            }}
+          />
+          <Stack.Screen name="Settings Page" component={SettingsPage} />
+          <Stack.Screen name="BanisList" component={FolderToPdfs} />
+          <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
+          <Stack.Screen
+            name="OpenPdf"
+            component={OpenPdf}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="ShabadScreen" component={ShabadScreen} />
+          <Stack.Screen name="ReadShabad" component={ReadShabad} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

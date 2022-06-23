@@ -1,4 +1,4 @@
-{
+export const ALLBANIS= {
   "banis": [
     {
       "bani_name": "ਜਪੁ ਜੀ ਸਾਹਿਬ",

@@ -495,4 +495,6 @@ export const folderToFileData = {
       ],
     },
   },
+  'Added PDFs':{},
+  'Unfinished Business':{},
 };

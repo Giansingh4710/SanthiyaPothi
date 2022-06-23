@@ -25,6 +25,7 @@ import {
 } from '../../redux/actions';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
 import {ALLSHABADS} from '../../assets/allShabads.js';
+import {ALLBANIS} from '../../assets/banis.js';
 import {BarOption} from '../../assets/components/baroption';
 
 export default function ShabadScreen({navigation}) {
@@ -84,6 +85,12 @@ export default function ShabadScreen({navigation}) {
   });
 
   const pages = [
+    <BanisList
+      key={'2'}
+      state={state}
+      dispatch={dispatch}
+      navigation={navigation}
+    />,
     <ShabadHistoryView
       key={'1'}
       state={state}
@@ -123,6 +130,65 @@ export default function ShabadScreen({navigation}) {
         }}
       />
     </SafeAreaView>
+  );
+}
+
+function BanisList({state,navigation}){
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 5,
+      margin: 5,
+      padding: 5,
+      //width: WIDTH,
+      //backgroundColor: 'blue',
+    },
+    titleText: {
+      color: state.darkMode ? 'white' : 'black',
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={ALLBANIS['banis']}
+        keyExtractor={item => item.bani_name} //incase shabadId is same twice
+        renderItem={({item, index}) => {
+          console.log(item);
+          //item={"saved": false, "shabadId": "EWD"}
+          return (
+            <BarOption
+              state={state}
+              onClick={() => {
+                navigation.navigate('ReadShabad', {
+                  bani_name:item.bani_name,
+                  bani:item.bani,
+                  type:'bani',
+                });
+              }}
+              left={
+                <Icon
+                  name="reader-outline"
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
+              }
+              text={item.bani_name}
+              right={
+                <Icon
+                  name="arrow-forward-outline"
+                  size={25}
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
+                />
+              }
+            />
+          );
+        }}
+      />
+    </View>
   );
 }
 
@@ -189,6 +255,7 @@ function ShabadHistoryView({state, dispatch, navigation}) {
                 navigation.navigate('ReadShabad', {
                   shabadData: item,
                   index: listOfData.length - 1 - index,
+                  type:'shabad',
                 });
               }}
               left={
