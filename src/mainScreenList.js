@@ -51,6 +51,7 @@ function HomeScreen({navigation, route}) {
       headerStyle: {
         backgroundColor: allColors[state.darkMode].headerColor,
       },
+      headerTintColor: state.darkMode ? 'white' : 'black',
       headerTitleStyle: {
         color: state.darkMode ? 'white' : 'black',
       },
@@ -119,20 +120,21 @@ function HomeScreen({navigation, route}) {
           keyExtractor={item => item} //name of each item like 'Bai Vaara'
           data={Object.keys(route.params.data)}
           renderItem={({item}) => {
+            const isFolder=!route.params.data[item].currentAng; //currentAng will never be 0
             console.log(item);
             return (
               <BarOption
                 state={state}
                 left={
                   <Icon
-                    name="folder-outline"
+                    name={isFolder?"folder-outline":"document-outline"}
                     type="ionicon"
                     color={state.darkMode ? 'white' : 'black'}
                   />
                 }
                 text={item}
                 right={
-                  !route.params.data[item].currentAng ? (
+                  isFolder || route.params.title=="Unfinished Business"? (
                     <Icon
                       name="arrow-forward-outline"
                       type="ionicon"
@@ -164,15 +166,20 @@ function HomeScreen({navigation, route}) {
                   )
                 }
                 onClick={() => {
-                  if (route.params.data[item].currentAng) {
-                    navigation.navigate('OpenPdf', {
-                      pdfTitle: item,
-                      folderTitle: route.params.title,
+                  if (isFolder) {
+                    let theDataObj=route.params.data[item]
+                    if(item==="Unfinished Business"){
+                      theDataObj=getPdfsFromDiffFolders(state.allPdfs);
+                    }
+                    navigation.push('Home', {
+                      //data: item==="Unfinished Business"?getPdfsFromDiffFolders(state.allPdfs):route.params.data[item],
+                      data:theDataObj,
+                      title: item,
                     });
                   } else {
-                    navigation.push('Home', {
-                      data: route.params.data[item],
-                      title: item,
+                    navigation.navigate('OpenPdf', {
+                      pdfTitle: item,
+                      folderTitle: route.params.data[item]['baniType'],
                     });
                   }
                 }}
@@ -185,4 +192,21 @@ function HomeScreen({navigation, route}) {
   );
 }
 
+function getPdfsFromDiffFolders(pdfObj, pdfsLstForAllPdfs = {}) {
+    //pdfs for unfinished business
+    for (const item of Object.keys(pdfObj)) {
+        if (!pdfObj[item].currentAng) {
+            //means if isfolder
+            getPdfsFromDiffFolders(
+                pdfObj[item],
+                pdfsLstForAllPdfs,
+            );
+            continue;
+        }
+        if (pdfObj[item].currentAng > 1 && !pdfObj[item].checked)
+            pdfsLstForAllPdfs[item]= pdfObj[item];
+    }
+    console.log(pdfsLstForAllPdfs,"UOOUU")
+    return pdfsLstForAllPdfs;
+}
 export default HomeScreen;
