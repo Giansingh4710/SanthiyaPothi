@@ -20,7 +20,7 @@ export const initialState = {
   shabadHistory:[],
 };
 
-//setData('state', initialState); //to reset all state
+setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;

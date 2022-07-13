@@ -32,7 +32,7 @@ function App() {
             component={HomeScreen}
             initialParams={{
               data: folderToFileData,
-              title: 'Home!!!',
+              title: 'Santhiya Pothi',
             }}
           />
           <Stack.Screen name="Settings Page" component={SettingsPage} />
