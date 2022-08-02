@@ -17,9 +17,12 @@ export function changePDFsObj(
   if (depth + 1 === pathLst.length) {
     if (action === 'SET_CHECKBOX')
       obj[pathLst[depth]][title].checked = !obj[pathLst[depth]][title].checked;
-    else if (action === 'SET_ANG_NUM') {
+    else if (action === 'SET_ANG_NUM') 
       obj[pathLst[depth]][title].currentAng = otherData.angNum
-    } else console.log('nothing Donw');
+    else if (action === 'ADD_PDF_OR_FOLDER') 
+      obj[pathLst[depth]][title] = otherData.value
+    else
+      console.log('nothing happend in changePDFsObj in helper func')
     return;
   }
   changePDFsObj(

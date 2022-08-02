@@ -38,34 +38,18 @@ export const setShowHeader = mode => dispatch => {
   });
 };
 
-export const addFileOrFolder = (folderTitle, item) => dispatch => {
+export const addPDForFolder = (key,value,fullPath) => dispatch => {
   dispatch({
-    type: 'ADD_FILE_OR_FOLDER',
-    item,
-    folderTitle,
+    type: 'ADD_PDF_OR_FOLDER',
+    key,
+    value,
+    fullPath,
   });
 };
-export const deleteAddedItem = title => dispatch => {
-  dispatch({
-    type: 'DELETE_ADDED_ITEM',
-    title,
-  });
-};
-export const addNdeletePdf = (title, item, toAdd) => dispatch => {
-  dispatch({
-    type: 'ADD_OR_DELETE_PDF',
-    title,
-    item,
-    add: toAdd, //boolean
-  });
-};
-export const setList = (listTitle, theList) => dispatch => {
-  dispatch({
-    type: 'SET_LIST_IN_ADDED_PDFS',
-    listTitle,
-    theList,
-  });
-};
+
+
+
+//--------------------------------
 export const setFontSize = fontSize => dispatch => {
   dispatch({
     type: 'SET_FONT_SIZE',

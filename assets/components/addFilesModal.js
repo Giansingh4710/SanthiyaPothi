@@ -11,15 +11,15 @@ import {
 import DocumentPicker from 'react-native-document-picker';
 import {Icon} from 'react-native-elements';
 
-import {addFileOrFolder, addNdeletePdf} from '../../redux/actions';
+import {addPDForFolder} from '../../redux/actions';
 
-export default function AddFileModal({
+export function AddFileModal({
   state,
+  dispatch,
   visible,
   setVisibility,
-  folderTitle,
-  dispatch,
-  onlyFiles,
+  fullPath,
+  navigation
 }) {
   const [folderName, setFolderName] = React.useState('');
 
@@ -46,6 +46,7 @@ export default function AddFileModal({
       top: '15%',
       left: '5%',
       borderRadius: 40,
+      position: 'absolute',
     },
     topRow: {
       flexDirection: 'row',
@@ -81,19 +82,17 @@ export default function AddFileModal({
         type: DocumentPicker.types.pdf,
       });
       const name = res[0].name;
-      const uri = res[0].uri;
       const details = {
         checked: false,
-        baniType: folderTitle,
         currentAng: 1,
-        uri: uri,
+        uri: res[0].uri,
       };
       if (state.allPdfs[name]) {
         sameFileAlert(name);
         return;
       }
-      dispatch(addNdeletePdf(name, details, true));
-      dispatch(addFileOrFolder(folderTitle, {title: name}));
+      dispatch(addPDForFolder(name,details,fullPath))
+      navigation.goBack()
     } catch (err) {
       // alert(err);
       console.log(err);
@@ -101,28 +100,6 @@ export default function AddFileModal({
     setVisibility(false);
   }
 
-  const addFolderBtn = onlyFiles ? (
-    <></>
-  ) : (
-    <TouchableOpacity
-      style={styles.ButtomButton}
-      onPress={() => {
-        if (state.allPdfs[folderName] || folderName === '') {
-          sameFileAlert(folderName);
-          setFolderName('');
-          return;
-        }
-        const details = {
-          checked: false,
-          baniType: folderTitle,
-        };
-        dispatch(addNdeletePdf(folderName, details, true));
-        dispatch(addFileOrFolder(folderTitle, {title: folderName, list: []}));
-        setVisibility(false);
-      }}>
-      <Text>Add a FOLDER</Text>
-    </TouchableOpacity>
-  );
   return (
     <Modal
       visible={visible}
@@ -140,22 +117,32 @@ export default function AddFileModal({
           <Icon
             name="close-outline"
             type="ionicon"
+            size={50}
             color={state.darkMode ? 'white' : 'black'}
           />
         </TouchableOpacity>
-        {onlyFiles ? (
-          <></>
-        ) : (
-          <TextInput
-            style={{backgroundColor: '#cecece', borderRadius: 5}}
-            placeholder="exp: Folder 1"
-            onChangeText={e => {
-              setFolderName(e);
-            }}
-          />
-        )}
+        <TextInput
+          style={{backgroundColor: '#cecece', borderRadius: 5}}
+          placeholder="exp: Folder 1"
+          onChangeText={e => {
+            setFolderName(e);
+          }}
+        />
         <View style={styles.underScroll}>
-          {addFolderBtn}
+          <TouchableOpacity
+            style={styles.ButtomButton}
+            onPress={() => {
+              if (state.allPdfs[folderName] || folderName === '') {
+                sameFileAlert(folderName);
+                setFolderName('');
+                return;
+              }
+              dispatch(addPDForFolder(folderName,{},fullPath))
+              navigation.goBack()
+              setVisibility(false);
+            }}>
+            <Text>Add a FOLDER</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.ButtomButton}
             onPress={() => {

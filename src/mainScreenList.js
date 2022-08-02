@@ -1,26 +1,20 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
-import { Icon, CheckBox } from 'react-native-elements';
+import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
+import {Icon, CheckBox} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { setTheState } from '../redux/actions';
-import { initialState } from '../redux/reducers';
-import { allColors } from '../assets/styleForEachOption';
-import { BarOption } from '../assets/components/baroption';
-import { RightOfHeader } from '../assets/components/rightOfHeader';
-import { AddFileModal } from '../assets/components/addFilesModal.js';
-import {getItemFromFullPath} from '../assets/common_funcs.js'
+import {setTheState} from '../redux/actions';
+import {initialState} from '../redux/reducers';
+import {allColors} from '../assets/styleForEachOption';
+import {BarOption} from '../assets/components/baroption';
+import {RightOfHeader} from '../assets/components/rightOfHeader';
+import {AddFileModal} from '../assets/components/addFilesModal.js';
+import {getItemFromFullPath} from '../assets/helper_funcs.js';
 
+import {setCheckBox} from '../redux/actions';
 
-import {
-  setCheckBox,
-  deleteAddedItem,
-  addNdeletePdf,
-  setList,
-} from '../redux/actions';
-
-function HomeScreen({ navigation, route }) {
+function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
@@ -62,31 +56,27 @@ function HomeScreen({ navigation, route }) {
           state={state}
           icons={[
             {
-              name: route.params.title == "Added PDFs" ? "add-outline" : 'open-outline',
-              action: () => {
-                if (route.params.title !== "Added PDFs") {
-                  navigation.navigate('ShabadScreen');
-                  return;
-                }
-                console.log("Added Pdf page")
-              },
+              name: 'open-outline',
+              action: () => navigation.navigate('ShabadScreen'),
             },
             {
               name: 'shuffle-outline',
               action: () => {
                 const items = Object.keys(route.params.dataObj);
-                if (items.length === 0) return
+                if (items.length === 0) return;
 
                 const item = items[Math.floor(Math.random() * items.length)];
                 if (route.params.dataObj[item].currentAng) {
                   navigation.navigate('OpenPdf', {
                     pdfTitle: item,
-                    folderTitle: route.params.title,
+                    fullPath: [...route.params.fullPath],
                   });
                 } else {
+                  let theDataObj = route.params.dataObj[item];
                   navigation.push('Home', {
-                    data: route.params.dataObj[item],
+                    dataObj: theDataObj,
                     title: item,
+                    fullPath: [...route.params.fullPath, item],
                   });
                 }
               },
@@ -102,40 +92,72 @@ function HomeScreen({ navigation, route }) {
       ),
     });
   });
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+      height: '100%',
+    },
+  });
+
+  if (route.params.addedPdfs) {
+    return (
+      <AddedPDFsScreen
+        state={state}
+        dispatch={dispatch}
+        params={route.params}
+        navigation={navigation}
+        container={styles.container}
+      />
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <ListDisplay
+        state={state}
+        dispatch={dispatch}
+        params={route.params}
+        navigation={navigation}
+      />
+    </View>
+  );
+}
+
+function ListDisplay({state, dispatch, params, navigation}) {
+  const dataObj = params.dataObj;
+  const fullPath = params.fullPath;
+
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
-      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-      height: '100%',
     },
     scroll: {
       width: '100%',
       // height: '80%',
     },
   });
-
   return (
     <View style={styles.container}>
       <View style={styles.scroll}>
         <FlatList
           keyExtractor={item => item} //name of each item like 'Bai Vaara'
-          data={Object.keys(route.params.dataObj)}
-          renderItem={({ item }) => {
-            const isFolder = !route.params.dataObj[item].currentAng; //currentAng will never be 0
-            // console.log(item);
+          data={Object.keys(dataObj)}
+          renderItem={({item}) => {
+            const isFolder = !dataObj[item].currentAng; //currentAng will never be 0
             return (
               <BarOption
                 state={state}
                 left={
                   <Icon
-                    name={isFolder ? "folder-outline" : "document-outline"}
+                    name={isFolder ? 'folder-outline' : 'document-outline'}
                     type="ionicon"
                     color={state.darkMode ? 'white' : 'black'}
                   />
                 }
                 text={item}
                 right={
-                  isFolder || route.params.title == "Unfinished Business" ? (
+                  isFolder ? (
                     <Icon
                       name="arrow-forward-outline"
                       type="ionicon"
@@ -143,7 +165,10 @@ function HomeScreen({ navigation, route }) {
                     />
                   ) : (
                     <CheckBox
-                      checked={getItemFromFullPath(state.allPdfs, route.params.fullPath)[item].checked}
+                      checked={
+                        getItemFromFullPath(state.allPdfs, fullPath)[item]
+                          .checked
+                      }
                       checkedColor="#0F0"
                       checkedTitle="ਸੰਪੂਰਨ"
                       containerStyle={{
@@ -152,7 +177,7 @@ function HomeScreen({ navigation, route }) {
                         backgroundColor: 'black',
                       }}
                       onPress={() => {
-                        dispatch(setCheckBox(item, route.params.fullPath));
+                        dispatch(setCheckBox(item, fullPath));
                       }}
                       //size={20}
                       textStyle={{
@@ -168,20 +193,21 @@ function HomeScreen({ navigation, route }) {
                 }
                 onClick={() => {
                   if (isFolder) {
-                    let theDataObj = route.params.dataObj[item]
-                    // console.log(theDataObj)
-                    if (item === "Unfinished Business") {
-                      theDataObj = getPdfsFromDiffFolders(state.allPdfs);
-                    }
+                    let theDataObj = getItemFromFullPath(
+                      state.allPdfs,
+                      fullPath,
+                    )[item];
+                    const addedPdfs = item === 'Added PDFs' || params.addedPdfs;
                     navigation.push('Home', {
                       dataObj: theDataObj,
                       title: item,
-                      fullPath: [...route.params.fullPath, item],
+                      fullPath: [...fullPath, item],
+                      addedPdfs,
                     });
                   } else {
                     navigation.navigate('OpenPdf', {
                       pdfTitle: item,
-                      fullPath:[...route.params.fullPath],
+                      fullPath: [...fullPath],
                     });
                   }
                 }}
@@ -189,38 +215,72 @@ function HomeScreen({ navigation, route }) {
             );
           }}
         />
-        {/* <AddFileModal
-          state={state}
-          dispatch={dispatch}
-          visible={true}
-          setVisibility={true}
-          folderTitle={true}
-          onlyFiles={true}
-        /> */}
       </View>
     </View>
   );
 }
 
-// function AddedPDFsScreen({})
+function AddedPDFsScreen({state, dispatch, params, navigation, container}) {
+  const [visible, setVisibility] = React.useState(false);
 
-
-function getPdfsFromDiffFolders(pdfObj, pdfsLstForAllPdfs = {}) {
-  //pdfs for unfinished business
-  for (const item of Object.keys(pdfObj)) {
-    if (!pdfObj[item].currentAng) {
-      //means if isfolder
-      getPdfsFromDiffFolders(
-        pdfObj[item],
-        pdfsLstForAllPdfs,
-      );
-      continue;
+  const styles = StyleSheet.create({
+    container: {
+      ...container,
+    },
+    scroll: {
+      height: '85%',
+    },
+    bottomRow:{
+      flexDirection:'row',
+      justifyContent:'space-evenly'
     }
-    if (pdfObj[item].currentAng > 1 && !pdfObj[item].checked)
-      pdfsLstForAllPdfs[item] = pdfObj[item];
-  }
-  console.log(pdfsLstForAllPdfs, "UOOUU")
-  return pdfsLstForAllPdfs;
-}
-export default HomeScreen;
+    
+  });
 
+  return (
+    <View style={styles.container}>
+      <View style={styles.scroll}>
+        <ListDisplay
+          state={state}
+          dispatch={dispatch}
+          params={params}
+          navigation={navigation}
+        />
+      </View>
+      <View style={styles.bottomRow}>
+        <TouchableOpacity
+          onPress={() => {
+            setVisibility(true);
+          }}>
+          <Icon
+            name={'add-outline'}
+            type="ionicon"
+            size={50}
+            color={state.darkMode ? 'white' : 'black'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            // setVisibility(true);
+          }}>
+          <Icon
+            name={'trash-outline'}
+            type="ionicon"
+            size={50}
+            color={state.darkMode ? 'white' : 'black'}
+          />
+        </TouchableOpacity>
+      </View>
+      <AddFileModal
+        state={state}
+        dispatch={dispatch}
+        visible={visible}
+        setVisibility={setVisibility}
+        fullPath={params.fullPath}
+        navigation={navigation}
+      />
+    </View>
+  );
+}
+
+export default HomeScreen;

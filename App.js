@@ -27,6 +27,7 @@ function App() {
               dataObj: folderToFileData,
               title: 'Santhiya Pothi',
               fullPath: [], //
+              addedPdfs: false,
             }}
           />
           <Stack.Screen name="Settings Page" component={SettingsPage} />

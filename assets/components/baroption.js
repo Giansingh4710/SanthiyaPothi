@@ -6,7 +6,7 @@ export function BarOption({left, text, right, onClick, onLongPress, state}) {
 
     const styles = StyleSheet.create({
         itemContainer: {
-            height: 75,
+            height: 95,
             padding: 5,
             borderRadius: 5,
             flexDirection: 'row',

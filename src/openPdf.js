@@ -15,10 +15,10 @@ import {RightOfHeader} from '../assets/components/rightOfHeader';
 import Pdf from 'react-native-pdf';
 import TeekaPDF from '../assets/components/teekaPdf';
 import {useSelector, useDispatch} from 'react-redux';
-import {setAngNum, addUriPath, removeUriPath} from '../redux/actions';
+import {setAngNum} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {getItemFromFullPath} from '../assets/common_funcs.js'
+import {getItemFromFullPath} from '../assets/helper_funcs.js'
 
 const alertMsg = msg => {
   return Alert.alert('Oops!!', msg, [
@@ -45,7 +45,7 @@ export default function OpenPdf({navigation, route}) {
   const fileObj=getItemFromFullPath(state.allPdfs,[...fullPath,pdfTitle])
 
   const sourceFileName = {
-    uri: fileObj.uris[0],
+    uri: fileObj.uri,
     cache: true,
   };
   if (pdfTitle === 'Fareedkot Teeka') {
@@ -104,7 +104,7 @@ export default function OpenPdf({navigation, route}) {
         }}
         onError={error => {
           const strError = String(error);
-          Alert.alert(
+          /* Alert.alert(
             'PDF ERROR',
             strError,
             [
@@ -116,8 +116,9 @@ export default function OpenPdf({navigation, route}) {
             {
               cancelable: true,
             },
-          );
+          ); */
           console.log(error);
+          return
         }}
         onPressLink={uri => {
           console.log(`Link presse: ${uri}`);
