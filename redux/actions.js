@@ -1,8 +1,8 @@
-export const setCheckBox = (baniTitle, thefolder) => dispatch => {
+export const setCheckBox = (baniTitle, fullPath) => dispatch => {
   dispatch({
     type: 'SET_CHECKBOX',
     theBani: baniTitle,
-    theFolder: thefolder,
+    fullPath,
   });
 };
 export const setTheState = state => dispatch => {
@@ -11,11 +11,11 @@ export const setTheState = state => dispatch => {
     state,
   });
 };
-export const setAngNum = (folder, bani, angNum) => dispatch => {
+export const setAngNum = (fullPath, baniTitle, angNum) => dispatch => {
   dispatch({
     type: 'SET_ANG_NUM',
-    folder,
-    bani,
+    fullPath,
+    theBani: baniTitle,
     angNum,
   });
 };
@@ -35,21 +35,6 @@ export const setShowHeader = mode => dispatch => {
   dispatch({
     type: 'SET_SHOW_HEADER',
     mode,
-  });
-};
-export const addUriPath = (folder, file, uri) => dispatch => {
-  dispatch({
-    type: 'ADD_URI',
-    folder,
-    file,
-    uri,
-  });
-};
-export const removeUriPath = (folder, file) => dispatch => {
-  dispatch({
-    type: 'REMOVE_URI',
-    folder,
-    file,
   });
 };
 

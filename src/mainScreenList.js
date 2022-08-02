@@ -1,23 +1,26 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
-import {Icon, CheckBox} from 'react-native-elements';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
+import { Icon, CheckBox } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {setTheState} from '../redux/actions';
-import {initialState} from '../redux/reducers';
-import {allColors} from '../assets/styleForEachOption';
-import {BarOption} from '../assets/components/baroption';
-import {RightOfHeader} from '../assets/components/rightOfHeader';
+import { setTheState } from '../redux/actions';
+import { initialState } from '../redux/reducers';
+import { allColors } from '../assets/styleForEachOption';
+import { BarOption } from '../assets/components/baroption';
+import { RightOfHeader } from '../assets/components/rightOfHeader';
+import { AddFileModal } from '../assets/components/addFilesModal.js';
+import {getItemFromFullPath} from '../assets/common_funcs.js'
+
 
 import {
-    setCheckBox,
-    deleteAddedItem,
-    addNdeletePdf,
-    setList,
+  setCheckBox,
+  deleteAddedItem,
+  addNdeletePdf,
+  setList,
 } from '../redux/actions';
 
-function HomeScreen({navigation, route}) {
+function HomeScreen({ navigation, route }) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
@@ -27,7 +30,6 @@ function HomeScreen({navigation, route}) {
         let theState;
         if (theStringState) {
           theState = JSON.parse(theStringState);
-          // console.log(theState);
           console.log('got state that was previously saved');
         } else {
           console.log('there is nothing is state');
@@ -60,34 +62,33 @@ function HomeScreen({navigation, route}) {
           state={state}
           icons={[
             {
-              name: 'open-outline',
+              name: route.params.title == "Added PDFs" ? "add-outline" : 'open-outline',
               action: () => {
-                console.log('shabad are');
-                navigation.navigate('ShabadScreen');
+                if (route.params.title !== "Added PDFs") {
+                  navigation.navigate('ShabadScreen');
+                  return;
+                }
+                console.log("Added Pdf page")
               },
             },
             {
               name: 'shuffle-outline',
               action: () => {
-                const items = Object.keys(route.params.data);
+                const items = Object.keys(route.params.dataObj);
+                if (items.length === 0) return
+
                 const item = items[Math.floor(Math.random() * items.length)];
-                if (route.params.data[item].currentAng) {
+                if (route.params.dataObj[item].currentAng) {
                   navigation.navigate('OpenPdf', {
                     pdfTitle: item,
                     folderTitle: route.params.title,
                   });
                 } else {
                   navigation.push('Home', {
-                    data: route.params.data[item],
+                    data: route.params.dataObj[item],
                     title: item,
                   });
                 }
-                //const theList = state.allPdfs[item];
-                //console.log(theList);
-                //navigation.navigate('BanisList', {
-                //list: theList,
-                //folderTitle: item, //name of the bar clicked on
-                //});
               },
             },
             {
@@ -118,23 +119,23 @@ function HomeScreen({navigation, route}) {
       <View style={styles.scroll}>
         <FlatList
           keyExtractor={item => item} //name of each item like 'Bai Vaara'
-          data={Object.keys(route.params.data)}
-          renderItem={({item}) => {
-            const isFolder=!route.params.data[item].currentAng; //currentAng will never be 0
-            console.log(item);
+          data={Object.keys(route.params.dataObj)}
+          renderItem={({ item }) => {
+            const isFolder = !route.params.dataObj[item].currentAng; //currentAng will never be 0
+            // console.log(item);
             return (
               <BarOption
                 state={state}
                 left={
                   <Icon
-                    name={isFolder?"folder-outline":"document-outline"}
+                    name={isFolder ? "folder-outline" : "document-outline"}
                     type="ionicon"
                     color={state.darkMode ? 'white' : 'black'}
                   />
                 }
                 text={item}
                 right={
-                  isFolder || route.params.title=="Unfinished Business"? (
+                  isFolder || route.params.title == "Unfinished Business" ? (
                     <Icon
                       name="arrow-forward-outline"
                       type="ionicon"
@@ -142,7 +143,7 @@ function HomeScreen({navigation, route}) {
                     />
                   ) : (
                     <CheckBox
-                      checked={state.allPdfs[route.params.title][item].checked}
+                      checked={getItemFromFullPath(state.allPdfs, route.params.fullPath)[item].checked}
                       checkedColor="#0F0"
                       checkedTitle="ਸੰਪੂਰਨ"
                       containerStyle={{
@@ -151,7 +152,7 @@ function HomeScreen({navigation, route}) {
                         backgroundColor: 'black',
                       }}
                       onPress={() => {
-                        dispatch(setCheckBox(item, route.params.title));
+                        dispatch(setCheckBox(item, route.params.fullPath));
                       }}
                       //size={20}
                       textStyle={{
@@ -167,19 +168,20 @@ function HomeScreen({navigation, route}) {
                 }
                 onClick={() => {
                   if (isFolder) {
-                    let theDataObj=route.params.data[item]
-                    if(item==="Unfinished Business"){
-                      theDataObj=getPdfsFromDiffFolders(state.allPdfs);
+                    let theDataObj = route.params.dataObj[item]
+                    // console.log(theDataObj)
+                    if (item === "Unfinished Business") {
+                      theDataObj = getPdfsFromDiffFolders(state.allPdfs);
                     }
                     navigation.push('Home', {
-                      //data: item==="Unfinished Business"?getPdfsFromDiffFolders(state.allPdfs):route.params.data[item],
-                      data:theDataObj,
+                      dataObj: theDataObj,
                       title: item,
+                      fullPath: [...route.params.fullPath, item],
                     });
                   } else {
                     navigation.navigate('OpenPdf', {
                       pdfTitle: item,
-                      folderTitle: route.params.data[item]['baniType'],
+                      fullPath:[...route.params.fullPath],
                     });
                   }
                 }}
@@ -187,26 +189,38 @@ function HomeScreen({navigation, route}) {
             );
           }}
         />
+        {/* <AddFileModal
+          state={state}
+          dispatch={dispatch}
+          visible={true}
+          setVisibility={true}
+          folderTitle={true}
+          onlyFiles={true}
+        /> */}
       </View>
     </View>
   );
 }
 
+// function AddedPDFsScreen({})
+
+
 function getPdfsFromDiffFolders(pdfObj, pdfsLstForAllPdfs = {}) {
-    //pdfs for unfinished business
-    for (const item of Object.keys(pdfObj)) {
-        if (!pdfObj[item].currentAng) {
-            //means if isfolder
-            getPdfsFromDiffFolders(
-                pdfObj[item],
-                pdfsLstForAllPdfs,
-            );
-            continue;
-        }
-        if (pdfObj[item].currentAng > 1 && !pdfObj[item].checked)
-            pdfsLstForAllPdfs[item]= pdfObj[item];
+  //pdfs for unfinished business
+  for (const item of Object.keys(pdfObj)) {
+    if (!pdfObj[item].currentAng) {
+      //means if isfolder
+      getPdfsFromDiffFolders(
+        pdfObj[item],
+        pdfsLstForAllPdfs,
+      );
+      continue;
     }
-    console.log(pdfsLstForAllPdfs,"UOOUU")
-    return pdfsLstForAllPdfs;
+    if (pdfObj[item].currentAng > 1 && !pdfObj[item].checked)
+      pdfsLstForAllPdfs[item] = pdfObj[item];
+  }
+  console.log(pdfsLstForAllPdfs, "UOOUU")
+  return pdfsLstForAllPdfs;
 }
 export default HomeScreen;
+

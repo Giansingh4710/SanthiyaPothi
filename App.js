@@ -7,10 +7,8 @@ import {Provider} from 'react-redux';
 import {Store} from './redux/store';
 
 import HomeScreen from './src/mainScreenList';
-import FolderToPdfs from './src/foldersToPdf';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
-import FolderToPdfs2 from './src/subFolder';
 import ShabadScreen from './src/shabadPage/shabadPage.js';
 import ReadShabad from './src/shabadPage/readShabad.js';
 import {folderToFileData} from './assets/longData';
@@ -18,11 +16,6 @@ import {folderToFileData} from './assets/longData';
 const Stack = createStackNavigator();
 
 function App() {
-  const allListItems = [
-    ...Object.keys(folderToFileData),
-    'ਪਾਠ Hajari',
-    'All Pdfs',
-  ];
   return (
     <Provider store={Store}>
       <NavigationContainer>
@@ -31,13 +24,12 @@ function App() {
             name="Home"
             component={HomeScreen}
             initialParams={{
-              data: folderToFileData,
+              dataObj: folderToFileData,
               title: 'Santhiya Pothi',
+              fullPath: [], //
             }}
           />
           <Stack.Screen name="Settings Page" component={SettingsPage} />
-          <Stack.Screen name="BanisList" component={FolderToPdfs} />
-          <Stack.Screen name="BanisList2" component={FolderToPdfs2} />
           <Stack.Screen
             name="OpenPdf"
             component={OpenPdf}

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {folderToFileData} from '../assets/longData';
+import {changePDFsObj} from '../assets/common_funcs.js'
 
 export const setData = async (title, state) => {
   try {
@@ -30,20 +31,11 @@ function theReducer(state = initialState, action) {
     };
     theState = newState;
   } else if (action.type === 'SET_CHECKBOX') {
-    const newallPdfs = {...state.allPdfs};
-    newallPdfs[action.theFolder][action.theBani].checked =
-      !newallPdfs[action.theFolder][action.theBani].checked;
-    const newState = {
-      ...state,
-      allPdfs: newallPdfs,
-    };
-    theState = newState;
+    changePDFsObj(state.allPdfs,action.theBani,action.fullPath,action.type)
+    theState = {...state};
   } else if (action.type === 'SET_ANG_NUM') {
-    state.allPdfs[action.folder][action.bani].currentAng = action.angNum;
-    const newState = {
-      ...state,
-    };
-    theState = newState;
+    changePDFsObj(state.allPdfs,action.theBani,action.fullPath,action.type,{angNum:action.angNum})
+    theState = {...state};
   } else if (action.type === 'SET_DARK_MODE') {
     const newState = {
       ...state,
@@ -62,15 +54,6 @@ function theReducer(state = initialState, action) {
       showHeaderOnScroll: action.mode,
     };
     theState = newState;
-  } else if (action.type === 'ADD_URI') {
-    state.allPdfs[action.folder][action.file].uris.unshift(action.uri);
-    theState = state;
-    console.log(theState.allPdfs[action.folder][action.file]);
-  } else if (action.type === 'REMOVE_URI') {
-    if (state.allPdfs[action.folder][action.file].uris.length > 1)
-      state.allPdfs[action.folder][action.file].uris.shift();
-    theState = state;
-    console.log(theState.allPdfs[action.folder][action.file]);
   } else if (action.type === 'SET_FONT_SIZE') {
     state.fontSizeForShabad = action.fontSize;
     theState = state;

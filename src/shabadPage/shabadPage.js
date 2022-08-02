@@ -47,10 +47,6 @@ export default function ShabadScreen({navigation}) {
           state={state}
           icons={[
             {
-              name: 'shuffle-outline',
-              action: () => {},
-            },
-            {
               name: 'settings-outline',
               action: () => {
                 navigation.navigate('Settings Page');
@@ -109,6 +105,7 @@ export default function ShabadScreen({navigation}) {
           navigation.navigate('ReadShabad', {
             shabadData: theObj,
             index: state.shabadHistory.length,
+            type:'shabad',
           });
           dispatch(addToShabadHistory(theObj));
         }}>

@@ -1,66 +1,80 @@
 export const folderToFileData = {
   'Sri Guru Granth Sahib Jee': {
-    "Adi Maharaj (Big File)":{
+    "test": {
+      "bob": {
+        checked: false,
+        baniType: 'Sri Guru Granth Sahib Jee',
+        currentAng: 1,
+        uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28BigFile%29.pdf'],
+      },
+      "Adi Maharaj (Small File)": {
+        checked: false,
+        baniType: 'Sri Guru Granth Sahib Jee',
+        currentAng: 1,
+        uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28SmallFile%29.pdf'],
+      },
+    },
+    "Adi Maharaj (Big File)": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28BigFile%29.pdf'],
     },
-    "Adi Maharaj (Small File)":{
+    "Adi Maharaj (Small File)": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28SmallFile%29.pdf'],
     },
-    "Puratan Handwritten Adi Maharaj":{
+    "Puratan Handwritten Adi Maharaj": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanHandwrittenAdiMaharaj.pdf'],
     },
-    "Dasam Maharaj Larrivar":{
+    "Dasam Maharaj Larrivar": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharajlarrivaar.pdf'],
     },
-    "Dasam Maharaj 1 - 716 (Part1)":{
+    "Dasam Maharaj 1 - 716 (Part1)": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMahraj1-716%28Part1%29.pdf'],
     },
-    "Dasam Maharaj 716 - 1429 (Part2)":{
+    "Dasam Maharaj 716 - 1429 (Part2)": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMahraj716-1429%28Part2%29.pdf'],
     },
-    "Fareedkot Teeka":{
+    "Fareedkot Teeka": {
       checked: false,
       baniType: 'Sri Guru Granth Sahib Jee',
       currentAng: 1,
       uris: ['http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/FareedkotTeeka.pdf'],
     },
   },
-  'Nitnem':{
-    "Nitnem Not Larrivaar":{
-      checked:false,
+  'Nitnem': {
+    "Nitnem Not Larrivaar": {
+      checked: false,
       baniType: 'Nitnem',
-      currentAng:1,
-      uris:["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/NitnemNotLarrivaar.pdf"],
+      currentAng: 1,
+      uris: ["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/NitnemNotLarrivaar.pdf"],
     },
-    "Sundar Gutka Not Larrivaar":{
-      checked:false,
+    "Sundar Gutka Not Larrivaar": {
+      checked: false,
       baniType: 'Nitnem',
-      currentAng:1,
-      uris:["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/SundarGutkaNotLarrivaar.pdf"],
+      currentAng: 1,
+      uris: ["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/SundarGutkaNotLarrivaar.pdf"],
     },
-    "Nitnem Larrivaar":{
-      checked:false,
+    "Nitnem Larrivaar": {
+      checked: false,
       baniType: 'Nitnem',
-      currentAng:1,
-      uris:["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/Nitnem.pdf"],
+      currentAng: 1,
+      uris: ["http://45.41.235.161/~daasstor/SanthiyaPothi/Nitnem/Nitnem.pdf"],
     },
   },
   'Panj Granthi': {
@@ -517,6 +531,6 @@ export const folderToFileData = {
     },
     //'Bhagat Bani Tatkara.jpeg'
   },
-  'Added PDFs':{},
-  'Unfinished Business':{},
+  'Added PDFs': {},
+  'Unfinished Business': {},
 };

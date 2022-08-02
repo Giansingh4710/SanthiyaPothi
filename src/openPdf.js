@@ -6,11 +6,9 @@ import {
   ActivityIndicator,
   TextInput,
   Alert,
-  PermissionsAndroid
 } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
-//import {RNFS} from 'react-native-fs';
-var RNFS = require('react-native-fs');
+// import RNFetchBlob from 'rn-fetch-blob';
+// var RNFS = require('react-native-fs');
 import {Icon} from 'react-native-elements';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
 
@@ -20,6 +18,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum, addUriPath, removeUriPath} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {getItemFromFullPath} from '../assets/common_funcs.js'
 
 const alertMsg = msg => {
   return Alert.alert('Oops!!', msg, [
@@ -42,19 +41,21 @@ export default function OpenPdf({navigation, route}) {
   const dispatch = useDispatch();
 
   const {pdfTitle} = route.params;
-  const {folderTitle} = route.params;
+  const {fullPath} = route.params;
+  const fileObj=getItemFromFullPath(state.allPdfs,[...fullPath,pdfTitle])
+
   const sourceFileName = {
-    uri: state.allPdfs[folderTitle][pdfTitle].uris[0],
+    uri: fileObj.uris[0],
     cache: true,
   };
-  //console.log(sourceFileName,state.allPdfs[folderTitle][pdfTitle]);
   if (pdfTitle === 'Fareedkot Teeka') {
     return <TeekaPDF navigation={navigation} uri={sourceFileName.uri} />;
   }
+
   React.useEffect(() => {
-    pdfRef.current.setPage(state.allPdfs[folderTitle][pdfTitle].currentAng);
+    pdfRef.current.setPage(fileObj.currentAng);
     navigation.addListener('beforeRemove', () => {
-      dispatch(setAngNum(folderTitle, pdfTitle, currentAngRef.current));
+      dispatch(setAngNum(fullPath, pdfTitle, currentAngRef.current));
     });
   }, [totalAngs, navigation]);
 
@@ -103,15 +104,6 @@ export default function OpenPdf({navigation, route}) {
         }}
         onError={error => {
           const strError = String(error);
-          if (strError === 'Error: canceled') return;
-          if (
-            strError ===
-              'Error: open failed: ENOENT (No such file or directory)' ||
-            strError === 'Error: no pdf source!'
-          ) {
-            dispatch(removeUriPath(folderTitle, pdfTitle));
-            return;
-          }
           Alert.alert(
             'PDF ERROR',
             strError,
@@ -125,7 +117,6 @@ export default function OpenPdf({navigation, route}) {
               cancelable: true,
             },
           );
-          dispatch(removeUriPath(folderTitle, pdfTitle)); //remove path to downloaded pdf
           console.log(error);
         }}
         onPressLink={uri => {
@@ -134,7 +125,6 @@ export default function OpenPdf({navigation, route}) {
       />
       <Header
         //header on the bottom so it can be drawn on top of the pdf.
-        folder={folderTitle}
         title={pdfTitle}
         currentAng={currentAng}
         totalAngs={totalAngs}
@@ -143,19 +133,12 @@ export default function OpenPdf({navigation, route}) {
         navigation={navigation}
         hidden={!headerShown}
         pdfRef={pdfRef}
-        link={
-          state.allPdfs[folderTitle][pdfTitle].uris[
-            state.allPdfs[folderTitle][pdfTitle].uris.length - 1
-          ]
-        }
       />
     </View>
   );
 }
 
 function Header({
-  dispatch,
-  folder,
   title,
   currentAng,
   totalAngs,
@@ -163,7 +146,6 @@ function Header({
   navigation,
   hidden,
   pdfRef,
-  link,
 }) {
   if (hidden) return null;
 
@@ -249,85 +231,6 @@ function Header({
         <RightOfHeader
           state={state}
           icons={[
-            {
-              name: 'cloud-download-outline',
-              action: () => {
-                function mkdir(path) {
-                  RNFS.exists(path).then(dirExists => {
-                    if (dirExists) {
-                      console.log(path + ' exists');
-                    } else {
-                      RNFS.mkdir(path);
-                    }
-                  });
-                }
-                const requestFilePermission = async () => {
-                  try {
-                    const granted = await PermissionsAndroid.request(
-                      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                      {
-                        title: 'Cool Photo App Camera Permission',
-                        message:
-                          'Cool Photo App needs access to your camera ' +
-                          'so you can take awesome pictures.',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                      },
-                    );
-                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                      return true;
-                    } else {
-                      alertMsg('Camera permission denied');
-                    }
-                  } catch (err) {
-                    console.warn(err);
-                    alertMsg(err)
-                  }
-                  return false;
-                };
-                if (!requestFilePermission()) {
-                  alertMsg("Can't read files. Please give permission")
-                }
-                const {config, fs} = RNFetchBlob;
-                const {DownloadDir} = fs.dirs; // You can check the available directories in the wiki.
-
-                let DirectoryPath = DownloadDir + '/' + 'SanthiyaPothi/';
-                mkdir(DirectoryPath);
-                DirectoryPath += folder;
-                mkdir(DirectoryPath);
-
-                const pathToFile = `${DirectoryPath}/${title}.pdf`;
-                RNFS.exists(pathToFile).then(fileExists => {
-                  if (fileExists) {
-                    console.log('File already exists.');
-                    alertMsg('File already exists.');
-                  } else {
-                    const options = {
-                      fileCache: true,
-                      addAndroidDownloads: {
-                        useDownloadManager: true, // true will use native manager and be shown on notification bar.
-                        notification: true,
-                        path: pathToFile,
-                        description: 'Downloading.',
-                      },
-                    };
-                    config(options)
-                      .fetch('GET', link)
-                      .then(res => {
-                        console.log(res);
-                        alertMsg("Downloaded at "+res.data);
-                        dispatch(addUriPath(folder, title, res.data));
-                        //console.log('do some magic in here');
-                      })
-                      .catch(err => {
-                        console.log(err);
-                        alertMsg(String(err))
-                      });
-                  }
-                });
-              },
-            },
             {
               name: 'shuffle-outline',
               action: () => {
