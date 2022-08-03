@@ -9,7 +9,8 @@ import {initialState} from '../redux/reducers';
 import {allColors} from '../assets/styleForEachOption';
 import {BarOption} from '../assets/components/baroption';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
-import {AddFileModal} from '../assets/components/addFilesModal.js';
+import {Add_Or_Del_Folder_or_File} from '../assets/components/addFilesModal.js';
+import {DeleteFilesModal} from '../assets/components/deleteFilesModal.js';
 import {getItemFromFullPath} from '../assets/helper_funcs.js';
 
 import {setCheckBox} from '../redux/actions';
@@ -107,7 +108,6 @@ function HomeScreen({navigation, route}) {
         dispatch={dispatch}
         params={route.params}
         navigation={navigation}
-        container={styles.container}
       />
     );
   }
@@ -167,7 +167,9 @@ function ListDisplay({state, dispatch, params, navigation}) {
                     <CheckBox
                       checked={
                         getItemFromFullPath(state.allPdfs, fullPath)[item]
-                          .checked
+                          ? getItemFromFullPath(state.allPdfs, fullPath)[item]
+                              .checked
+                          : false
                       }
                       checkedColor="#0F0"
                       checkedTitle="ਸੰਪੂਰਨ"
@@ -220,21 +222,24 @@ function ListDisplay({state, dispatch, params, navigation}) {
   );
 }
 
-function AddedPDFsScreen({state, dispatch, params, navigation, container}) {
+function AddedPDFsScreen({state, dispatch, params, navigation}) {
   const [visible, setVisibility] = React.useState(false);
+  const [typeOfModal, setTypeOfModal] = React.useState('');
 
   const styles = StyleSheet.create({
     container: {
-      ...container,
+      backgroundColor: visible
+        ? 'rgba(0,0,0,0.5)'
+        : allColors[state.darkMode].mainBackgroundColor,
+      height: '100%',
     },
     scroll: {
       height: '85%',
     },
-    bottomRow:{
-      flexDirection:'row',
-      justifyContent:'space-evenly'
-    }
-    
+    bottomRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+    },
   });
 
   return (
@@ -250,6 +255,7 @@ function AddedPDFsScreen({state, dispatch, params, navigation, container}) {
       <View style={styles.bottomRow}>
         <TouchableOpacity
           onPress={() => {
+            setTypeOfModal('add');
             setVisibility(true);
           }}>
           <Icon
@@ -261,7 +267,8 @@ function AddedPDFsScreen({state, dispatch, params, navigation, container}) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            // setVisibility(true);
+            setTypeOfModal('delete');
+            setVisibility(true);
           }}>
           <Icon
             name={'trash-outline'}
@@ -271,13 +278,14 @@ function AddedPDFsScreen({state, dispatch, params, navigation, container}) {
           />
         </TouchableOpacity>
       </View>
-      <AddFileModal
+      <Add_Or_Del_Folder_or_File
         state={state}
         dispatch={dispatch}
         visible={visible}
         setVisibility={setVisibility}
         fullPath={params.fullPath}
         navigation={navigation}
+        actionType={typeOfModal}
       />
     </View>
   );

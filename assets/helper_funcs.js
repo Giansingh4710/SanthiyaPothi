@@ -21,6 +21,8 @@ export function changePDFsObj(
       obj[pathLst[depth]][title].currentAng = otherData.angNum
     else if (action === 'ADD_PDF_OR_FOLDER') 
       obj[pathLst[depth]][title] = otherData.value
+    else if (action === 'DELETE_PDF_OR_FOLDER') 
+      delete obj[pathLst[depth]][title]
     else
       console.log('nothing happend in changePDFsObj in helper func')
     return;

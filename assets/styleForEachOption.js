@@ -29,6 +29,7 @@ export const allColors = {
     },
     openPdf: {},
     mainScreenList: {},
+    modal:{}
   },
   true: {
     headerColor: '#041C32',

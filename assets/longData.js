@@ -1,17 +1,5 @@
 export const folderToFileData = {
   'Sri Guru Granth Sahib Jee': {
-    test: {
-      bob: {
-        checked: false,
-        currentAng: 1,
-        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28BigFile%29.pdf',
-      },
-      'Adi Maharaj (Small File)': {
-        checked: false,
-        currentAng: 1,
-        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28SmallFile%29.pdf',
-      },
-    },
     'Adi Maharaj (Big File)': {
       checked: false,
       currentAng: 1,

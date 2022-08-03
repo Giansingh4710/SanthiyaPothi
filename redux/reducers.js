@@ -21,7 +21,7 @@ export const initialState = {
   shabadHistory:[],
 };
 
-setData('state', initialState); //to reset all state
+// setData('state', initialState); //to reset all state
 
 function theReducer(state = initialState, action) {
   let theState;
@@ -57,7 +57,9 @@ function theReducer(state = initialState, action) {
   } else if (action.type === 'ADD_PDF_OR_FOLDER') {
     changePDFsObj(state.allPdfs,action.key,action.fullPath,action.type,{value:action.value})
     theState = {...state};
-    console.log(state.allPdfs['Added PDFs'])
+  } else if (action.type === 'DELETE_PDF_OR_FOLDER') {
+    changePDFsObj(state.allPdfs,action.key,action.fullPath,action.type)
+    theState = {...state};
   } else if (action.type === 'SET_FONT_SIZE') {
     state.fontSizeForShabad = action.fontSize;
     theState = state;

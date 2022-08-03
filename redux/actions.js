@@ -46,6 +46,13 @@ export const addPDForFolder = (key,value,fullPath) => dispatch => {
     fullPath,
   });
 };
+export const deletePDForFolder = (key,fullPath) => dispatch => {
+  dispatch({
+    type: 'DELETE_PDF_OR_FOLDER',
+    key,
+    fullPath,
+  });
+};
 
 
 
