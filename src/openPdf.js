@@ -31,6 +31,7 @@ const alertMsg = msg => {
   ]);
 };
 
+
 export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currentAng, setCurrentAng] = React.useState(1);
@@ -61,6 +62,10 @@ export default function OpenPdf({navigation, route}) {
       dispatch(setAngNum(fullPath, pdfTitle, currentAngRef.current));
     });
   }, [totalAngs, navigation]);
+
+  React.useEffect(() => {
+    if(showPdfModal)setHeaderShown(false)
+  })
 
   const styles = StyleSheet.create({
     container: {

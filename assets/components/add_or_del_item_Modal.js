@@ -231,14 +231,16 @@ function AddItemModal({
       const res = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
         allowMultiSelection: true,
+        copyTo: 'cachesDirectory',
       });
+      // console.log(res)
       navigation.goBack();
       res.map((file, index) => {
         const name = file.name;
         const details = {
           checked: false,
           currentAng: 1,
-          uri: file.uri,
+          uri: file.fileCopyUri,
         };
         dispatch(addPDForFolder(name, details, fullPath));
       });
