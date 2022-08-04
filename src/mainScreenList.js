@@ -9,8 +9,7 @@ import {initialState} from '../redux/reducers';
 import {allColors} from '../assets/styleForEachOption';
 import {BarOption} from '../assets/components/baroption';
 import {RightOfHeader} from '../assets/components/rightOfHeader';
-import {Add_Or_Del_Folder_or_File} from '../assets/components/addFilesModal.js';
-import {DeleteFilesModal} from '../assets/components/deleteFilesModal.js';
+import {Add_Or_Del_Folder_or_File} from '../assets/components/add_or_del_item_Modal.js';
 import {getItemFromFullPath} from '../assets/helper_funcs.js';
 
 import {setCheckBox} from '../redux/actions';

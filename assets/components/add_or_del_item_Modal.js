@@ -16,7 +16,7 @@ import {allColors} from '../styleForEachOption';
 import {getItemFromFullPath} from '../helper_funcs.js';
 import {BarOption} from './baroption.js';
 
-import {addPDForFolder,deletePDForFolder} from '../../redux/actions';
+import {addPDForFolder, deletePDForFolder} from '../../redux/actions';
 
 export function Add_Or_Del_Folder_or_File({
   state,
@@ -61,22 +61,19 @@ function DeleteItemsModal({
   navigation,
 }) {
   const dataObj = getItemFromFullPath(state.allPdfs, fullPath);
-  const files=Object.keys(dataObj)
-  const [checksLst, setChecksLst] = React.useState(
-    files.map(() => false),
-  );
+  const files = Object.keys(dataObj);
+  const [checksLst, setChecksLst] = React.useState(files.map(() => false));
   const deleteFilesAlert = () => {
     const msg = 'Are you sure you want the delete the selected files?';
     return Alert.alert('This Action is Irreversible', msg, [
       {
         text: 'Yes',
         onPress: () => {
-          for(const ind in files){
-            const fileName=files[ind]
-            if(checksLst[ind])
-              dispatch(deletePDForFolder(fileName,fullPath))
+          for (const ind in files) {
+            const fileName = files[ind];
+            if (checksLst[ind]) dispatch(deletePDForFolder(fileName, fullPath));
           }
-          navigation.goBack()
+          navigation.goBack();
         },
       },
       {
@@ -229,53 +226,6 @@ function AddItemModal({
     ]);
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: allColors[state.darkMode].headerColor,
-      // backgroundColor: 'blue',
-      // height: '50%',
-      // backgroundColor: 'rgba(0,0,0,0.5)',
-      // height:'100%',
-      top: '25%',
-      // bottom: '50%',
-      width: '90%',
-      left: '5%',
-      borderRadius: 40,
-      // position: 'absolute',
-    },
-    topRow: {
-      flexDirection: 'row',
-      // justifyContent: 'space-between',
-      margin: 10,
-    },
-    title: {
-      flex: 3,
-      margin: 10,
-      fontSize: 18,
-      color: state.darkMode ? 'white' : 'black',
-    },
-    text: {
-      color: state.darkMode ? 'white' : 'black',
-      fontSize: 16,
-      // justifyContent:'flex-start'
-    },
-    icons: {
-      flex: 1,
-    },
-    textInput: {
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      borderRadius: 5,
-    },
-    ButtomButton: {
-      paddingHorizontal: 15,
-      paddingVertical: 5,
-      borderRadius: 10,
-      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-    },
-  });
-
   async function pickDoc() {
     try {
       const res = await DocumentPicker.pick({
@@ -283,7 +233,7 @@ function AddItemModal({
         allowMultiSelection: true,
       });
       navigation.goBack();
-      res.map((file,index)=>{
+      res.map((file, index) => {
         const name = file.name;
         const details = {
           checked: false,
@@ -291,7 +241,7 @@ function AddItemModal({
           uri: file.uri,
         };
         dispatch(addPDForFolder(name, details, fullPath));
-      })
+      });
     } catch (err) {
       // alert(err);
       console.log(err);
@@ -299,10 +249,11 @@ function AddItemModal({
     setVisibility(false);
   }
 
+  const styles = commoncss(state);
   return (
     <Modal
       visible={visible}
-      transparent
+      // transparent
       animationType="slide"
       onRequestClose={() => {
         setVisibility(false);
@@ -362,4 +313,107 @@ function AddItemModal({
       </View>
     </Modal>
   );
+}
+
+export function PdfInfoModal({visible, setVisibility, state,pdfInfo}) {
+  const styles = commoncss(state);
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={() => {
+        setVisibility(false);
+      }}>
+      <View style={styles.container}>
+        <View style={styles.topRow}>
+          <TouchableOpacity
+            style={styles.icons}
+            onPress={() => {
+              setVisibility(false);
+            }}>
+            <Icon
+              name="arrow-back-outline"
+              type="ionicon"
+              size={50}
+              color={state.darkMode ? 'white' : 'black'}
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>PDF Info :</Text>
+        </View>
+        <View style={styles.topRow}>
+          <Text style={styles.text}>Title : </Text>
+          <Text style={styles.text}>{pdfInfo.pdfTitle}</Text>
+        </View>
+        <View style={styles.topRow}>
+          <Text style={styles.text}>Checked : </Text>
+          <Text style={styles.text}>{pdfInfo.checked?'True':'False'}</Text>
+        </View>
+        <View style={styles.topRow}>
+          <Text style={styles.text}>Current Saved Page : </Text>
+          <Text style={styles.text}>{pdfInfo.currentAng}*</Text>
+        </View>
+        <View style={styles.topRow}>
+          <Text style={styles.text}>Uri : </Text>
+          <Text style={styles.text}>{pdfInfo.uri}</Text>
+        </View>
+          <Text style={styles.text}>*(the Current Saved Page is changed when you leave the pdf screen and not when you change pages in the pdf)</Text>
+      </View>
+    </Modal>
+  );
+}
+
+function commoncss(state) {
+  const styles = StyleSheet.create({
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: allColors[state.darkMode].headerColor,
+      // backgroundColor: 'blue',
+      // height: '50%',
+      // backgroundColor: 'rgba(0,0,0,0.5)',
+      // height:'100%',
+      top: '25%',
+      // bottom: '50%',
+      width: '90%',
+      left: '5%',
+      borderRadius: 25,
+      // position: 'absolute',
+    },
+    topRow: {
+      flexDirection: 'row',
+      // justifyContent: 'space-between',
+      alignSelf:'flex-start',
+      alignItems:'flex-start',
+      margin: 10,
+      flexWrap:'wrap',
+      // padding:2,
+    },
+    title: {
+      flex: 3,
+      margin: 10,
+      fontSize: 18,
+      color: state.darkMode ? 'white' : 'black',
+    },
+    text: {
+      color: state.darkMode ? 'white' : 'black',
+      fontSize: 16,
+      overflow:'scroll',
+      // justifyContent:'flex-start'
+    },
+    icons: {
+      flex: 1,
+    },
+    textInput: {
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+    },
+    ButtomButton: {
+      paddingHorizontal: 15,
+      paddingVertical: 5,
+      borderRadius: 10,
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+    },
+  });
+  return styles;
 }

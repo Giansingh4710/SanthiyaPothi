@@ -18,7 +18,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setAngNum} from '../redux/actions';
 import {allColors} from '../assets/styleForEachOption';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {getItemFromFullPath} from '../assets/helper_funcs.js'
+import {getItemFromFullPath} from '../assets/helper_funcs.js';
+
+import {PdfInfoModal} from '../assets/components/add_or_del_item_Modal.js'
 
 const alertMsg = msg => {
   return Alert.alert('Oops!!', msg, [
@@ -33,6 +35,7 @@ export default function OpenPdf({navigation, route}) {
   const [totalAngs, setTotalAngs] = React.useState(0);
   const [currentAng, setCurrentAng] = React.useState(1);
   const [headerShown, setHeaderShown] = React.useState(true);
+  const [showPdfModal, setPdfModal] = React.useState(false);
 
   const currentAngRef = React.useRef(1); //only for addListner
   const pdfRef = React.useRef(null);
@@ -42,7 +45,7 @@ export default function OpenPdf({navigation, route}) {
 
   const {pdfTitle} = route.params;
   const {fullPath} = route.params;
-  const fileObj=getItemFromFullPath(state.allPdfs,[...fullPath,pdfTitle])
+  const fileObj = getItemFromFullPath(state.allPdfs, [...fullPath, pdfTitle]);
 
   const sourceFileName = {
     uri: fileObj.uri,
@@ -118,7 +121,7 @@ export default function OpenPdf({navigation, route}) {
             },
           ); */
           console.log(error);
-          return
+          return;
         }}
         onPressLink={uri => {
           console.log(`Link presse: ${uri}`);
@@ -134,6 +137,13 @@ export default function OpenPdf({navigation, route}) {
         navigation={navigation}
         hidden={!headerShown}
         pdfRef={pdfRef}
+        setPdfModal={setPdfModal}
+      />
+      <PdfInfoModal
+        visible={showPdfModal}
+        setVisibility={setPdfModal}
+        state={state}
+        pdfInfo={{...fileObj,pdfTitle:pdfTitle}}
       />
     </View>
   );
@@ -147,6 +157,7 @@ function Header({
   navigation,
   hidden,
   pdfRef,
+  setPdfModal,
 }) {
   if (hidden) return null;
 
@@ -206,10 +217,7 @@ function Header({
           color={state.darkMode ? 'white' : 'black'}
         />
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          console.log(title);
-        }}>
+      <TouchableOpacity onPress={() => setPdfModal(true)}>
         <Text style={styles.title}>{showTitle}</Text>
       </TouchableOpacity>
       <View style={styles.angNumInfo}>
@@ -251,3 +259,4 @@ function Header({
     </View>
   );
 }
+
