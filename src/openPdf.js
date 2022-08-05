@@ -112,7 +112,8 @@ export default function OpenPdf({navigation, route}) {
         }}
         onError={error => {
           const strError = String(error);
-          /* Alert.alert(
+          if(strError==="Error: canceled")return 
+          Alert.alert(
             'PDF ERROR',
             strError,
             [
@@ -124,7 +125,7 @@ export default function OpenPdf({navigation, route}) {
             {
               cancelable: true,
             },
-          ); */
+          );
           console.log(error);
           return;
         }}

@@ -5,38 +5,77 @@ export const folderToFileData = {
       currentAng: 1,
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28BigFile%29.pdf',
     },
-    'Adi Maharaj (Small File)': {
+    'Adi Maharaj (Small File/Typed)': {
       checked: false,
       currentAng: 1,
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/AdiMaharaj%28SmallFile%29.pdf',
     },
-    'Puratan Handwritten Adi Maharaj': {
+    'Bhag Part 1(Used By Sant Gurbachan Singh Ji)': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanHandwrittenAdiMaharaj.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/Puratan_Bhag_Part_1_Used_By_Sant_Gurbachan_Singh_Ji.pdf',
     },
-    'Dasam Maharaj Larrivar': {
+    'Bhag Part 2(Used By Sant Gurbachan Singh Ji)': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharajlarrivaar.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/Puratan_Bhag_Part_2_Used_By_Sant_Gurbachan_Singh_Ji.pdf',
     },
-    'Dasam Maharaj 1 - 716 (Part1)': {
+    'Non Larrivar Saroop 1': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMahraj1-716%28Part1%29.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/NonLarrivarSaroop1.pdf',
     },
-    'Dasam Maharaj 716 - 1429 (Part2)': {
+    'Non Larrivar Saroop 2': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMahraj716-1429%28Part2%29.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/NonLarrivarSaroop2.pdf',
     },
-    'Fareedkot Teeka': {
-      checked: false,
-      currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/FareedkotTeeka.pdf',
+    'Puratan Saroops': {
+      'Puratan Saroop 1': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanSaroops/PuratanSaroop1.pdf',
+      },
+      'Puratan Saroop 2': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanSaroops/PuratanSaroop2.pdf',
+      },
+      'Puratan Saroop 3': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanSaroops/PuratanSaroop3.pdf',
+      },
+      'Saroop From 1912': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/PuratanSaroops/SaroopFrom1912.pdf',
+      },
+    },
+    'Dasam Maharaj': {
+      'Dasam Maharaj Larrivar': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharaj/DasamMaharajlarrivaar.pdf',
+      },
+      'Dasam Maharaj 1 - 716 (Part1)': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharaj/DasamMahraj1-716%28Part1%29.pdf',
+      },
+      'Dasam Maharaj 716 - 1429 (Part2)': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharaj/DasamMahraj716-1429%28Part2%29.pdf',
+      },
+      'Facts Beyond Doubt on Sri Dasam Granth Sahib Ji': {
+        checked: false,
+        currentAng: 1,
+        uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/SriGuruGranthSahibJee/DasamMaharaj/FactsBeyondDoubt%202022_SGGS%20Academy.pdf',
+      },
     },
   },
-  Nitnem: {
+  'Nitnem': {
     'Nitnem Not Larrivaar': {
       checked: false,
       currentAng: 1,
@@ -78,6 +117,11 @@ export const folderToFileData = {
       checked: false,
       currentAng: 1,
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/PanjGranthi/SidhGosth.pdf',
+    },
+    'Full Panj Granthi Pothi Sahib': {
+      checked: false,
+      currentAng: 1,
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/PanjGranthi/FullPanjGranthiPothiSahib.pdf',
     },
   },
   'Bai Vaara': {
@@ -191,12 +235,17 @@ export const folderToFileData = {
       currentAng: 1,
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BaiVarra/22)KanreKiVaarMahala4.pdf',
     },
+    'Full Bai Vaara Pothi Sahib': {
+      checked: false,
+      currentAng: 1,
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BaiVarra/FullBaiVaaraPothiSahib.pdf',
+    },
   },
   'Bhagat Bani': {
     '1) Sri raag': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BhagatBani/1)Sriraag.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BhagatBani/1)SriRaag.pdf',
     },
     '2) Raag Gaurii': {
       checked: false,
@@ -312,6 +361,11 @@ export const folderToFileData = {
       checked: false,
       currentAng: 1,
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BhagatBani/24)SalokBhagatFareedJeeKi.pdf',
+    },
+    'Full Bhagat Bani Pothi Sahib': {
+      checked: false,
+      currentAng: 1,
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BhagatBani/FullBhagatBaniPothiSahib.pdf',
     },
     //'Bhagat Bani Tatkara.jpeg'
   },

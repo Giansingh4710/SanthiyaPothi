@@ -81,14 +81,14 @@ export default function ShabadScreen({navigation}) {
   });
 
   const pages = [
-    <BanisList
-      key={'2'}
+    <ShabadHistoryView
+      key={'1'}
       state={state}
       dispatch={dispatch}
       navigation={navigation}
     />,
-    <ShabadHistoryView
-      key={'1'}
+    <BanisList
+      key={'2'}
       state={state}
       dispatch={dispatch}
       navigation={navigation}
@@ -153,7 +153,6 @@ function BanisList({state,navigation}){
         data={ALLBANIS['banis']}
         keyExtractor={item => item.bani_name} //incase shabadId is same twice
         renderItem={({item, index}) => {
-          console.log(item);
           //item={"saved": false, "shabadId": "EWD"}
           return (
             <BarOption
