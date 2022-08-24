@@ -3,3 +3,9 @@ empty because this is where it will generate
 
 cd android
 ./gradlew assembleRelease
+------------------------------
+change version in package.json and then run bottom command to update version
+react-native-version --never-amend
+
+make sure that ./android/app/build/outputs/bundle/release is
+./gradlew bundleRelease

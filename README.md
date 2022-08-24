@@ -7,4 +7,4 @@ and scriptures. Currently the app is being developed and tested. The current lin
 given is the watered down web verion of the app. The app is being built with React-Native
 so it should be avaliable on IOS and Andriod soon.
 
-![Screenshot_1644372529](https://user-images.githubusercontent.com/73843250/153108632-3f25e230-352c-42c7-b6c7-4bfbf2515380.png)
+![Screenshot_1644372529](https://user-images.githubusercontent.com/73843250/186296386-874fb577-bff6-4ade-a94f-5ec5939ab856.jpg)
