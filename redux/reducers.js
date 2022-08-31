@@ -26,10 +26,7 @@ export const initialState = {
 function theReducer(state = initialState, action) {
   let theState;
   if (action.type === 'SET_THE_STATE') {
-    const newState = {
-      ...action.state,
-    };
-    theState = newState;
+    theState = {...action.state};
   } else if (action.type === 'SET_CHECKBOX') {
     changePDFsObj(state.allPdfs,action.theBani,action.fullPath,action.type)
     theState = {...state};
@@ -74,6 +71,13 @@ function theReducer(state = initialState, action) {
     state.shabadHistory[action.index].saved=!oldState;
     theState = state;
     console.log(state.shabadHistory[action.index])
+  } else if (action.type === 'CORRECT_FROM_DE_TO_TE') {
+    //FOR build Version 3
+    if(state.allPdfs['Vaara De Vadeek']){
+      delete state.allPdfs['Vaara De Vadeek']
+      state.allPdfs['Vaara Te Vadeek']=folderToFileData['Vaara Te Vadeek']
+    }
+    theState = {...state};
   } else {
     return state;
   }

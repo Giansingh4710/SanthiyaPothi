@@ -1,3 +1,11 @@
+//temporary for build version 3 update
+export const correctVaaraTeVadeek = () => dispatch => {
+  dispatch({
+    type: 'CORRECT_FROM_DE_TO_TE',
+  });
+};
+
+//--------------------------------
 export const setCheckBox = (baniTitle, fullPath) => dispatch => {
   dispatch({
     type: 'SET_CHECKBOX',
