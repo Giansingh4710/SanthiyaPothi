@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
 import {Icon, CheckBox} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {setTheState} from '../redux/actions';
+import {setTheState,correctVaaraTeVadeek} from '../redux/actions';
 import {initialState} from '../redux/reducers';
 import {allColors} from '../assets/styleForEachOption';
 import {BarOption} from '../assets/components/baroption';
@@ -14,7 +14,7 @@ import {getItemFromFullPath} from '../assets/helper_funcs.js';
 
 import {setCheckBox} from '../redux/actions';
 
-function HomeScreen({navigation, route}) {
+function TheListDisplayScreen({navigation, route}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
@@ -31,6 +31,11 @@ function HomeScreen({navigation, route}) {
         }
         state = theState;
         dispatch(setTheState(theState));
+        // console.log(Object.keys(theState))
+        if(theState.allPdfs['Vaara De Vadeek']){
+          console.log('corrected Vaara Te Vadeek');
+          dispatch(correctVaaraTeVadeek());
+        }
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -290,4 +295,4 @@ function AddedPDFsScreen({state, dispatch, params, navigation}) {
   );
 }
 
-export default HomeScreen;
+export default TheListDisplayScreen;

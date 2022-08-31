@@ -406,26 +406,26 @@ export const folderToFileData = {
       uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/BhattaDeSwaiye/SwaiyeMahallayPanjveyKy.pdf',
     },
   },
-  'Vaara De Vadeek': {
-    'Vaara Di Vadeek Mahalla 1': {
+  'Vaara Te Vadeek': {
+    'Vaara Te Vadeek Mahalla 1': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraDeVadeek/VaaraDiVadeekMahalla1.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraTeVadeek/VaaraTeVadeekMahalla1.pdf',
     },
-    'Vaara Di Vadeek Mahalla 3': {
+    'Vaara Te Vadeek Mahalla 3': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraDeVadeek/VaaraDiVadeekMahalla3.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraTeVadeek/VaaraTeVadeekMahalla3.pdf',
     },
-    'Vaara Di Vadeek Mahalla 4': {
+    'Vaara Te Vadeek Mahalla 4': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraDeVadeek/VaaraDiVadeekMahalla4.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraTeVadeek/VaaraTeVadeekMahalla4.pdf',
     },
-    'Vaara Di Vadeek Mahalla 5': {
+    'Vaara Te Vadeek Mahalla 5': {
       checked: false,
       currentAng: 1,
-      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraDeVadeek/VaaraDiVadeekMahalla5.pdf',
+      uri: 'http://45.41.235.161/~daasstor/SanthiyaPothi/VaaraTeVadeek/VaaraTeVadeekMahalla5.pdf',
     },
   },
   'Vidya Sagar Pothis': {

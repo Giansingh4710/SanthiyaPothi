@@ -6,7 +6,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
 import {Store} from './redux/store';
 
-import HomeScreen from './src/mainScreenList';
+import TheListDisplayScreen from './src/mainScreenList';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
 import ShabadScreen from './src/shabadPage/shabadPage.js';
@@ -22,7 +22,7 @@ function App() {
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
-            component={HomeScreen}
+            component={TheListDisplayScreen}
             initialParams={{
               dataObj: folderToFileData,
               title: 'Santhiya Pothi',
