@@ -18,17 +18,15 @@ import {Icon, Switch} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {allColors} from '../../assets/styleForEachOption';
 import {
-  setFontSize,
   addToShabadHistory,
   clearHistory,
-  toggleSaveForShabad,
 } from '../../redux/actions';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
 import {ALLSHABADS} from '../../assets/allShabads.js';
 import {ALLBANIS} from '../../assets/banis.js';
 import {BarOption} from '../../assets/components/baroption';
 
-export default function ShabadScreen({navigation}) {
+export function ShabadScreen({navigation}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
 
@@ -66,7 +64,6 @@ export default function ShabadScreen({navigation}) {
       alignItems: 'center',
     },
     openShabadBtn: {
-      backgroundColor: 'blue',
       backgroundColor: allColors[state.darkMode].shabadPage.openShabadBtn,
       alignItems: 'center',
       padding: 10,
@@ -130,17 +127,10 @@ export default function ShabadScreen({navigation}) {
   );
 }
 
-function BanisList({state,navigation}){
+export function BanisList({state,navigation}){
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 5,
-      margin: 5,
-      padding: 5,
-      //width: WIDTH,
-      //backgroundColor: 'blue',
+      width:'100%'
     },
     titleText: {
       color: state.darkMode ? 'white' : 'black',
@@ -157,6 +147,7 @@ function BanisList({state,navigation}){
           return (
             <BarOption
               state={state}
+              // height={50}
               onClick={() => {
                 navigation.navigate('ReadShabad', {
                   bani_name:item.bani_name,
@@ -337,7 +328,7 @@ function ShabadHistoryView({state, dispatch, navigation}) {
   );
 }
 
-function getRandomShabadId() {
+export function getRandomShabadId() {
   const keys = Object.keys(ALLSHABADS);
   const prop = keys[Math.floor(Math.random() * keys.length)];
   return prop;

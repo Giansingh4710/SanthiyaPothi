@@ -18,6 +18,7 @@ function SwitchBar({SettingTitle, icons, nameInState, setter}) {
   return (
     <BarOption
       state={state}
+      height={95}
       left={
         <Icon
           name={settingOnOff ? icons[0] : icons[1]}

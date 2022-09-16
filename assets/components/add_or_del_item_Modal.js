@@ -158,6 +158,7 @@ function DeleteItemsModal({
             return (
               <BarOption
                 state={state}
+                height={95}
                 left={
                   <Icon
                     name={isFolder ? 'folder-outline' : 'document-outline'}

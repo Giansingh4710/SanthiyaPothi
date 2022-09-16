@@ -109,6 +109,7 @@ function SettingsPage({navigation}) {
       </ScrollView>
         <BarOption
           state={state}
+          height={95}
           left={
             <Icon
               name="alert-circle-outline"
