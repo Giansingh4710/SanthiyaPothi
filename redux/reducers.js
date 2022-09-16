@@ -71,11 +71,11 @@ function theReducer(state = initialState, action) {
     state.shabadHistory[action.index].saved=!oldState;
     theState = state;
     console.log(state.shabadHistory[action.index])
-  } else if (action.type === 'CORRECT_FROM_DE_TO_TE') {
+  } else if (action.type === 'CORRECT_PDF_STATE') {
     //FOR build Version 3
-    if(state.allPdfs['Vaara De Vadeek']){
-      delete state.allPdfs['Vaara De Vadeek']
-      state.allPdfs['Vaara Te Vadeek']=folderToFileData['Vaara Te Vadeek']
+    if(state.allPdfs['Nitnem']['Nitnem Larrivaar']['uri']!=='https://santhiyapothi.xyz/pdfs/Nitnem/Nitnem.pdf'){
+      state.allPdfs={...folderToFileData}
+      console.log("corrected pdf strucute")
     }
     theState = {...state};
   } else {

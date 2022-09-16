@@ -1,7 +1,7 @@
 //temporary for build version 3 update
-export const correctVaaraTeVadeek = () => dispatch => {
+export const correctPDFstate = () => dispatch => {
   dispatch({
-    type: 'CORRECT_FROM_DE_TO_TE',
+    type: 'CORRECT_PDF_STATE',
   });
 };
 

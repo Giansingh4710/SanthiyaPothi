@@ -1,38 +1,25 @@
 import React from 'react';
 import {
-  Alert,
   FlatList,
   Text,
   StyleSheet,
   View,
-  Button,
   TouchableOpacity,
-  Dimensions,
-  ScrollView,
-  Image,
-  Modal,
-  useWindowDimensions,
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {Icon, Switch} from 'react-native-elements';
 import {allColors} from '../../assets/styleForEachOption';
 import {
   setFontSize,
-  addToShabadHistory,
-  clearHistory,
   toggleSaveForShabad,
 } from '../../redux/actions';
 import {ALLSHABADS} from '../../assets/allShabads.js';
 import {useDispatch, useSelector} from 'react-redux';
-//import {SafeAreaView} from 'react-native-safe-area-context';
 import {RightOfHeader} from '../../assets/components/rightOfHeader';
-//import {BarOption} from '../../assets/components/baroption';
 
 export default function ReadShabad({navigation, route}) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
-  //export default function ReadShabad({state, dispatch, setModal, modalInfo}) {
-  //if (Object.keys(modalInfo).length == 0) return <></>;
-
   const modalInfo = route.params;
   const shabad =
     modalInfo.type == 'bani'
@@ -40,7 +27,6 @@ export default function ReadShabad({navigation, route}) {
       : ALLSHABADS[modalInfo.shabadData.shabadId];
   const [fontsz, setfontsz] = React.useState(state.fontSizeForShabad);
   const [larrivar, setLarrivar] = React.useState(true);
-  const [meanings, setMeanings] = React.useState(true);
   const [shabadSaved, setSavedShabad] = React.useState(
     modalInfo.shabadData ? modalInfo.shabadData.saved : false,
   );
@@ -134,17 +120,9 @@ export default function ReadShabad({navigation, route}) {
       <ShabadText
         sbd={shabad}
         larrivar={larrivar}
-        meanings={meanings}
         state={state}
         fontsz={fontsz}
       />
-      <ScrollView style={styles.gurbaniScrollView}>
-        {/*
-        <Text style={styles.shabadText}>
-          {showShabad(shabad, larrivar, meanings)}
-        </Text>
-        */}
-      </ScrollView>
       <View style={styles.plusMinusRow}>
         <View style={styles.bottomActions}>
           <Icon
@@ -169,15 +147,6 @@ export default function ReadShabad({navigation, route}) {
           <Text style={styles.text}>larrivar</Text>
         </View>
         <View style={styles.bottomActions}>
-          <Switch
-            value={meanings}
-            onValueChange={newSetting => {
-              setMeanings(newSetting);
-            }}
-          />
-          <Text style={styles.text}>meanings</Text>
-        </View>
-        <View style={styles.bottomActions}>
           <Icon
             size={fontsz * 2}
             color={state.darkMode ? 'white' : 'black'}
@@ -195,7 +164,7 @@ export default function ReadShabad({navigation, route}) {
   );
 }
 
-function ShabadText({sbd, larrivar, meanings, state,fontsz}) {
+function ShabadText({sbd, larrivar, state, fontsz}) {
   const styles = StyleSheet.create({
     gurbaniScrollView: {
       //backgroundColor: '#888',
@@ -210,48 +179,75 @@ function ShabadText({sbd, larrivar, meanings, state,fontsz}) {
       color: state.darkMode ? 'white' : 'black',
     },
   });
-  const [clickedInd,setClickedInd]=React.useState(-1);
-  const [theClickedLine,setTheLine]=React.useState(null);
+  // const [clickedInd, setClickedInd] = React.useState(-1);
+  // const [theClickedLine, setTheLine] = React.useState(null);
+  // console.log(sbd.split('\n').length)
   return (
     <View style={styles.gurbaniScrollView}>
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         data={sbd.split('\n')}
-        renderItem={({item,index}) => {
-          let line=item
-          if (larrivar && index % 3 == 0) {
-            line = line.replace(/ /g, '');
-          }
-          if (!meanings && index % 3 == 1) return;
-          return (
-            <TouchableOpacity onPress={()=>{
-              if(index==clickedInd){
-                setTheLine(theClickedLine.includes(" ")?item.replace(/ /g, ''):item);
-                return;
-              }
-              setClickedInd(index);
-              setTheLine(line.includes(" ")?line.replace(/ /g, ''):item);
-              console.log(theClickedLine)
-            }}>
-              <Text style={styles.shabadText}>{clickedInd===index?theClickedLine:line}</Text>
-            </TouchableOpacity>
-          );
+        // initialNumToRender={50}
+        // maxToRenderPerBatch={200}
+        // windowSize={41}
+        renderItem={({item, index}) => {
+          const lineType=index % 3 === 0?"Gurbani":'Not Gurbani'
+          return <ShabadLine larrivar={larrivar}  line={item} lineType={lineType} shabadTextStyle={styles.shabadText}/>
+          // let line = item;
+          // if (larrivar && index % 3 == 0) {
+          //   line = line.replace(/ /g, '');
+          // }
+          // return (
+          //   <TouchableOpacity
+          //     onPress={() => {
+          //       if (index == clickedInd) {
+          //         setTheLine(
+          //           theClickedLine.includes(' ')
+          //             ? item.replace(/ /g, '')
+          //             : item,
+          //         );
+          //         return;
+          //       }
+          //       setClickedInd(index);
+          //       setTheLine(line.includes(' ') ? line.replace(/ /g, '') : item);
+          //       console.log(theClickedLine);
+          //     }}
+          //     onLongPress={() => {
+          //       Clipboard.setString(line);
+          //       console.log(line)
+          //     }}>
+          //     <Text style={styles.shabadText}>
+          //       {clickedInd === index ? theClickedLine : line}
+          //     </Text>
+          //   </TouchableOpacity>
+          // );
         }}
       />
     </View>
   );
 }
 
-function showShabad(sbd, larrivar, meanings) {
-  let ans = '';
-  const sbdLst = sbd.split('\n');
-  for (let i = 0; i < sbdLst.length; i++) {
-    let line = sbdLst[i];
-    if (larrivar && i % 3 == 0) {
-      line = line.replace(/ /g, '');
-    }
-    if (!meanings && i % 3 == 1) continue;
-    ans += line + '\n';
-  }
-  return ans;
+function ShabadLine({larrivar, line, lineType, shabadTextStyle}) {
+  //larrivarLine is larrivar is gurbani otherwise is regular line
+  const larrivarLine = lineType === 'Gurbani' ? line.replace(/ /g, '') : line;
+  const padChedLine = line;
+  const [lineLarrivar, setLarrivar] = React.useState(larrivar); //true=larrivar false=padChed
+
+  React.useEffect(() => {
+    setLarrivar(larrivar);
+  }, [larrivar]);
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        setLarrivar(!lineLarrivar);
+      }}
+      onLongPress={() => {
+        Clipboard.setString(lineLarrivar ? larrivarLine : padChedLine);
+        // console.log(lineLarrivar ? larrivarLine : padChedLine)
+      }}>
+      <Text style={shabadTextStyle}>
+        {lineLarrivar ? larrivarLine : padChedLine}
+      </Text>
+    </TouchableOpacity>
+  );
 }

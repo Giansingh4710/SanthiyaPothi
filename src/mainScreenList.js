@@ -1,20 +1,24 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, FlatList} from 'react-native';
-import {Icon, CheckBox} from 'react-native-elements';
+import { StyleSheet, TouchableOpacity, View, FlatList, Text } from 'react-native';
+import { Icon, CheckBox } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setTheState,
+  correctPDFstate,
+  addToShabadHistory,
+} from '../redux/actions';
+import { initialState } from '../redux/reducers';
+import { allColors } from '../assets/styleForEachOption';
+import {getRandomShabadId, BanisList} from './shabadPage/shabadPage.js'
+import { BarOption } from '../assets/components/baroption';
+import { RightOfHeader } from '../assets/components/rightOfHeader';
+import { Add_Or_Del_Folder_or_File } from '../assets/components/add_or_del_item_Modal.js';
+import { getItemFromFullPath } from '../assets/helper_funcs.js';
 
-import {setTheState,correctVaaraTeVadeek} from '../redux/actions';
-import {initialState} from '../redux/reducers';
-import {allColors} from '../assets/styleForEachOption';
-import {BarOption} from '../assets/components/baroption';
-import {RightOfHeader} from '../assets/components/rightOfHeader';
-import {Add_Or_Del_Folder_or_File} from '../assets/components/add_or_del_item_Modal.js';
-import {getItemFromFullPath} from '../assets/helper_funcs.js';
+import { setCheckBox } from '../redux/actions';
 
-import {setCheckBox} from '../redux/actions';
-
-function TheListDisplayScreen({navigation, route}) {
+function TheListDisplayScreen({ navigation, route }) {
   const dispatch = useDispatch();
   let state = useSelector(theState => theState.theReducer);
   React.useEffect(() => {
@@ -31,11 +35,7 @@ function TheListDisplayScreen({navigation, route}) {
         }
         state = theState;
         dispatch(setTheState(theState));
-        // console.log(Object.keys(theState))
-        if(theState.allPdfs['Vaara De Vadeek']){
-          console.log('corrected Vaara Te Vadeek');
-          dispatch(correctVaaraTeVadeek());
-        }
+        dispatch(correctPDFstate());
       } catch (error) {
         // Error retrieving data
         console.log(error);
@@ -98,13 +98,6 @@ function TheListDisplayScreen({navigation, route}) {
     });
   });
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
-      height: '100%',
-    },
-  });
-
   if (route.params.addedPdfs) {
     return (
       <AddedPDFsScreen
@@ -116,19 +109,83 @@ function TheListDisplayScreen({navigation, route}) {
     );
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: allColors[state.darkMode].mainBackgroundColor,
+      height: '100%',
+    },
+    listContainer: {
+      // height: route.params.title === 'Santhiya Pothi' ? '50%' : '100%',
+      flex:2,
+      margin:5,
+    },
+    banisList: {
+      height:'30%',
+      width:'100%',
+    },
+    mainBottom:{
+      flex:1,
+      margin:5,
+      // backgroundColor:'red',
+    },
+    banisList: {
+      flex:1,
+      margin:5,
+      // height:'30%',
+      // width:'100%',
+    },
+    openShabadBtn: {
+      backgroundColor: allColors[state.darkMode].shabadPage.openShabadBtn,
+      alignItems: 'center',
+      borderRadius: 5,
+      padding: 15,
+      margin: 10,
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <ListDisplay
-        state={state}
-        dispatch={dispatch}
-        params={route.params}
-        navigation={navigation}
-      />
+      <View style={styles.listContainer}>
+        <ListDisplay
+          state={state}
+          dispatch={dispatch}
+          params={route.params}
+          navigation={navigation}
+        />
+      </View>
+      {route.params.title === 'Santhiya Pothi' ? (
+        <View style={styles.mainBottom}>
+          <View style={styles.banisList}>
+            <BanisList state={state} navigation={navigation}/>
+          </View>
+          <TouchableOpacity
+            style={styles.openShabadBtn}
+            onPress={() => {
+              const theID = getRandomShabadId();
+              const theObj = { shabadId: theID, saved: false };
+              navigation.navigate('ReadShabad', {
+                shabadData: theObj,
+                index: state.shabadHistory.length,
+                type: 'shabad',
+              });
+              dispatch(addToShabadHistory(theObj));
+            }}>
+            <Text
+              style={{
+                color: state.darkMode ? 'white' : 'black',
+              }}>
+              Open Random Shabad
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+          <></>
+        )}
     </View>
   );
 }
 
-function ListDisplay({state, dispatch, params, navigation}) {
+function ListDisplay({ state, dispatch, params, navigation }) {
   const dataObj = params.dataObj;
   const fullPath = params.fullPath;
 
@@ -138,7 +195,7 @@ function ListDisplay({state, dispatch, params, navigation}) {
     },
     scroll: {
       width: '100%',
-      // height: '80%',
+      height: '100%',
     },
   });
   return (
@@ -147,34 +204,36 @@ function ListDisplay({state, dispatch, params, navigation}) {
         <FlatList
           keyExtractor={item => item} //name of each item like 'Bai Vaara'
           data={Object.keys(dataObj)}
-          renderItem={({item}) => {
+          initialNumToRender={30}
+          renderItem={({ item }) => {
             const isFolder = !dataObj[item].currentAng; //currentAng will never be 0
             return (
               <BarOption
                 state={state}
+                height={95}
                 left={
-                  <Icon
-                    name={isFolder ? 'folder-outline' : 'document-outline'}
-                    type="ionicon"
-                    color={state.darkMode ? 'white' : 'black'}
+                <Icon
+                  name={isFolder ? 'folder-outline' : 'document-outline'}
+                  type="ionicon"
+                  color={state.darkMode ? 'white' : 'black'}
                   />
-                }
+              }
                 text={item}
                 right={
-                  isFolder ? (
-                    <Icon
-                      name="arrow-forward-outline"
-                      type="ionicon"
-                      color={state.darkMode ? 'white' : 'black'}
+                isFolder ? (
+                  <Icon
+                    name="arrow-forward-outline"
+                    type="ionicon"
+                    color={state.darkMode ? 'white' : 'black'}
                     />
-                  ) : (
+                ) : (
                     <CheckBox
                       checked={
-                        getItemFromFullPath(state.allPdfs, fullPath)[item]
-                          ? getItemFromFullPath(state.allPdfs, fullPath)[item]
-                              .checked
-                          : false
-                      }
+                      getItemFromFullPath(state.allPdfs, fullPath)[item]
+                        ? getItemFromFullPath(state.allPdfs, fullPath)[item]
+                        .checked
+                        : false
+                    }
                       checkedColor="#0F0"
                       checkedTitle="ਸੰਪੂਰਨ"
                       containerStyle={{
@@ -194,9 +253,9 @@ function ListDisplay({state, dispatch, params, navigation}) {
                       title="Not Done"
                       titleProps={{}}
                       uncheckedColor="#F00"
-                    />
+                      />
                   )
-                }
+              }
                 onClick={() => {
                   if (isFolder) {
                     let theDataObj = getItemFromFullPath(
@@ -217,16 +276,16 @@ function ListDisplay({state, dispatch, params, navigation}) {
                     });
                   }
                 }}
-              />
+                />
             );
           }}
-        />
+          />
       </View>
     </View>
   );
 }
 
-function AddedPDFsScreen({state, dispatch, params, navigation}) {
+function AddedPDFsScreen({ state, dispatch, params, navigation }) {
   const [visible, setVisibility] = React.useState(false);
   const [typeOfModal, setTypeOfModal] = React.useState('');
 
@@ -254,7 +313,7 @@ function AddedPDFsScreen({state, dispatch, params, navigation}) {
           dispatch={dispatch}
           params={params}
           navigation={navigation}
-        />
+          />
       </View>
       <View style={styles.bottomRow}>
         <TouchableOpacity
@@ -267,7 +326,7 @@ function AddedPDFsScreen({state, dispatch, params, navigation}) {
             type="ionicon"
             size={50}
             color={state.darkMode ? 'white' : 'black'}
-          />
+            />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -279,7 +338,7 @@ function AddedPDFsScreen({state, dispatch, params, navigation}) {
             type="ionicon"
             size={50}
             color={state.darkMode ? 'white' : 'black'}
-          />
+            />
         </TouchableOpacity>
       </View>
       <Add_Or_Del_Folder_or_File
@@ -290,7 +349,7 @@ function AddedPDFsScreen({state, dispatch, params, navigation}) {
         fullPath={params.fullPath}
         navigation={navigation}
         actionType={typeOfModal}
-      />
+        />
     </View>
   );
 }

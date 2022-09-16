@@ -9,7 +9,7 @@ import {Store} from './redux/store';
 import TheListDisplayScreen from './src/mainScreenList';
 import OpenPdf from './src/openPdf';
 import SettingsPage from './src/settingsPage/settings';
-import ShabadScreen from './src/shabadPage/shabadPage.js';
+import {ShabadScreen} from './src/shabadPage/shabadPage.js';
 import ReadShabad from './src/shabadPage/readShabad.js';
 import {folderToFileData} from './assets/longData';
 
