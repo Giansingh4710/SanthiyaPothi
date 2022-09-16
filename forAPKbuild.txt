@@ -7,9 +7,12 @@ cd android
 change version in package.json and then run bottom command to update version
 react-native-version --never-amend
 
+https://www.youtube.com/watch?v=A3--3Ozxz6o
+
 change version in android/app/build.gradle
         versionCode 2
         versionName "0.2"
 
+--------------------------------------------------------------
 make sure that ./android/app/build/outputs/bundle/release is
 ./gradlew bundleRelease
